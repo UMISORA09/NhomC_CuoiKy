@@ -20,6 +20,7 @@ wp-content/upgrade/
 wp-content/cache/
 wp-content/backup-db/
 wp-content/backups/
+backups/
 
 # Environment & Logs
 .env
