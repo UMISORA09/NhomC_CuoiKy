@@ -28,10 +28,10 @@ try {
     }
 }
 
-$URL_WEB = "http://${DOMAIN}:8080"
-$URL_ADMIN = "http://${DOMAIN}:8080/wp-admin"
-$URL_PMA = "http://${DOMAIN}:8085"
-$URL_DASHBOARD = "http://${DOMAIN}:8080/dashboard.html"
+$URL_WEB = "http://${DOMAIN}:${WP_PORT}"
+$URL_ADMIN = "http://${DOMAIN}:${WP_PORT}/wp-admin"
+$URL_PMA = "http://${DOMAIN}:${PMA_PORT}"
+$URL_DASHBOARD = "http://${DOMAIN}:${WP_PORT}/dashboard.html"
 
 # Browser tim Edge hoac Chrome
 $APP_BROWSER = $null
@@ -51,7 +51,7 @@ function Open-FloatingWindow {
     }
 }
 
-function Exec-SqlFile ($sqlFile) {
+function Invoke-SqlFile ($sqlFile) {
     if (Test-Path $sqlFile) {
         docker cp $sqlFile "${DB_CONTAINER}:/tmp/$sqlFile" 2>$null
         docker exec $DB_CONTAINER mysql -u root -prootpassword --default-character-set=utf8mb4 $DB_NAME -e "source /tmp/$sqlFile;" 2>$null
@@ -61,7 +61,7 @@ function Exec-SqlFile ($sqlFile) {
     }
 }
 
-function Run-StartAll {
+function Start-JobScoutAll {
     Clear-Host
     Write-Host "+--------------------------------------------------------------------------+" -ForegroundColor Cyan
     Write-Host "|          TIEN TRINH KHOI DONG TOAN DIEN HE THONG JOBSCOUT 2D             |" -ForegroundColor Cyan
@@ -80,16 +80,16 @@ function Run-StartAll {
     }
 
     Write-Host "[3/6] Dong bo 6 tai khoan Administrator Nhom C..." -ForegroundColor Yellow
-    Exec-SqlFile "create_users.sql"
+    Invoke-SqlFile "create_users.sql"
 
     Write-Host "[4/6] Thiet lap thuong hieu JobScout va Front Page..." -ForegroundColor Yellow
-    Exec-SqlFile "setup_jobscout_brand.sql"
+    Invoke-SqlFile "setup_jobscout_brand.sql"
 
     Write-Host "[5/6] Kich hoat Theme JobScout va 4 Plugin..." -ForegroundColor Yellow
-    Exec-SqlFile "activate_theme_plugins.sql"
+    Invoke-SqlFile "activate_theme_plugins.sql"
 
     Write-Host "[6/6] Nap 7 trang thiet ke Figma vao Database..." -ForegroundColor Yellow
-    Exec-SqlFile "import_job_design_data.sql"
+    Invoke-SqlFile "import_job_design_data.sql"
 
     Write-Host ""
     Write-Host "+--------------------------------------------------------------------------+" -ForegroundColor Green
@@ -102,51 +102,51 @@ function Run-StartAll {
     [Console]::ReadKey($true) | Out-Null
 }
 
-function Run-ImportDesign {
+function Import-JobDesign {
     Clear-Host
     Write-Host "[TIEN TRINH] Nap du lieu 7 trang thiet ke Figma vao CSDL JobScout..." -ForegroundColor Cyan
     Write-Host "-------------------------------------------------------------------------------" -ForegroundColor Gray
-    Exec-SqlFile "import_job_design_data.sql"
+    Invoke-SqlFile "import_job_design_data.sql"
     Write-Host "[OK] Da nap thanh cong Trang, Tin Tuc va 6 Tin Tuyen Dung vao database!" -ForegroundColor Green
     Write-Host ""
     Write-Host "Nhan phim bat ky de quay lai menu..." -ForegroundColor Gray
     [Console]::ReadKey($true) | Out-Null
 }
 
-function Run-SetupBrand {
+function Set-JobScoutBrand {
     Clear-Host
     Write-Host "[TIEN TRINH] Thiet lap thuong hieu JobScout..." -ForegroundColor Cyan
     Write-Host "-------------------------------------------------------------------------------" -ForegroundColor Gray
-    Exec-SqlFile "setup_jobscout_brand.sql"
+    Invoke-SqlFile "setup_jobscout_brand.sql"
     Write-Host "[OK] Da cap nhat Site Title: JobScout, Tagline va Front Page!" -ForegroundColor Green
     Write-Host ""
     Write-Host "Nhan phim bat ky de quay lai menu..." -ForegroundColor Gray
     [Console]::ReadKey($true) | Out-Null
 }
 
-function Run-ActivateTheme {
+function Enable-ThemePlugins {
     Clear-Host
     Write-Host "[TIEN TRINH] Kich hoat Theme JobScout va cac Plugin..." -ForegroundColor Cyan
     Write-Host "-------------------------------------------------------------------------------" -ForegroundColor Gray
-    Exec-SqlFile "activate_theme_plugins.sql"
+    Invoke-SqlFile "activate_theme_plugins.sql"
     Write-Host "[OK] Theme JobScout va 4 Plugin da duoc kich hoat!" -ForegroundColor Green
     Write-Host ""
     Write-Host "Nhan phim bat ky de quay lai menu..." -ForegroundColor Gray
     [Console]::ReadKey($true) | Out-Null
 }
 
-function Run-SetupUsers {
+function Set-AdminUsers {
     Clear-Host
     Write-Host "[TIEN TRINH] Cap nhat 6 tai khoan Administrator Nhom C..." -ForegroundColor Cyan
     Write-Host "-------------------------------------------------------------------------------" -ForegroundColor Gray
-    Exec-SqlFile "create_users.sql"
+    Invoke-SqlFile "create_users.sql"
     Write-Host "[OK] Da cap nhat 6 tai khoan Administrator thanh cong [Password@123]!" -ForegroundColor Green
     Write-Host ""
     Write-Host "Nhan phim bat ky de quay lai menu..." -ForegroundColor Gray
     [Console]::ReadKey($true) | Out-Null
 }
 
-function Run-ListUsers {
+function Get-AdminUsersList {
     Clear-Host
     Write-Host "+--------------------------------------------------------------------------+" -ForegroundColor Cyan
     Write-Host "|                DANH SACH 6 TAI KHOAN QUAN TRI VIEN NHOM C                |" -ForegroundColor Cyan
@@ -165,7 +165,7 @@ function Run-ListUsers {
     [Console]::ReadKey($true) | Out-Null
 }
 
-function Run-BackupDb {
+function Backup-JobScoutDb {
     Clear-Host
     Write-Host "[TIEN TRINH] Dang sao luu co so du lieu JobScout..." -ForegroundColor Cyan
     Write-Host "-------------------------------------------------------------------------------" -ForegroundColor Gray
@@ -183,7 +183,7 @@ function Run-BackupDb {
     [Console]::ReadKey($true) | Out-Null
 }
 
-function Run-Status {
+function Get-JobScoutStatus {
     Clear-Host
     Write-Host "+--------------------------------------------------------------------------+" -ForegroundColor Cyan
     Write-Host "|                       KIEM TRA TRANG THAI HE THONG                       |" -ForegroundColor Cyan
@@ -201,7 +201,7 @@ function Run-Status {
     [Console]::ReadKey($true) | Out-Null
 }
 
-function Run-DockerRestart {
+function Restart-DockerServices {
     Clear-Host
     Write-Host "Dang khoi dong lai cac containers..." -ForegroundColor Yellow
     docker compose restart
@@ -209,7 +209,7 @@ function Run-DockerRestart {
     Start-Sleep -Seconds 1
 }
 
-function Run-DockerStop {
+function Stop-DockerServices {
     Clear-Host
     Write-Host "Dang tam dung cac containers..." -ForegroundColor Yellow
     docker compose stop
@@ -217,7 +217,7 @@ function Run-DockerStop {
     Start-Sleep -Seconds 1
 }
 
-function Run-SetupHosts {
+function Set-VirtualHosts {
     Clear-Host
     Write-Host "[TIEN TRINH] Cap nhat ten mien Virtual Host 'wordpressc'..." -ForegroundColor Cyan
     Write-Host "-------------------------------------------------------------------------------" -ForegroundColor Gray
@@ -240,38 +240,109 @@ $tabs = @(
     @{
         Title = "1. TONG QUAN"
         Items = @(
-            @{ Key = "A"; Label = "[A] KHOI DONG TOAN DIEN (1-Click Docker + CSDL + Mo Tab 2D)"; Action = { Run-StartAll } }
-            @{ Key = "M"; Label = "[M] MO NGAY CUA SO TAB NOI 2D (Floating 2D OS Dashboard)"; Action = { Open-FloatingWindow } }
-            @{ Key = "W"; Label = "[W] Mo Website JobScout ($URL_WEB)"; Action = { Start-Process $URL_WEB } }
-            @{ Key = "P"; Label = "[P] Mo phpMyAdmin Quan Ly CSDL ($URL_PMA)"; Action = { Start-Process $URL_PMA } }
-            @{ Key = "S"; Label = "[S] Kiem Tra Suc Khoe & Tien Trinh Containers"; Action = { Run-Status } }
+            @{
+                Key    = "A"
+                Label  = "[A] KHOI DONG TOAN DIEN (1-Click Docker + CSDL + Mo Tab 2D)"
+                Action = { Start-JobScoutAll }
+            }
+            @{
+                Key    = "M"
+                Label  = "[M] MO NGAY CUA SO TAB NOI 2D (Floating 2D OS Dashboard)"
+                Action = { Open-FloatingWindow }
+            }
+            @{
+                Key    = "W"
+                Label  = "[W] Mo Website JobScout ($URL_WEB)"
+                Action = { Start-Process $URL_WEB }
+            }
+            @{
+                Key    = "P"
+                Label  = "[P] Mo phpMyAdmin Quan Ly CSDL ($URL_PMA)"
+                Action = { Start-Process $URL_PMA }
+            }
+            @{
+                Key    = "S"
+                Label  = "[S] Kiem Tra Suc Khoe & Tien Trinh Containers"
+                Action = { Get-JobScoutStatus }
+            }
         )
-    },
+    }
     @{
         Title = "2. DU LIEU THIET KE"
         Items = @(
-            @{ Key = "F"; Label = "[F] Nap 7 Trang Thiet Ke Figma vao Database"; Action = { Run-ImportDesign } }
-            @{ Key = "B"; Label = "[B] Thiet Lap Thuong Hieu JobScout & Front Page"; Action = { Run-SetupBrand } }
-            @{ Key = "K"; Label = "[K] Kich Hoat Theme JobScout va 4 Plugin Nghiep Vu"; Action = { Run-ActivateTheme } }
-            @{ Key = "V"; Label = "[V] Mo Xem Trang Du Lieu Thiet Ke Tren Trinh Duyet"; Action = { Start-Process "$URL_WEB/about-us"; Start-Process "$URL_WEB/all-jobs" } }
+            @{
+                Key    = "F"
+                Label  = "[F] Nap 7 Trang Thiet Ke Figma vao Database"
+                Action = { Import-JobDesign }
+            }
+            @{
+                Key    = "B"
+                Label  = "[B] Thiet Lap Thuong Hieu JobScout & Front Page"
+                Action = { Set-JobScoutBrand }
+            }
+            @{
+                Key    = "K"
+                Label  = "[K] Kich Hoat Theme JobScout va 4 Plugin Nghiep Vu"
+                Action = { Enable-ThemePlugins }
+            }
+            @{
+                Key    = "V"
+                Label  = "[V] Mo Xem Trang Du Lieu Thiet Ke Tren Trinh Duyet"
+                Action = {
+                    Start-Process "$URL_WEB/about-us"
+                    Start-Process "$URL_WEB/all-jobs"
+                }
+            }
         )
-    },
+    }
     @{
         Title = "3. TAI KHOAN ADMIN"
         Items = @(
-            @{ Key = "U"; Label = "[U] Cap Nhat & Dat Lai 6 Tai Khoan Admin [Password@123]"; Action = { Run-SetupUsers } }
-            @{ Key = "L"; Label = "[L] Xem Danh Sach 6 Quan Tri Vien (Ho ten, User, Email)"; Action = { Run-ListUsers } }
-            @{ Key = "G"; Label = "[G] Mo Trang Dang Nhap WP-Admin ($URL_ADMIN)"; Action = { Start-Process $URL_ADMIN } }
+            @{
+                Key    = "U"
+                Label  = "[U] Cap Nhat & Dat Lai 6 Tai Khoan Admin [Password@123]"
+                Action = { Set-AdminUsers }
+            }
+            @{
+                Key    = "L"
+                Label  = "[L] Xem Danh Sach 6 Quan Tri Vien (Ho ten, User, Email)"
+                Action = { Get-AdminUsersList }
+            }
+            @{
+                Key    = "G"
+                Label  = "[G] Mo Trang Dang Nhap WP-Admin ($URL_ADMIN)"
+                Action = { Start-Process $URL_ADMIN }
+            }
         )
-    },
+    }
     @{
         Title = "4. CSDL & DOCKER"
         Items = @(
-            @{ Key = "H"; Label = "[H] Cap Nhat Ten Mien 'wordpressc' Vao File Hosts (Admin)"; Action = { Run-SetupHosts } }
-            @{ Key = "X"; Label = "[X] Sao Luu Co So Du Lieu (.sql vao backups/)"; Action = { Run-BackupDb } }
-            @{ Key = "R"; Label = "[R] Khoi Dong Lai Tat Ca Containers (Restart Docker)"; Action = { Run-DockerRestart } }
-            @{ Key = "Q"; Label = "[Q] Tam Dung Tat Ca Dich Vu Containers (Stop Docker)"; Action = { Run-DockerStop } }
-            @{ Key = "S"; Label = "[S] Kiem Tra Chi Tiet Cong & Trang Thai Containers"; Action = { Run-Status } }
+            @{
+                Key    = "H"
+                Label  = "[H] Cap Nhat Ten Mien 'wordpressc' Vao File Hosts (Admin)"
+                Action = { Set-VirtualHosts }
+            }
+            @{
+                Key    = "X"
+                Label  = "[X] Sao Luu Co So Du Lieu (.sql vao backups/)"
+                Action = { Backup-JobScoutDb }
+            }
+            @{
+                Key    = "R"
+                Label  = "[R] Khoi Dong Lai Tat Ca Containers (Restart Docker)"
+                Action = { Restart-DockerServices }
+            }
+            @{
+                Key    = "Q"
+                Label  = "[Q] Tam Dung Tat Ca Dich Vu Containers (Stop Docker)"
+                Action = { Stop-DockerServices }
+            }
+            @{
+                Key    = "S"
+                Label  = "[S] Kiem Tra Chi Tiet Cong & Trang Thai Containers"
+                Action = { Get-JobScoutStatus }
+            }
         )
     }
 )
