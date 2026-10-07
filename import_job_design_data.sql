@@ -1,5 +1,4 @@
 SET NAMES utf8mb4;
-USE cms_nhomc;
 
         INSERT INTO wp_terms (name, slug, term_group)
         SELECT 'Job Category', 'job-category', 0

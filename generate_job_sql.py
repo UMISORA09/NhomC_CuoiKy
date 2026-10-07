@@ -16,7 +16,6 @@ def esc(text):
 def generate_sql():
     sql = []
     sql.append("SET NAMES utf8mb4;")
-    sql.append("USE cms_nhomc;")
     
     # 1. Categories
     categories = [
