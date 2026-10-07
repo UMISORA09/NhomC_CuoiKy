@@ -1,0 +1,992 @@
+/* ==========================================================================
+   NHOM C - JOB DETAIL STYLESHEET (PIXEL-PERFECT FIGMA/MOCKUP MATCH)
+   Primary Color Theme: Recruiter Vibrant Orange (#ea580c / #f26522)
+   Brand Logo: NhomC RECRUITING
+   ========================================================================== */
+
+:root {
+  --nhomc-orange: #ea580c;
+  --nhomc-orange-hover: #c2410c;
+  --nhomc-orange-light: #fff7ed;
+  --nhomc-dark: #111827;
+  --nhomc-text-main: #374151;
+  --nhomc-text-muted: #6b7280;
+  --nhomc-border: #e5e7eb;
+  --nhomc-bg-gray: #f9fafb;
+  --nhomc-card-bg: #ffffff;
+}
+
+body.single-job_listing,
+body.page-template-page-jobdetail,
+body.page-template-page-job-detail,
+body.nhomc-job-page {
+  background-color: #f8f9fa !important;
+  color: var(--nhomc-text-main);
+  font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Container */
+.nhomc-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   1. HEADER & BRANDING
+   ========================================================================== */
+.nhomc-header {
+  background: #ffffff;
+  border-bottom: 1px solid var(--nhomc-border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.nhomc-header-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+}
+
+/* Logo NhomC */
+.nhomc-brand-logo {
+  display: inline-flex;
+  flex-direction: column;
+  text-decoration: none !important;
+  line-height: 1;
+}
+
+.nhomc-logo-badge {
+  display: flex;
+  flex-direction: column;
+}
+
+.nhomc-logo-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: 1.5px;
+  font-family: inherit;
+  text-transform: uppercase;
+}
+
+.nhomc-logo-title span.orange-dot {
+  color: var(--nhomc-orange);
+}
+
+.nhomc-logo-sub {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 3.5px;
+  color: #333333;
+  margin-top: 3px;
+  text-transform: uppercase;
+}
+
+/* Main Navigation */
+.nhomc-nav-list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 32px;
+}
+
+.nhomc-nav-item a {
+  font-size: 13px;
+  font-weight: 700;
+  color: #374151;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 0;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nhomc-nav-item a:hover {
+  color: var(--nhomc-orange);
+}
+
+.nhomc-nav-item.active a,
+.nhomc-nav-item.current-menu-item a {
+  color: var(--nhomc-orange) !important;
+}
+
+.nhomc-nav-item.active a::after,
+.nhomc-nav-item.current-menu-item a::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2.5px;
+  background-color: var(--nhomc-orange);
+  border-radius: 2px;
+}
+
+/* Submit Job Button */
+.nhomc-btn-submit-job {
+  background-color: var(--nhomc-orange);
+  color: #ffffff !important;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 10px 22px;
+  border-radius: 4px;
+  text-decoration: none !important;
+  display: inline-block;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(234, 88, 12, 0.2);
+}
+
+.nhomc-btn-submit-job:hover {
+  background-color: var(--nhomc-orange-hover);
+  box-shadow: 0 4px 8px rgba(234, 88, 12, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Mobile Toggle */
+.nhomc-mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #111;
+}
+
+/* ==========================================================================
+   2. BREADCRUMBS
+   ========================================================================== */
+.nhomc-breadcrumbs {
+  padding: 22px 0 16px;
+  font-size: 13px;
+  color: #b45309;
+}
+
+.nhomc-breadcrumbs a {
+  color: #ea580c;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.nhomc-breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.nhomc-breadcrumbs .sep {
+  margin: 0 8px;
+  color: #9ca3af;
+}
+
+.nhomc-breadcrumbs .current {
+  color: #6b7280;
+}
+
+/* ==========================================================================
+   3. HERO JOB CARD
+   ========================================================================== */
+.nhomc-job-hero-card {
+  background: var(--nhomc-card-bg);
+  border: 1px solid var(--nhomc-border);
+  border-radius: 6px;
+  padding: 26px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.nhomc-job-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Company Logo Box */
+.nhomc-company-logo-box {
+  width: 90px;
+  height: 90px;
+  min-width: 90px;
+  border: 1px solid var(--nhomc-border);
+  border-radius: 4px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.nhomc-company-logo-box img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Typographic Logo Fallback */
+.nhomc-typo-logo {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.nhomc-typo-logo.sodoh {
+  font-family: serif;
+}
+
+.nhomc-typo-logo .logo-icon {
+  font-size: 18px;
+  color: #111;
+  margin-bottom: 2px;
+}
+
+.nhomc-typo-logo .logo-main {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #111;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.nhomc-typo-logo .logo-sub {
+  font-size: 7px;
+  letter-spacing: 0.5px;
+  color: #666;
+  text-transform: uppercase;
+}
+
+/* Job Hero Info */
+.nhomc-job-hero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nhomc-job-title {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 800;
+  color: #111827;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1.3;
+}
+
+.nhomc-job-meta-row {
+  display: flex;
+  align-items: center;
+  font-size: 12.5px;
+  color: #9ca3af;
+}
+
+.nhomc-job-tags-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.nhomc-tag-pill {
+  display: inline-block;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  color: #4b5563;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 3px 14px;
+  border-radius: 14px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* Job Hero Action Buttons */
+.nhomc-job-hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 130px;
+}
+
+.nhomc-btn-share {
+  background: #ffffff;
+  border: 1px solid #9ca3af;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 9px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.nhomc-btn-share:hover {
+  border-color: #4b5563;
+  color: #111827;
+  background: #f9fafb;
+}
+
+.nhomc-btn-apply {
+  background: #ffffff;
+  border: 1px solid var(--nhomc-orange);
+  color: var(--nhomc-orange) !important;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 9px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+}
+
+.nhomc-btn-apply:hover {
+  background: var(--nhomc-orange);
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
+}
+
+/* ==========================================================================
+   4. TWO-COLUMN DETAILS SECTION
+   ========================================================================== */
+.nhomc-job-columns {
+  display: grid;
+  grid-template-columns: 1fr 310px;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+/* Left Content Card */
+.nhomc-card-content {
+  background: var(--nhomc-card-bg);
+  border: 1px solid var(--nhomc-border);
+  border-radius: 6px;
+  padding: 32px 36px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.nhomc-card-content h3 {
+  font-size: 16.5px;
+  font-weight: 800;
+  color: #111827;
+  margin-top: 26px;
+  margin-bottom: 12px;
+  text-transform: none;
+  letter-spacing: -0.2px;
+}
+
+.nhomc-card-content h3:first-child {
+  margin-top: 0;
+}
+
+.nhomc-card-content p {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: #4b5563;
+  margin-bottom: 14px;
+}
+
+.nhomc-card-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Right Sidebar */
+.nhomc-job-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.nhomc-sidebar-card {
+  background: var(--nhomc-card-bg);
+  border: 1px solid var(--nhomc-border);
+  border-radius: 6px;
+  padding: 22px 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.nhomc-sidebar-title {
+  margin: 0 0 16px 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: #111827;
+}
+
+/* Staff Rating */
+.nhomc-rating-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nhomc-stars {
+  display: flex;
+  gap: 4px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.nhomc-stars .star.filled {
+  color: #f97316;
+}
+
+.nhomc-stars .star.empty {
+  color: #d1d5db;
+}
+
+.nhomc-rating-score {
+  font-size: 17px;
+  font-weight: 800;
+  color: #374151;
+}
+
+/* Company Photos */
+.nhomc-photos-preview {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 220px;
+  background: #f3f4f6;
+}
+
+.nhomc-photos-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.nhomc-photo-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 800;
+  padding: 8px 18px;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  backdrop-filter: blur(4px);
+}
+
+/* ==========================================================================
+   5. OTHER JOBS SECTION
+   ========================================================================== */
+.nhomc-other-jobs-section {
+  margin: 50px 0 60px;
+}
+
+.nhomc-section-heading {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 900;
+  color: #111827;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.nhomc-other-jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.nhomc-other-job-card {
+  background: var(--nhomc-card-bg);
+  border: 1px solid var(--nhomc-border);
+  border-radius: 6px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.nhomc-other-job-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  border-color: #cbd5e1;
+}
+
+.nhomc-oj-top {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.nhomc-oj-logo {
+  width: 75px;
+  height: 75px;
+  min-width: 75px;
+  border: 1px solid var(--nhomc-border);
+  border-radius: 4px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+.nhomc-oj-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.nhomc-oj-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.nhomc-oj-title {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 1.35;
+}
+
+.nhomc-oj-title a {
+  color: #111827;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nhomc-oj-title a:hover {
+  color: var(--nhomc-orange);
+}
+
+.nhomc-oj-date {
+  font-size: 11.5px;
+  color: #9ca3af;
+}
+
+.nhomc-oj-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.nhomc-oj-tags .nhomc-tag-pill {
+  font-size: 11px;
+  padding: 2px 10px;
+}
+
+.nhomc-oj-bullets {
+  border-top: 1px solid #f3f4f6;
+  padding-top: 12px;
+}
+
+.nhomc-oj-bullets ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nhomc-oj-bullets li {
+  font-size: 12.5px;
+  color: #4b5563;
+  line-height: 1.45;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.nhomc-oj-bullets li::before {
+  content: "•";
+  color: #6b7280;
+  font-weight: bold;
+}
+
+/* ==========================================================================
+   6. NEWSLETTER BAR
+   ========================================================================== */
+.nhomc-newsletter-section {
+  background-color: var(--nhomc-orange);
+  padding: 38px 0;
+  color: #ffffff;
+}
+
+.nhomc-newsletter-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.nhomc-nl-title {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #ffffff;
+  max-width: 250px;
+}
+
+.nhomc-nl-form {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  max-width: 650px;
+  justify-content: flex-end;
+}
+
+.nhomc-nl-input-group {
+  position: relative;
+  flex: 1;
+  max-width: 440px;
+}
+
+.nhomc-nl-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.nhomc-nl-input-group input {
+  width: 100%;
+  height: 48px;
+  background: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 0 16px 0 44px;
+  font-size: 13.5px;
+  color: #1f2937;
+  outline: none;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.nhomc-nl-input-group input:focus {
+  border-color: #fbd5c0;
+}
+
+.nhomc-btn-subscribe {
+  height: 48px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 0 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.nhomc-btn-subscribe:hover {
+  background: #ffffff;
+  color: var(--nhomc-orange);
+}
+
+/* ==========================================================================
+   7. FOOTER
+   ========================================================================== */
+.nhomc-site-footer {
+  background: #ffffff;
+  padding: 45px 0 0;
+  border-top: 1px solid var(--nhomc-border);
+}
+
+.nhomc-footer-brand {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.nhomc-footer-brand .nhomc-brand-logo {
+  align-items: center;
+}
+
+.nhomc-footer-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 36px;
+  margin-bottom: 28px;
+}
+
+.nhomc-footer-nav a {
+  font-size: 13px;
+  font-weight: 800;
+  color: #1f2937;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  transition: color 0.2s;
+}
+
+.nhomc-footer-nav a:hover {
+  color: var(--nhomc-orange);
+}
+
+.nhomc-social-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.nhomc-social-links a.social-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nhomc-social-links a.social-circle:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.nhomc-social-links a.fb {
+  background-color: #3b5998;
+}
+
+.nhomc-social-links a.gplus {
+  background-color: #ea4335;
+}
+
+.nhomc-social-links a.line {
+  background-color: #00c300;
+  font-size: 11px;
+}
+
+.nhomc-social-links a.tw {
+  background-color: #1da1f2;
+}
+
+.nhomc-sub-footer {
+  background: #18181b;
+  padding: 16px 0;
+  text-align: center;
+}
+
+.nhomc-sub-footer p {
+  margin: 0;
+  font-size: 12.5px;
+  color: #9ca3af;
+  letter-spacing: 0.3px;
+}
+
+/* ==========================================================================
+   8. APPLICATION & SHARE MODALS
+   ========================================================================== */
+.nhomc-modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  backdrop-filter: blur(4px);
+}
+
+.nhomc-modal-overlay.active {
+  display: flex;
+}
+
+.nhomc-modal-box {
+  background: #ffffff;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+  padding: 28px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: nhomcModalFadeIn 0.25s ease-out;
+}
+
+@keyframes nhomcModalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nhomc-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.nhomc-modal-title {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.nhomc-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nhomc-modal-form label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: -6px;
+}
+
+.nhomc-modal-form input,
+.nhomc-modal-form textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 13.5px;
+  box-sizing: border-box;
+}
+
+.nhomc-modal-form button[type="submit"] {
+  background: var(--nhomc-orange);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.nhomc-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #111827;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: none;
+  z-index: 10000;
+  animation: nhomcModalFadeIn 0.2s ease-out;
+}
+
+/* ==========================================================================
+   9. RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 991px) {
+  .nhomc-job-columns {
+    grid-template-columns: 1fr;
+  }
+  .nhomc-other-jobs-grid {
+    grid-template-columns: 1fr;
+  }
+  .nhomc-newsletter-wrap {
+    flex-direction: column;
+    text-align: center;
+  }
+  .nhomc-nl-title {
+    max-width: 100%;
+  }
+  .nhomc-nl-form {
+    width: 100%;
+    flex-direction: column;
+  }
+  .nhomc-nl-input-group {
+    max-width: 100%;
+    width: 100%;
+  }
+  .nhomc-btn-subscribe {
+    width: 100%;
+  }
+  .nhomc-nav-list {
+    display: none;
+  }
+  .nhomc-mobile-toggle {
+    display: block;
+  }
+}
+
+@media (max-width: 640px) {
+  .nhomc-job-hero-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+  .nhomc-job-hero-left {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .nhomc-job-hero-right {
+    width: 100%;
+    flex-direction: row;
+  }
+  .nhomc-btn-share,
+  .nhomc-btn-apply {
+    flex: 1;
+  }
+  .nhomc-footer-nav {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+}
