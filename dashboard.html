@@ -780,16 +780,23 @@
     <div class="os-window-header">
       <div class="header-text">
         <h1>Mô Hình Điều Khiển 2D Hệ Thống JobScout</h1>
-        <p>
+        <p style="margin-top: 6px; display: flex; flex-wrap: wrap; gap: 8px;">
           <span>Đồ Án Cuối Kỳ - Khoa CNTT - Nhóm C</span>
-          <span class="badge-chip">MySQL 8.0</span>
-          <span class="badge-chip">WordPress 6.7</span>
-          <span class="badge-chip">Theme JobScout</span>
+          <span class="badge-chip" id="badge-theme">Theme: JobScout</span>
+          <span class="badge-chip" id="badge-users">6 Admins</span>
+          <span class="badge-chip" id="badge-posts">18 Posts & Pages</span>
+          <span class="badge-chip" id="badge-tables">12 Tables</span>
         </p>
       </div>
-      <div style="display: flex; gap: 10px;">
-        <button class="btn-topbar" onclick="location.reload()">
-          <span>🔄 Tải Lại Dữ Liệu</span>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button class="btn-topbar primary" onclick="triggerAction('sync_brand', 'Đã cập nhật thương hiệu JobScout!')">
+          <span>✨ Đồng Bộ Thương Hiệu</span>
+        </button>
+        <button class="btn-topbar" onclick="triggerAction('activate_theme', 'Đã kích hoạt Theme và Plugins!')">
+          <span>🎨 Kích Hoạt Theme</span>
+        </button>
+        <button class="btn-topbar" onclick="loadLiveStatus()">
+          <span>🔄 Làm Mới Dữ Liệu</span>
         </button>
       </div>
     </div>
@@ -1229,6 +1236,54 @@
     }
     setInterval(updateClock, 1000);
     updateClock();
+
+    // Live API status
+    async function loadLiveStatus() {
+      try {
+        const res = await fetch('/api.php?action=status');
+        const data = await res.json();
+        if (data.status === 'ok') {
+          const elTables = document.getElementById('badge-tables');
+          const elPosts = document.getElementById('badge-posts');
+          const elUsers = document.getElementById('badge-users');
+          const elTheme = document.getElementById('badge-theme');
+          if (elTables) elTables.innerText = data.tables_count + ' Tables';
+          if (elPosts) elPosts.innerText = data.posts_count + ' Posts & Pages';
+          if (elUsers) elUsers.innerText = data.users_count + ' Admins';
+          if (elTheme) elTheme.innerText = 'Theme: ' + data.active_theme;
+        }
+      } catch (e) {
+        console.warn('API fetch warning:', e);
+      }
+    }
+    loadLiveStatus();
+
+    // Trigger action via api.php
+    async function triggerAction(actionName, defaultMsg) {
+      showToast('Đang xử lý yêu cầu...');
+      try {
+        const res = await fetch('/api.php?action=' + actionName);
+        const data = await res.json();
+        if (data.status === 'ok') {
+          showToast(data.message || defaultMsg);
+          loadLiveStatus();
+        } else {
+          showToast('Lỗi: ' + (data.message || 'Không thể thực thi'));
+        }
+      } catch (e) {
+        showToast('Lỗi kết nối API: ' + e);
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
   </script>
 </body>
 </html>
