@@ -32,57 +32,116 @@ if exist "%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe" (
     set "APP_BROWSER=%ProgramFiles(x86)%\Google\Chrome\Application\chrome.exe"
 )
 
-:MAIN_MENU
-cls
-echo +--------------------------------------------------------------------------+
-echo ^|                  JOBSCOUT OS v2.0 - TRUNG TAM DIEU KHIEN 2D              ^|
-echo ^|                     DO AN CUOI KY - KHOA CNTT - NHOM C                   ^|
-echo +--------------------------------------------------------------------------+
-echo ^| [TRANG THAI DICH VU]                                                     ^|
-echo ^|   * WordPress:  %URL_WEB% (Port %WP_PORT%)                                     ^|
-echo ^|   * phpMyAdmin: %URL_PMA% (Port %PMA_PORT%)                                     ^|
-echo ^|   * MySQL DB:   %DB_CONTAINER% (Port %DB_PORT% / DB: %DB_NAME%)                          ^|
-echo ^|   * Cach ly:    Doc lap 100%% voi FIT-TDC (Khong dung cham du lieu FIT-TDC) ^|
-echo +--------------------------------------------------------------------------+
-echo ^| [TAB 1: GIAO DIEN TAB NOI 2D ^& KHOI DONG]                                 ^|
-echo ^|   [1] Khoi Dong Toan Dien [Docker + DB + Mo Cua So Tab Noi Tren Man Hinh]  ^|
-echo ^|   [M] Mo Ngay Cua So Tab Noi 2D (Floating Window Dashboard)              ^|
-echo ^|   [6] Trinh Dieu Huong Web [Website / WP-Admin / phpMyAdmin / Dashboard]  ^|
-echo ^|                                                                          ^|
-echo ^| [TAB 2: DU LIEU THIET KE ^& THUONG HIEU]                                  ^|
-echo ^|   [2] Nap 7 Trang Thiet Ke Figma vao Co So Du Lieu                       ^|
-echo ^|   [4] Thiet Lap Thuong Hieu JobScout [Title, Tagline, Front Page]         ^|
-echo ^|   [5] Kich Hoat Theme JobScout va 4 Plugin Nghiep Vu                     ^|
-echo ^|                                                                          ^|
-echo ^| [TAB 3: TAI KHOAN QUAN TRI]                                              ^|
-echo ^|   [3] Dat Lai 6 Tai Khoan Administrator Nhom C [Password@123]            ^|
-echo ^|                                                                          ^|
-echo ^| [TAB 4: QUAN LY CSDL ^& DOCKER]                                           ^|
-echo ^|   [7] Sao Luu Database JobScout [Xuat file .sql]                         ^|
-echo ^|   [8] Kiem Tra Suc Khoe He Thong (Status Check)                          ^|
-echo ^|   [9] Dieu Khien Docker Containers [Restart / Stop]                      ^|
-echo ^|                                                                          ^|
-echo ^|   [0] Thoat Chuong Trinh                                                 ^|
-echo +--------------------------------------------------------------------------+
-set "CHOICE="
-set /p "CHOICE=>> Vui long chon chuc nang (1-9, M, 0) [Mac dinh nhan Enter de chon 1]: "
-if "!CHOICE!"=="" set "CHOICE=1"
+:: Khoi tao tab mac dinh
+set "CURRENT_TAB=1"
 
-if /i "%CHOICE%"=="1" goto OP_START_ALL
-if /i "%CHOICE%"=="2" goto OP_IMPORT_DESIGN
-if /i "%CHOICE%"=="3" goto OP_SETUP_USERS
-if /i "%CHOICE%"=="4" goto OP_SETUP_BRAND
-if /i "%CHOICE%"=="5" goto OP_ACTIVATE_THEME
-if /i "%CHOICE%"=="6" goto OP_OPEN_WEB
-if /i "%CHOICE%"=="7" goto OP_BACKUP_DB
-if /i "%CHOICE%"=="8" goto OP_STATUS
-if /i "%CHOICE%"=="9" goto OP_DOCKER_CTRL
+:RENDER_MENU
+cls
+echo +=============================================================================+
+echo ^|            JOBSCOUT OS v2.0 - BANG DIEU KHIEN 2D CO TAB RIENG BIET        ^|
+echo ^|                   DO AN CUOI KY - KHOA CNTT - NHOM C                      ^|
+echo +=============================================================================+
+echo ^| Ports: Web :8080 ^| PMA :8085 ^| MySQL :3307 ^| DB: %DB_NAME%                  ^|
+echo ^| Cach ly FIT-TDC: 100%% Doc Lap (Khong dung cham du lieu FIT-TDC)           ^|
+echo +=============================================================================+
+
+if "%CURRENT_TAB%"=="1" goto SHOW_TAB_1
+if "%CURRENT_TAB%"=="2" goto SHOW_TAB_2
+if "%CURRENT_TAB%"=="3" goto SHOW_TAB_3
+if "%CURRENT_TAB%"=="4" goto SHOW_TAB_4
+goto SHOW_TAB_1
+
+:SHOW_TAB_1
+echo ^| == [TAB 1: TONG QUAN] == ^|    TAB 2: DU LIEU    ^|    TAB 3: ADMIN       ^|
+echo ^|                          ^|    TAB 4: CSDL ^& DOCKER                      ^|
+echo +-----------------------------------------------------------------------------+
+echo ^|                                                                             ^|
+echo ^|  [A] KHOI DONG TOAN DIEN [Docker + CSDL + Mo Tab Noi 2D Tren Man Hinh]      ^|
+echo ^|  [M] MO NGAY CUA SO TAB NOI 2D (Floating 2D OS Dashboard)                   ^|
+echo ^|  [W] Mo Trang Chu Website JobScout (%URL_WEB%)                              ^|
+echo ^|  [P] Mo phpMyAdmin Quan Ly CSDL (%URL_PMA%)                                 ^|
+echo ^|  [S] Kiem Tra Suc Khoe ^& Trang Thai Containers                             ^|
+echo ^|                                                                             ^|
+goto SHOW_TAB_FOOTER
+
+:SHOW_TAB_2
+echo ^|     TAB 1: TONG QUAN     ^| == [TAB 2: DU LIEU] == ^|    TAB 3: ADMIN     ^|
+echo ^|                          ^|     TAB 4: CSDL ^& DOCKER                     ^|
+echo +-----------------------------------------------------------------------------+
+echo ^|                                                                             ^|
+echo ^|  [F] Nap 7 Trang Thiet Ke Figma vao Database (Home, About, News, Jobs...)   ^|
+echo ^|  [B] Thiet Lap Nhan Dien Thuong Hieu JobScout ^& Front Page                  ^|
+echo ^|  [K] Kich Hoat Theme JobScout va 4 Plugin Nghiep Vu                         ^|
+echo ^|  [V] Mo Xem Trang Du Lieu Thiet Ke Tren Trinh Duyet                         ^|
+echo ^|                                                                             ^|
+goto SHOW_TAB_FOOTER
+
+:SHOW_TAB_3
+echo ^|     TAB 1: TONG QUAN     ^|     TAB 2: DU LIEU     ^| == [TAB 3: ADMIN] == ^|
+echo ^|                          ^|     TAB 4: CSDL ^& DOCKER                     ^|
+echo +-----------------------------------------------------------------------------+
+echo ^|                                                                             ^|
+echo ^|  [U] Cap Nhat ^& Dat Lai 6 Tai Khoan Administrator [Password@123]            ^|
+echo ^|  [L] Xem Danh Sach 6 Quan Tri Vien (Ho ten, Username, Email, Mat khau)      ^|
+echo ^|  [G] Mo Trang Dang Nhap WP-Admin (%URL_ADMIN%)                              ^|
+echo ^|                                                                             ^|
+goto SHOW_TAB_FOOTER
+
+:SHOW_TAB_4
+echo ^|     TAB 1: TONG QUAN     ^|     TAB 2: DU LIEU     ^|     TAB 3: ADMIN     ^|
+echo ^|                          ^| == [TAB 4: CSDL ^& DOCKER] ==                 ^|
+echo +-----------------------------------------------------------------------------+
+echo ^|                                                                             ^|
+echo ^|  [X] Sao Luu Co So Du Lieu (.sql vao thu muc backups/)                      ^|
+echo ^|  [R] Khoi Dong Lai Tat Ca Containers (Restart Docker)                       ^|
+echo ^|  [Q] Tam Dung Tat Ca Dich Vu Containers (Stop Docker)                       ^|
+echo ^|  [S] Kiem Tra Chi Tiet Cong ^& Trinh Trang Container                         ^|
+echo ^|                                                                             ^|
+goto SHOW_TAB_FOOTER
+
+:SHOW_TAB_FOOTER
+
+echo +-----------------------------------------------------------------------------+
+echo ^|  CHUYEN TAB : Go [1] Tong Quan ^| [2] Du Lieu ^| [3] Admin ^| [4] Docker ^& DB ^|
+echo ^|  THAO TAC   : Go ma chu cai [A, M, W, P, F, U, X...] hoac [0] Thoat          ^|
+echo +-----------------------------------------------------------------------------+
+
+set "CHOICE="
+if "%CURRENT_TAB%"=="1" (
+    set /p "CHOICE=>> Nhap lua chon (Chon Tab 1-4 / Thao tac / Enter de Khoi dong [A]): "
+    if "!CHOICE!"=="" set "CHOICE=A"
+) else (
+    set /p "CHOICE=>> Nhap lua chon (Chon Tab 1-4 / Thao tac ma chu cai / [0] Thoat): "
+    if "!CHOICE!"=="" goto RENDER_MENU
+)
+
+:: Chuyen tab
+if "%CHOICE%"=="1" set "CURRENT_TAB=1" & goto RENDER_MENU
+if "%CHOICE%"=="2" set "CURRENT_TAB=2" & goto RENDER_MENU
+if "%CHOICE%"=="3" set "CURRENT_TAB=3" & goto RENDER_MENU
+if "%CHOICE%"=="4" set "CURRENT_TAB=4" & goto RENDER_MENU
+
+:: Thao tac chuc nang
+if /i "%CHOICE%"=="A" goto OP_START_ALL
 if /i "%CHOICE%"=="M" goto OP_LAUNCH_FLOATING_TAB
+if /i "%CHOICE%"=="W" start "" "%URL_WEB%" & goto RENDER_MENU
+if /i "%CHOICE%"=="P" start "" "%URL_PMA%" & goto RENDER_MENU
+if /i "%CHOICE%"=="S" goto OP_STATUS
+if /i "%CHOICE%"=="F" goto OP_IMPORT_DESIGN
+if /i "%CHOICE%"=="B" goto OP_SETUP_BRAND
+if /i "%CHOICE%"=="K" goto OP_ACTIVATE_THEME
+if /i "%CHOICE%"=="V" start "" "%URL_WEB%/about-us" & start "" "%URL_WEB%/all-jobs" & goto RENDER_MENU
+if /i "%CHOICE%"=="U" goto OP_SETUP_USERS
+if /i "%CHOICE%"=="L" goto OP_LIST_USERS
+if /i "%CHOICE%"=="G" start "" "%URL_ADMIN%" & goto RENDER_MENU
+if /i "%CHOICE%"=="X" goto OP_BACKUP_DB
+if /i "%CHOICE%"=="R" goto OP_DOCKER_RESTART
+if /i "%CHOICE%"=="Q" goto OP_DOCKER_STOP
 if /i "%CHOICE%"=="0" goto OP_EXIT
 
 echo Lua chon khong hop le!
 ping 127.0.0.1 -n 2 >nul
-goto MAIN_MENU
+goto RENDER_MENU
 
 :: ===============================================================================
 :OP_START_ALL
@@ -95,7 +154,7 @@ docker info >nul 2>&1
 if %errorlevel% neq 0 (
     echo [LOI] Docker Desktop chua bat! Vui long bat Docker Desktop truoc.
     pause
-    goto MAIN_MENU
+    goto RENDER_MENU
 )
 
 echo [1/6] Khoi dong Docker containers...
@@ -129,7 +188,7 @@ call :OPEN_FLOATING_WINDOW
 start "" "%URL_WEB%" >nul 2>&1
 echo.
 pause
-goto MAIN_MENU
+goto RENDER_MENU
 
 :: ===============================================================================
 :OP_LAUNCH_FLOATING_TAB
@@ -138,7 +197,7 @@ echo Dang mo Cua So Tab Noi 2D He Dieu Hanh tren man hinh...
 call :OPEN_FLOATING_WINDOW
 echo [OK] Da mo cua so tab noi thanh cong!
 ping 127.0.0.1 -n 2 >nul
-goto MAIN_MENU
+goto RENDER_MENU
 
 :: ===============================================================================
 :OPEN_FLOATING_WINDOW
@@ -157,7 +216,7 @@ echo ---------------------------------------------------------------------------
 call :EXEC_SQL import_job_design_data.sql
 echo [OK] Da nap thanh cong Trang, Tin Tuc va 6 Tin Tuyen Dung vao database!
 pause
-goto MAIN_MENU
+goto RENDER_MENU
 
 :: ===============================================================================
 :OP_SETUP_USERS
@@ -165,17 +224,28 @@ cls
 echo [TIEN TRINH] Cap nhat 6 tai khoan Administrator Nhom C...
 echo -------------------------------------------------------------------------------
 call :EXEC_SQL create_users.sql
+echo [OK] Da cap nhat 6 tai khoan Administrator thanh cong!
+pause
+goto RENDER_MENU
+
+:: ===============================================================================
+:OP_LIST_USERS
+cls
+echo +--------------------------------------------------------------------------+
+echo ^|                DANH SACH 6 TAI KHOAN QUAN TRI VIEN NHOM C                ^|
+echo +--------------------------------------------------------------------------+
 echo.
-echo Danh sach tai khoan [Mat khau chung: Password@123]:
 echo   1. xuanhoa      - Van Nguyen Xuan Hoa  (vhoa1682006@gmail.com)
 echo   2. thanhhien    - Nguyen Thanh Hien    (thenghien2006@gmail.com)
 echo   3. vinhem       - Huynh Van Vinh Em    (trumvinh85@gmail.com)
 echo   4. anhquy       - Nguyen Anh Quy       (nguyquy67@gmail.com)
 echo   5. dangnguyen   - Dang Dang Nguyen     (dn1275102@gmail.com)
 echo   6. admin_nhomc  - Quan Tri Vien Nhom C (admin_nhomc@fit.tdc.edu.vn)
+echo.
+echo   * Mat khau dang nhap chung: Password@123
 echo -------------------------------------------------------------------------------
 pause
-goto MAIN_MENU
+goto RENDER_MENU
 
 :: ===============================================================================
 :OP_SETUP_BRAND
@@ -185,7 +255,7 @@ echo ---------------------------------------------------------------------------
 call :EXEC_SQL setup_jobscout_brand.sql
 echo [OK] Da cap nhat Site Title: JobScout, Tagline va Front Page!
 pause
-goto MAIN_MENU
+goto RENDER_MENU
 
 :: ===============================================================================
 :OP_ACTIVATE_THEME
@@ -195,35 +265,7 @@ echo ---------------------------------------------------------------------------
 call :EXEC_SQL activate_theme_plugins.sql
 echo [OK] Theme JobScout va 4 Plugin da duoc kich hoat!
 pause
-goto MAIN_MENU
-
-:: ===============================================================================
-:OP_OPEN_WEB
-cls
-echo +--------------------------------------------------------------------------+
-echo ^|                        TRINH DIEU HUONG WEB                              ^|
-echo +--------------------------------------------------------------------------+
-echo   [1] Cua So Tab Noi 2D He Dieu Hanh : %URL_DASHBOARD%
-echo   [2] Trang Chu Website JobScout     : %URL_WEB%
-echo   [3] Trang Quan Tri WP-Admin        : %URL_ADMIN%
-echo   [4] Quan Ly CSDL phpMyAdmin        : %URL_PMA%
-echo   [5] Mo Toan Bo 4 Trang Tren
-echo   [0] Quay Lai Menu Chinh
-echo.
-set "WEB_CHOICE="
-set /p "WEB_CHOICE=>> Nhap thao tac (0-5): "
-if "%WEB_CHOICE%"=="1" call :OPEN_FLOATING_WINDOW & goto MAIN_MENU
-if "%WEB_CHOICE%"=="2" start "" "%URL_WEB%" & goto MAIN_MENU
-if "%WEB_CHOICE%"=="3" start "" "%URL_ADMIN%" & goto MAIN_MENU
-if "%WEB_CHOICE%"=="4" start "" "%URL_PMA%" & goto MAIN_MENU
-if "%WEB_CHOICE%"=="5" (
-    call :OPEN_FLOATING_WINDOW
-    start "" "%URL_WEB%"
-    start "" "%URL_ADMIN%"
-    start "" "%URL_PMA%"
-    goto MAIN_MENU
-)
-goto MAIN_MENU
+goto RENDER_MENU
 
 :: ===============================================================================
 :OP_BACKUP_DB
@@ -242,7 +284,7 @@ if %errorlevel% equ 0 (
     echo [LOI] Khong the xuat database!
 )
 pause
-goto MAIN_MENU
+goto RENDER_MENU
 
 :: ===============================================================================
 :OP_STATUS
@@ -259,35 +301,25 @@ echo   * phpMyAdmin:     %PMA_CONTAINER% (%URL_PMA%)
 echo   * 2D Dashboard:   %URL_DASHBOARD%
 echo -------------------------------------------------------------------------------
 pause
-goto MAIN_MENU
+goto RENDER_MENU
 
 :: ===============================================================================
-:OP_DOCKER_CTRL
+:OP_DOCKER_RESTART
 cls
-echo +--------------------------------------------------------------------------+
-echo ^|                        DIEU KHIEN DOCKER                                 ^|
-echo +--------------------------------------------------------------------------+
-echo   [1] Khoi Dong Lai Tat Ca Dich Vu (Restart)
-echo   [2] Tam Dung Toan Bo Dich Vu (Stop)
-echo   [0] Quay Lai Menu Chinh
-echo.
-set "DOCKER_ACT="
-set /p "DOCKER_ACT=>> Chon thao tac (0-2): "
-if "%DOCKER_ACT%"=="1" (
-    echo Dang khoi dong lai...
-    docker compose restart
-    echo [OK] Da khoi dong lai thanh cong!
-    pause
-    goto MAIN_MENU
-)
-if "%DOCKER_ACT%"=="2" (
-    echo Dang dung containers...
-    docker compose stop
-    echo [OK] Da tam dung dich vu an toan!
-    pause
-    goto MAIN_MENU
-)
-goto MAIN_MENU
+echo Dang khoi dong lai cac containers...
+docker compose restart
+echo [OK] Da khoi dong lai thanh cong!
+pause
+goto RENDER_MENU
+
+:: ===============================================================================
+:OP_DOCKER_STOP
+cls
+echo Dang tam dung cac containers...
+docker compose stop
+echo [OK] Da tam dung dich vu an toan!
+pause
+goto RENDER_MENU
 
 :: ===============================================================================
 :EXEC_SQL
