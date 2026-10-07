@@ -56,8 +56,9 @@ git checkout 1-master
 - Hệ thống sẽ:
   1. Tự động bật Docker containers (`wordpress_db`, `wordpress_app`, `wordpress_phpmyadmin`).
   2. Tự động nạp CSDL `wordpress` độc lập.
-  3. Kích hoạt Theme JobScout và 4 Plugins.
+  3. Kích hoạt Theme JobScout và 5 Plugins chuẩn đồ án (bao gồm `wpjm-company-profile-page` - Company Profile Page for WPJM theo gợi ý dòng 549 trong Excel).
   4. Tạo 6 tài khoản Administrator cho các thành viên.
+  5. Thiết lập sẵn 5 Hồ Sơ Doanh Nghiệp (Company Profiles) gắn liền với 25 tin tuyển dụng.
   5. Nạp toàn bộ 25 việc làm của 5 công ty và 5 bài viết cẩm nang nghề nghiệp.
   6. Mở **Cửa sổ điều khiển 2D WebOS** và trình duyệt web.
 
@@ -121,6 +122,14 @@ Nếu các thành viên làm việc chung cùng mạng WiFi:
 - **Trang Liên Hệ (Bắt buộc với nhóm 5SV):** `/contact-us`
 - **Trang Tìm kiếm việc làm:** `/jobs` (và `/all-jobs`)
 - **Trang Tin tức / Blog:** `/blog` (và `/news`)
+- **Hồ sơ Doanh nghiệp (Company Profiles - Plugin WPJM Company Profile Page):**
+  - Quản lý công ty: Menu **Job Listings > Companies** trong WP Admin
+  - VNG Corporation: `/company/vng-corporation/`
+  - FPT Software Vietnam: `/company/fpt-software-vietnam/`
+  - Viettel Digital Solutions: `/company/viettel-digital-solutions/`
+  - MoMo Financial Technology: `/company/momo-financial-technology/`
+  - Plan Do See Global (PDS): `/company/plan-do-see-global-pds/`
+  - *Mỗi trang công ty tự động tổng hợp đầy đủ mô tả công ty, website chính thức và danh sách tất cả các việc làm của công ty đó!*
 
 ---
 
