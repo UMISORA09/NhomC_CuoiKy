@@ -14,17 +14,22 @@ $WP_PORT = "8080"
 $PMA_PORT = "8085"
 $DB_PORT = "3307"
 
-# Tu dong nhan dien ten mien wordpressc, WordpressC.local hoac localhost
-$DOMAIN = "wordpressc"
+# Tu dong nhan dien ten mien wordpress.local (chuan file Excel), wordpressc hoac localhost
+$DOMAIN = "localhost"
 try {
-    [System.Net.Dns]::GetHostAddresses("wordpressc") | Out-Null
-    $DOMAIN = "wordpressc"
+    [System.Net.Dns]::GetHostAddresses("wordpress.local") | Out-Null
+    $DOMAIN = "wordpress.local"
 } catch {
     try {
-        [System.Net.Dns]::GetHostAddresses("WordpressC.local") | Out-Null
-        $DOMAIN = "WordpressC.local"
+        [System.Net.Dns]::GetHostAddresses("wordpressc") | Out-Null
+        $DOMAIN = "wordpressc"
     } catch {
-        $DOMAIN = "localhost"
+        try {
+            [System.Net.Dns]::GetHostAddresses("WordpressC.local") | Out-Null
+            $DOMAIN = "WordpressC.local"
+        } catch {
+            $DOMAIN = "localhost"
+        }
     }
 }
 
@@ -70,26 +75,32 @@ function Start-JobScoutAll {
     
     Write-Host "[1/6] Khoi dong Docker containers (docker-compose)..." -ForegroundColor Yellow
     docker compose up -d
-    Start-Sleep -Seconds 2
 
-    Write-Host "[2/6] Kiem tra va khoi tao WordPress core..." -ForegroundColor Yellow
-    docker exec $WP_CONTAINER wp core is-installed --allow-root 2>$null
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "      Dang cai dat WordPress core..." -ForegroundColor DarkYellow
-        docker exec $WP_CONTAINER wp core install --url="$URL_WEB" --title="JobScout" --admin_user="admin_nhomc" --admin_password="Password@123" --admin_email="admin_nhomc@fit.tdc.edu.vn" --skip-email --allow-root 2>$null
+    Write-Host "[2/6] Doi co so du lieu MySQL san sang tren cong 3307..." -ForegroundColor Yellow
+    $dbReady = $false
+    for ($i = 0; $i -lt 35; $i++) {
+        docker exec $DB_CONTAINER mysqladmin ping -u root -prootpassword --silent 2>$null
+        if ($LASTEXITCODE -eq 0) { $dbReady = $true; break }
+        Start-Sleep -Seconds 1
+    }
+    if ($dbReady) {
+        Write-Host "      CSDL MySQL da san sang ket noi!" -ForegroundColor Green
+    } else {
+        Write-Host "      [Canh bao] MySQL van dang khoi dong, tiep tuc nap..." -ForegroundColor DarkYellow
     }
 
-    Write-Host "[3/6] Dong bo 6 tai khoan Administrator Nhom C..." -ForegroundColor Yellow
+    Write-Host "[3/6] Nap 7 trang thiet ke Figma & CSDL goc vao Database..." -ForegroundColor Yellow
+    Invoke-SqlFile "import_job_design_data.sql"
+
+    Write-Host "[4/6] Dong bo 6 tai khoan Administrator Nhom C..." -ForegroundColor Yellow
     Invoke-SqlFile "create_users.sql"
 
-    Write-Host "[4/6] Thiet lap thuong hieu JobScout va Front Page..." -ForegroundColor Yellow
+    Write-Host "[5/6] Thiet lap thuong hieu JobScout va Front Page..." -ForegroundColor Yellow
     Invoke-SqlFile "setup_jobscout_brand.sql"
 
-    Write-Host "[5/6] Kich hoat Theme JobScout va 4 Plugin..." -ForegroundColor Yellow
+    Write-Host "[6/6] Kich hoat Theme JobScout, 5 Plugins va Dong bo Doanh Nghiep..." -ForegroundColor Yellow
     Invoke-SqlFile "activate_theme_plugins.sql"
-
-    Write-Host "[6/6] Nap 7 trang thiet ke Figma vao Database..." -ForegroundColor Yellow
-    Invoke-SqlFile "import_job_design_data.sql"
+    docker exec $WP_CONTAINER php sync_company_profiles.php 2>$null
 
     Write-Host ""
     Write-Host "+--------------------------------------------------------------------------+" -ForegroundColor Green
@@ -351,9 +362,18 @@ $currentTabIdx = 0
 $selectedItemIdx = 0
 
 # ===============================================================================
-# AUTO-LAUNCH CUA SO TAB NOI 2D NGAY KHI MO MENU
+# AUTO-LAUNCH CUA SO TAB NOI 2D KHI WEB SERVICE DA SAN SANG
 # ===============================================================================
-Open-FloatingWindow
+try {
+    $tcp = New-Object System.Net.Sockets.TcpClient
+    $iar = $tcp.BeginConnect("127.0.0.1", [int]$WP_PORT, $null, $null)
+    $ok = $iar.AsyncWaitHandle.WaitOne(400)
+    if ($ok -and $tcp.Connected) {
+        $tcp.EndConnect($iar)
+        Open-FloatingWindow
+    }
+    $tcp.Close()
+} catch {}
 
 # ===============================================================================
 # MAIN TUI LOOP (INSTANT KEYPRESS INTERACTION - AN CHON LA CHAY)
