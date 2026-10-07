@@ -788,15 +788,24 @@
           <span class="badge-chip" id="badge-tables">12 Tables</span>
         </p>
       </div>
-      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <button class="btn-topbar primary" onclick="triggerAction('sync_brand', 'Đã cập nhật thương hiệu JobScout!')">
-          <span>✨ Đồng Bộ Thương Hiệu</span>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <button class="btn-topbar primary" onclick="triggerAction('start_all', 'Khởi động & cấu hình toàn bộ hệ thống JobScout 100%!')">
+          <span>🚀 Khởi Động Toàn Diện</span>
+        </button>
+        <button class="btn-topbar" onclick="triggerAction('sync_users', 'Đã đồng bộ 6 tài khoản Administrator [Password@123]!')">
+          <span>👥 Đồng Bộ 6 Admin</span>
+        </button>
+        <button class="btn-topbar" onclick="triggerAction('sync_brand', 'Đã cập nhật thương hiệu JobScout và Front Page!')">
+          <span>✨ Đặt Thương Hiệu</span>
         </button>
         <button class="btn-topbar" onclick="triggerAction('activate_theme', 'Đã kích hoạt Theme và Plugins!')">
           <span>🎨 Kích Hoạt Theme</span>
         </button>
+        <button class="btn-topbar" onclick="triggerAction('import_design', 'Đã nạp dữ liệu 7 trang Figma vào Database!')">
+          <span>📥 Nạp 7 Trang Figma</span>
+        </button>
         <button class="btn-topbar" onclick="loadLiveStatus()">
-          <span>🔄 Làm Mới Dữ Liệu</span>
+          <span>🔄 Làm Mới</span>
         </button>
       </div>
     </div>
@@ -965,6 +974,91 @@
           <a href="http://localhost:8085" target="_blank" class="btn-action">
             <span>Mở phpMyAdmin ↗</span>
           </a>
+        </div>
+
+        <!-- CARD 4: KHOI DONG TOAN DIEN -->
+        <div class="service-card" style="border-color: rgba(6, 182, 212, 0.4);">
+          <div>
+            <div class="service-top">
+              <div class="service-icon" style="background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3);">🚀</div>
+              <div class="service-info">
+                <h3>Khởi Động Toàn Diện (1-Click)</h3>
+                <p>Tự động nạp CSDL: 6 Admin + Brand + Theme JobScout + 4 Plugin + 7 Trang Figma.</p>
+              </div>
+            </div>
+            <div class="service-url">api.php?action=start_all</div>
+          </div>
+          <button class="btn-action" style="background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); color:#fff; cursor:pointer;" onclick="triggerAction('start_all', 'Đã khởi động & cấu hình toàn bộ hệ thống JobScout 100%!')">
+            <span>Chạy Toàn Bộ Ngay ⚡</span>
+          </button>
+        </div>
+
+        <!-- CARD 5: DONG BO 6 ADMIN -->
+        <div class="service-card">
+          <div>
+            <div class="service-top">
+              <div class="service-icon" style="background: rgba(139, 92, 246, 0.15); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.3);">👥</div>
+              <div class="service-info">
+                <h3>Đồng Bộ 6 Tài Khoản Admin</h3>
+                <p>Cập nhật tài khoản cho 6 thành viên Nhóm C với mật khẩu chung <code>Password@123</code>.</p>
+              </div>
+            </div>
+            <div class="service-url">create_users.sql</div>
+          </div>
+          <button class="btn-action" style="cursor:pointer;" onclick="triggerAction('sync_users', 'Đã đồng bộ 6 tài khoản Administrator [Password@123]!')">
+            <span>Cập Nhật 6 Admin 👥</span>
+          </button>
+        </div>
+
+        <!-- CARD 6: CAU HINH THUONG HIEU -->
+        <div class="service-card">
+          <div>
+            <div class="service-top">
+              <div class="service-icon" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3);">✨</div>
+              <div class="service-info">
+                <h3>Cấu Hình Thương Hiệu JobScout</h3>
+                <p>Thiết lập Site Title, Tagline và cài đặt Front Page là Home, Posts Page là News.</p>
+              </div>
+            </div>
+            <div class="service-url">setup_jobscout_brand.sql</div>
+          </div>
+          <button class="btn-action" style="cursor:pointer;" onclick="triggerAction('sync_brand', 'Đã cập nhật thương hiệu JobScout và Front Page!')">
+            <span>Đặt Thương Hiệu ✨</span>
+          </button>
+        </div>
+
+        <!-- CARD 7: KICH HOAT THEME -->
+        <div class="service-card">
+          <div>
+            <div class="service-top">
+              <div class="service-icon" style="background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3);">🎨</div>
+              <div class="service-info">
+                <h3>Kích Hoạt Theme & 4 Plugins</h3>
+                <p>Kích hoạt Theme JobScout, WP Job Manager, Extra Fields, Rara Companion.</p>
+              </div>
+            </div>
+            <div class="service-url">activate_theme_plugins.sql</div>
+          </div>
+          <button class="btn-action" style="cursor:pointer;" onclick="triggerAction('activate_theme', 'Đã kích hoạt Theme và 4 Plugin!')">
+            <span>Kích Hoạt Theme 🎨</span>
+          </button>
+        </div>
+
+        <!-- CARD 8: NAP 7 TRANG FIGMA -->
+        <div class="service-card">
+          <div>
+            <div class="service-top">
+              <div class="service-icon" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3);">📥</div>
+              <div class="service-info">
+                <h3>Nạp 7 Trang Thiết Kế Figma</h3>
+                <p>Đồng bộ dữ liệu các trang (Home, About, News, All Jobs, Contact) và tin tuyển dụng.</p>
+              </div>
+            </div>
+            <div class="service-url">import_job_design_data.sql</div>
+          </div>
+          <button class="btn-action" style="cursor:pointer;" onclick="triggerAction('import_design', 'Đã nạp 7 trang thiết kế Figma vào Database!')">
+            <span>Nạp Dữ Liệu Figma 📥</span>
+          </button>
         </div>
       </div>
     </section>

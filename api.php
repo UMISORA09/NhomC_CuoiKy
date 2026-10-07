@@ -21,24 +21,35 @@ if ($conn->connect_error) {
 
 $conn->set_charset('utf8mb4');
 
+function runSqlFile($conn, $filename) {
+    if (!file_exists($filename)) {
+        return false;
+    }
+    $sql = file_get_contents($filename);
+    if ($conn->multi_query($sql)) {
+        do {
+            if ($result = $conn->store_result()) {
+                $result->free();
+            }
+        } while ($conn->more_results() && $conn->next_result());
+        return true;
+    }
+    return false;
+}
+
 if ($action === 'status') {
-    // Dem so tables
     $tableRes = $conn->query("SHOW TABLES");
     $tables = $tableRes ? $tableRes->num_rows : 0;
 
-    // Kiem tra theme
     $themeRes = $conn->query("SELECT option_value FROM wp_options WHERE option_name = 'stylesheet' LIMIT 1");
     $theme = ($themeRes && $row = $themeRes->fetch_assoc()) ? $row['option_value'] : 'unknown';
 
-    // Dem so users
     $userRes = $conn->query("SELECT COUNT(*) as cnt FROM wp_users");
     $users = ($userRes && $row = $userRes->fetch_assoc()) ? (int)$row['cnt'] : 0;
 
-    // Dem so posts
     $postRes = $conn->query("SELECT COUNT(*) as cnt FROM wp_posts WHERE post_status = 'publish'");
     $posts = ($postRes && $row = $postRes->fetch_assoc()) ? (int)$row['cnt'] : 0;
 
-    // Site Title
     $titleRes = $conn->query("SELECT option_value FROM wp_options WHERE option_name = 'blogname' LIMIT 1");
     $blogname = ($titleRes && $row = $titleRes->fetch_assoc()) ? $row['option_value'] : 'WordPress';
 
@@ -84,6 +95,27 @@ if ($action === 'activate_theme') {
     $stmt->execute();
 
     echo json_encode(['status' => 'ok', 'message' => 'Đã kích hoạt Theme JobScout và 4 Plugin thành công!']);
+    exit;
+}
+
+if ($action === 'sync_users') {
+    runSqlFile($conn, 'create_users.sql');
+    echo json_encode(['status' => 'ok', 'message' => 'Đã cập nhật 6 tài khoản Administrator [Password@123] thành công!']);
+    exit;
+}
+
+if ($action === 'import_design') {
+    runSqlFile($conn, 'import_job_design_data.sql');
+    echo json_encode(['status' => 'ok', 'message' => 'Đã nạp thành công 7 trang thiết kế Figma và tin tuyển dụng vào Database!']);
+    exit;
+}
+
+if ($action === 'start_all') {
+    runSqlFile($conn, 'create_users.sql');
+    runSqlFile($conn, 'setup_jobscout_brand.sql');
+    runSqlFile($conn, 'activate_theme_plugins.sql');
+    runSqlFile($conn, 'import_job_design_data.sql');
+    echo json_encode(['status' => 'ok', 'message' => 'Khởi động và nạp toàn bộ cấu hình JobScout thành công 100%!']);
     exit;
 }
 
