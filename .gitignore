@@ -13,13 +13,35 @@ wp-config.php
 # Log files
 *.log
 
+<<<<<<< HEAD
 # OS generated files
+=======
+# WordPress Sensitive & Upload Files
+wp-config.php
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/cache/
+wp-content/backup-db/
+wp-content/backups/
+
+# Environment & Logs
+.env
+*.log
+
+# Operating System
+>>>>>>> 9f40b57ed12bd17dbe918c6514805fb82c473730
 .DS_Store
 Thumbs.db
 desktop.ini
 
+<<<<<<< HEAD
 # IDE & Editor files
 .vscode/
 .idea/
 *.sublime-project
 *.sublime-workspace
+=======
+# IDE & Editor
+.vscode/
+.idea/
+>>>>>>> 9f40b57ed12bd17dbe918c6514805fb82c473730
