@@ -244,29 +244,29 @@ $tabs = @(
                 Key    = "A"
                 Label  = "[A] KHOI DONG TOAN DIEN (1-Click Docker + CSDL + Mo Tab 2D)"
                 Action = { Start-JobScoutAll }
-            }
+            },
             @{
                 Key    = "M"
                 Label  = "[M] MO NGAY CUA SO TAB NOI 2D (Floating 2D OS Dashboard)"
                 Action = { Open-FloatingWindow }
-            }
+            },
             @{
                 Key    = "W"
                 Label  = "[W] Mo Website JobScout ($URL_WEB)"
                 Action = { Start-Process $URL_WEB }
-            }
+            },
             @{
                 Key    = "P"
                 Label  = "[P] Mo phpMyAdmin Quan Ly CSDL ($URL_PMA)"
                 Action = { Start-Process $URL_PMA }
-            }
+            },
             @{
                 Key    = "S"
                 Label  = "[S] Kiem Tra Suc Khoe & Tien Trinh Containers"
                 Action = { Get-JobScoutStatus }
             }
         )
-    }
+    },
     @{
         Title = "2. DU LIEU THIET KE"
         Items = @(
@@ -274,17 +274,17 @@ $tabs = @(
                 Key    = "F"
                 Label  = "[F] Nap 7 Trang Thiet Ke Figma vao Database"
                 Action = { Import-JobDesign }
-            }
+            },
             @{
                 Key    = "B"
                 Label  = "[B] Thiet Lap Thuong Hieu JobScout & Front Page"
                 Action = { Set-JobScoutBrand }
-            }
+            },
             @{
                 Key    = "K"
                 Label  = "[K] Kich Hoat Theme JobScout va 4 Plugin Nghiep Vu"
                 Action = { Enable-ThemePlugins }
-            }
+            },
             @{
                 Key    = "V"
                 Label  = "[V] Mo Xem Trang Du Lieu Thiet Ke Tren Trinh Duyet"
@@ -294,7 +294,7 @@ $tabs = @(
                 }
             }
         )
-    }
+    },
     @{
         Title = "3. TAI KHOAN ADMIN"
         Items = @(
@@ -302,19 +302,19 @@ $tabs = @(
                 Key    = "U"
                 Label  = "[U] Cap Nhat & Dat Lai 6 Tai Khoan Admin [Password@123]"
                 Action = { Set-AdminUsers }
-            }
+            },
             @{
                 Key    = "L"
                 Label  = "[L] Xem Danh Sach 6 Quan Tri Vien (Ho ten, User, Email)"
                 Action = { Get-AdminUsersList }
-            }
+            },
             @{
                 Key    = "G"
                 Label  = "[G] Mo Trang Dang Nhap WP-Admin ($URL_ADMIN)"
                 Action = { Start-Process $URL_ADMIN }
             }
         )
-    }
+    },
     @{
         Title = "4. CSDL & DOCKER"
         Items = @(
@@ -322,22 +322,22 @@ $tabs = @(
                 Key    = "H"
                 Label  = "[H] Cap Nhat Ten Mien 'wordpressc' Vao File Hosts (Admin)"
                 Action = { Set-VirtualHosts }
-            }
+            },
             @{
                 Key    = "X"
                 Label  = "[X] Sao Luu Co So Du Lieu (.sql vao backups/)"
                 Action = { Backup-JobScoutDb }
-            }
+            },
             @{
                 Key    = "R"
                 Label  = "[R] Khoi Dong Lai Tat Ca Containers (Restart Docker)"
                 Action = { Restart-DockerServices }
-            }
+            },
             @{
                 Key    = "Q"
                 Label  = "[Q] Tam Dung Tat Ca Dich Vu Containers (Stop Docker)"
                 Action = { Stop-DockerServices }
-            }
+            },
             @{
                 Key    = "S"
                 Label  = "[S] Kiem Tra Chi Tiet Cong & Trang Thai Containers"
