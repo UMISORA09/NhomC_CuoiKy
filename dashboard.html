@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobScout OS - Bảng Điều Khiển Hệ Điều Hành 2D Nhóm C</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #07090e;
+      --bg-surface: #0e131f;
+      --bg-elevated: #151d30;
+      --bg-card: rgba(21, 29, 48, 0.7);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(6, 182, 212, 0.4);
+      --accent-cyan: #06b6d4;
+      --accent-cyan-glow: rgba(6, 182, 212, 0.25);
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --glass-filter: blur(16px);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --shadow-os: 0 20px 40px -15px rgba(0, 0, 0, 0.6), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(6, 182, 212, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(139, 92, 246, 0.08) 0%, transparent 45%),
+        linear-gradient(to bottom, rgba(14, 19, 31, 0.8), rgba(7, 9, 14, 0.95));
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* OS TOP BAR */
+    .os-topbar {
+      height: 48px;
+      background: rgba(14, 19, 31, 0.85);
+      backdrop-filter: var(--glass-filter);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .os-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .os-logo-badge {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 12px var(--accent-cyan-glow);
+    }
+
+    .os-logo-badge svg {
+      width: 16px;
+      height: 16px;
+      fill: #fff;
+    }
+
+    .os-status-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .status-pill.online {
+      color: var(--accent-emerald);
+      border-color: rgba(16, 185, 129, 0.25);
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    .status-pill.shield {
+      color: var(--accent-cyan);
+      border-color: rgba(6, 182, 212, 0.25);
+      background: rgba(6, 182, 212, 0.08);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 6px currentColor;
+    }
+
+    .os-quick-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-topbar {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-topbar:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-topbar.primary {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      color: #fff;
+      border: none;
+      box-shadow: 0 4px 12px var(--accent-cyan-glow);
+    }
+
+    .btn-topbar.primary:hover {
+      box-shadow: 0 6px 18px rgba(6, 182, 212, 0.4);
+    }
+
+    .clock-display {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      padding-left: 8px;
+    }
+
+    /* MAIN OS DESKTOP CONTAINER */
+    .os-desktop {
+      flex: 1;
+      max-width: 1400px;
+      width: 100%;
+      margin: 20px auto;
+      padding: 0 20px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* OS HERO / HEADER CARD */
+    .os-window-header {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 24px 28px;
+      box-shadow: var(--shadow-os);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .os-window-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-emerald));
+    }
+
+    .header-text h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #ffffff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-text p {
+      color: var(--text-muted);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-chip {
+      background: rgba(6, 182, 212, 0.12);
+      color: var(--accent-cyan);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(6, 182, 212, 0.3);
+    }
+
+    /* 2D OS TAB NAVIGATION BAR */
+    .os-tab-bar {
+      display: flex;
+      gap: 8px;
+      background: rgba(14, 19, 31, 0.7);
+      backdrop-filter: var(--glass-filter);
+      padding: 6px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .os-tab-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .os-tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .os-tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .os-tab-btn.active {
+      color: #fff;
+      background: var(--bg-elevated);
+      border-color: var(--border-subtle);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .os-tab-btn .tab-icon {
+      font-size: 16px;
+    }
+
+    /* TAB CONTENTS */
+    .os-tab-content {
+      display: none;
+      animation: fadeIn 0.25s ease-out forwards;
+    }
+
+    .os-tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 2D ARCHITECTURE DIAGRAM (TAB 1) */
+    .arch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      box-shadow: var(--shadow-os);
+      position: relative;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title .icon-box {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+    }
+
+    /* 2D FLOWCHART BOXES */
+    .diagram-2d-box {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .diagram-2d-box.highlight-wp {
+      border-color: rgba(6, 182, 212, 0.4);
+      background: linear-gradient(180deg, rgba(6, 182, 212, 0.05), rgba(14, 19, 31, 0.8));
+    }
+
+    .diagram-2d-box.highlight-db {
+      border-color: rgba(139, 92, 246, 0.4);
+      background: linear-gradient(180deg, rgba(139, 92, 246, 0.05), rgba(14, 19, 31, 0.8));
+    }
+
+    .diagram-2d-box.highlight-pma {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.05), rgba(14, 19, 31, 0.8));
+    }
+
+    .node-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .node-title {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .node-port {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .node-details {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .flow-connector {
+      text-align: center;
+      padding: 6px 0;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .flow-connector::before, .flow-connector::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+
+    /* ISOLATION SHIELD CARD */
+    .shield-box {
+      border-left: 4px solid var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.04);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .shield-box h4 {
+      font-size: 14px;
+      color: var(--accent-cyan);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .shield-box p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* QUICK ACTIONS (TAB 2) */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    .service-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      box-shadow: var(--shadow-os);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card:hover {
+      border-color: var(--border-focus);
+      transform: translateY(-2px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    .service-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .icon-wp { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .icon-admin { background: rgba(139, 92, 246, 0.15); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.3); }
+    .icon-pma { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .icon-db { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    .service-info h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .service-info p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .service-url {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.08);
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(6, 182, 212, 0.2);
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .btn-action {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 6px 20px var(--accent-cyan-glow);
+    }
+
+    /* USERS TAB (TAB 3) */
+    .users-table-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      box-shadow: var(--shadow-os);
+      overflow-x: auto;
+    }
+
+    .os-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .os-table th {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .os-table td {
+      padding: 16px;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      vertical-align: middle;
+    }
+
+    .os-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .user-pill {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .role-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-purple);
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    .btn-copy {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-copy:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    /* FIGMA PAGES TAB (TAB 4) */
+    .pages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .page-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .page-box:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      background: var(--bg-elevated);
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .page-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text-main);
+    }
+
+    .page-slug {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .btn-sm-link {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(6, 182, 212, 0.1);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(6, 182, 212, 0.25);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      width: fit-content;
+      transition: all 0.2s;
+    }
+
+    .btn-sm-link:hover {
+      background: var(--accent-cyan);
+      color: #000;
+    }
+
+    /* CLI GUIDE TAB (TAB 5) */
+    .code-block {
+      background: #05070b;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #38bdf8;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+
+    /* TOAST NOTIFICATION */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--accent-emerald);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* FOOTER */
+    .os-footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--text-dim);
+      font-size: 13px;
+      border-top: 1px solid var(--border-subtle);
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- OS TOPBAR -->
+  <header class="os-topbar">
+    <div class="os-brand">
+      <div class="os-logo-badge">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <span>JobScout OS v2.0 <span style="font-weight:400; color:var(--text-dim); margin-left:6px;">Nhóm C Cuối Kỳ</span></span>
+    </div>
+
+    <div class="os-status-badges">
+      <div class="status-pill online">
+        <span class="status-dot"></span>
+        <span>Docker Active</span>
+      </div>
+      <div class="status-pill online">
+        <span class="status-dot"></span>
+        <span>DB: Port 3307</span>
+      </div>
+      <div class="status-pill shield">
+        <span>🛡️</span>
+        <span>Cách Ly FIT-TDC</span>
+      </div>
+    </div>
+
+    <div class="os-quick-actions">
+      <a href="http://localhost:8080" target="_blank" class="btn-topbar primary">
+        <span>🌐 Mở Website (8080)</span>
+      </a>
+      <a href="http://localhost:8080/wp-admin" target="_blank" class="btn-topbar">
+        <span>⚙️ WP-Admin</span>
+      </a>
+      <a href="http://localhost:8085" target="_blank" class="btn-topbar">
+        <span>🗄️ phpMyAdmin (8085)</span>
+      </a>
+      <div class="clock-display" id="clock">00:00:00</div>
+    </div>
+  </header>
+
+  <!-- MAIN OS CONTAINER -->
+  <main class="os-desktop">
+    
+    <!-- OS WINDOW HEADER -->
+    <div class="os-window-header">
+      <div class="header-text">
+        <h1>Mô Hình Điều Khiển 2D Hệ Thống JobScout</h1>
+        <p>
+          <span>Đồ Án Cuối Kỳ - Khoa CNTT - Nhóm C</span>
+          <span class="badge-chip">MySQL 8.0</span>
+          <span class="badge-chip">WordPress 6.7</span>
+          <span class="badge-chip">Theme JobScout</span>
+        </p>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-topbar" onclick="location.reload()">
+          <span>🔄 Tải Lại Dữ Liệu</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2D OS TAB NAVIGATION BAR -->
+    <nav class="os-tab-bar">
+      <button class="os-tab-btn active" onclick="switchTab('tab-arch', this)">
+        <span class="tab-icon">🗺️</span>
+        <span>1. Mô Hình Kiến Trúc 2D</span>
+      </button>
+      <button class="os-tab-btn" onclick="switchTab('tab-services', this)">
+        <span class="tab-icon">🚀</span>
+        <span>2. Dịch Vụ & Lối Tắt Web</span>
+      </button>
+      <button class="os-tab-btn" onclick="switchTab('tab-users', this)">
+        <span class="tab-icon">👥</span>
+        <span>3. 6 Tài Khoản Quản Trị Viên</span>
+      </button>
+      <button class="os-tab-btn" onclick="switchTab('tab-pages', this)">
+        <span class="tab-icon">🎨</span>
+        <span>4. 7 Trang Thiết Kế Figma</span>
+      </button>
+      <button class="os-tab-btn" onclick="switchTab('tab-db', this)">
+        <span class="tab-icon">🗄️</span>
+        <span>5. Cơ Sở Dữ Liệu & Cách Ly</span>
+      </button>
+      <button class="os-tab-btn" onclick="switchTab('tab-cli', this)">
+        <span class="tab-icon">💻</span>
+        <span>6. Bộ Lệnh start.bat & Docker</span>
+      </button>
+    </nav>
+
+    <!-- TAB 1: 2D ARCHITECTURE & TOPOLOGY -->
+    <section id="tab-arch" class="os-tab-content active">
+      <div class="arch-grid">
+        <div class="card">
+          <div class="card-title">
+            <span>Sơ Đồ Luồng Dữ Liệu 2D (Topology)</span>
+            <div class="icon-box">📐</div>
+          </div>
+
+          <!-- NODE 1 -->
+          <div class="diagram-2d-box highlight-wp">
+            <div class="node-header">
+              <span class="node-title">🌐 Container: wordpress_app</span>
+              <span class="node-port">PORT 8080 : 80</span>
+            </div>
+            <div class="node-details">
+              - Ứng dụng: WordPress 6.7.2 vi_VN (PHP 8.2 Apache)<br>
+              - Giao diện kích hoạt: <strong>JobScout Theme</strong><br>
+              - Plugins: WP Job Manager, Extra Fields, Rara Companion
+            </div>
+          </div>
+
+          <div class="flow-connector">Đường dẫn mạng ảo Docker (wp_network) : db:3306</div>
+
+          <!-- NODE 2 -->
+          <div class="diagram-2d-box highlight-db">
+            <div class="node-header">
+              <span class="node-title">🗄️ Container: wordpress_db</span>
+              <span class="node-port">PORT 3307 : 3306</span>
+            </div>
+            <div class="node-details">
+              - Động cơ CSDL: <strong>MySQL 8.0 Community</strong><br>
+              - Tên Database: <code>wordpress</code> | User: <code>wordpress</code><br>
+              - Chứa toàn bộ dữ liệu 6 Admin + 7 trang tuyển dụng JobScout
+            </div>
+          </div>
+
+          <div class="flow-connector">Kết nối giao diện quản lý phpMyAdmin</div>
+
+          <!-- NODE 3 -->
+          <div class="diagram-2d-box highlight-pma">
+            <div class="node-header">
+              <span class="node-title">📊 Container: wordpress_phpmyadmin</span>
+              <span class="node-port">PORT 8085 : 80</span>
+            </div>
+            <div class="node-details">
+              - Quản lý trực quan CSDL Cột, Bảng, Index<br>
+              - Truy cập ngay tại: <code>http://localhost:8085</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Vùng An Toàn & Độc Lập Với FIT-TDC</span>
+            <div class="icon-box">🛡️</div>
+          </div>
+
+          <div class="shield-box">
+            <h4>✅ 100% Không Đụng Chạm Dự Án FIT-TDC</h4>
+            <p>
+              Dự án Cuối Kỳ <strong>JobScout</strong> và dự án <strong>FIT-TDC</strong> chạy song song hoàn toàn độc lập mà không bao giờ gây xung đột:
+            </p>
+          </div>
+
+          <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
+            <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+              <strong style="color: var(--accent-cyan);">Dự Án Cuối Kỳ (JobScout - Thư Mục Này):</strong><br>
+              • Web App: <code>http://localhost:8080</code> (Container: <code>wordpress_app</code>)<br>
+              • phpMyAdmin: <code>http://localhost:8085</code> (Container: <code>wordpress_phpmyadmin</code>)<br>
+              • MySQL Port: <code>3307</code> | Database: <code>wordpress</code>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
+              <strong style="color: var(--text-dim);">Dự Án FIT-TDC (Thư Mục CMS_NhomC):</strong><br>
+              • Web App: <code>http://WordpressC.local</code> (Port 80)<br>
+              • phpMyAdmin: <code>http://localhost:8081</code><br>
+              • MySQL Port: <code>3308</code> | Database: <code>cms_nhomc</code> (Đã khôi phục nguyên vẹn)
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: SERVICES & LAUNCHPAD -->
+    <section id="tab-services" class="os-tab-content">
+      <div class="services-grid">
+        <!-- CARD 1 -->
+        <div class="service-card">
+          <div>
+            <div class="service-top">
+              <div class="service-icon icon-wp">🌐</div>
+              <div class="service-info">
+                <h3>Trang Chủ JobScout</h3>
+                <p>Website tuyển dụng việc làm với giao diện hoàn chỉnh theo bản thiết kế mẫu.</p>
+              </div>
+            </div>
+            <div class="service-url">http://localhost:8080</div>
+          </div>
+          <a href="http://localhost:8080" target="_blank" class="btn-action">
+            <span>Truy Cập Trang Chủ ↗</span>
+          </a>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="service-card">
+          <div>
+            <div class="service-top">
+              <div class="service-icon icon-admin">⚙️</div>
+              <div class="service-info">
+                <h3>Trang Quản Trị WP-Admin</h3>
+                <p>Khu vực quản lý bài viết, trang, giao diện, plugin và quản trị viên.</p>
+              </div>
+            </div>
+            <div class="service-url">http://localhost:8080/wp-admin</div>
+          </div>
+          <a href="http://localhost:8080/wp-admin" target="_blank" class="btn-action">
+            <span>Mở Bảng Quản Trị WP ↗</span>
+          </a>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="service-card">
+          <div>
+            <div class="service-top">
+              <div class="service-icon icon-pma">📊</div>
+              <div class="service-info">
+                <h3>Quản Trị phpMyAdmin</h3>
+                <p>Công cụ quản trị CSDL trực quan, xem bảng wp_posts, wp_users, truy vấn SQL.</p>
+              </div>
+            </div>
+            <div class="service-url">http://localhost:8085</div>
+          </div>
+          <a href="http://localhost:8085" target="_blank" class="btn-action">
+            <span>Mở phpMyAdmin ↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: ADMIN ACCOUNTS -->
+    <section id="tab-users" class="os-tab-content">
+      <div class="users-table-card">
+        <div class="card-title">
+          <span>Danh Sách 6 Tài Khoản Quản Trị Viên (Password chung: Password@123)</span>
+          <button class="btn-copy" onclick="copyText('Password@123')">📋 Sao chép Mật khẩu chung</button>
+        </div>
+        <table class="os-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Họ và Tên</th>
+              <th>Tên Đăng Nhập</th>
+              <th>Email</th>
+              <th>Vai Trò</th>
+              <th>Mật Khẩu</th>
+              <th>Thao Tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><strong>Văn Nguyễn Xuân Hòa</strong></td>
+              <td><span class="user-pill">xuanhoa</span></td>
+              <td>vhoa1682006@gmail.com</td>
+              <td><span class="role-badge">Administrator</span></td>
+              <td><code>Password@123</code></td>
+              <td><button class="btn-copy" onclick="copyText('xuanhoa')">Copy User</button></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><strong>Nguyễn Thanh Hiền</strong></td>
+              <td><span class="user-pill">thanhhien</span></td>
+              <td>thenghien2006@gmail.com</td>
+              <td><span class="role-badge">Administrator</span></td>
+              <td><code>Password@123</code></td>
+              <td><button class="btn-copy" onclick="copyText('thanhhien')">Copy User</button></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><strong>Huỳnh Văn Vinh Em</strong></td>
+              <td><span class="user-pill">vinhem</span></td>
+              <td>trumvinh85@gmail.com</td>
+              <td><span class="role-badge">Administrator</span></td>
+              <td><code>Password@123</code></td>
+              <td><button class="btn-copy" onclick="copyText('vinhem')">Copy User</button></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><strong>Nguyễn Anh Quý</strong></td>
+              <td><span class="user-pill">anhquy</span></td>
+              <td>nguyquy67@gmail.com</td>
+              <td><span class="role-badge">Administrator</span></td>
+              <td><code>Password@123</code></td>
+              <td><button class="btn-copy" onclick="copyText('anhquy')">Copy User</button></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><strong>Đặng Đăng Nguyên</strong></td>
+              <td><span class="user-pill">dangnguyen</span></td>
+              <td>dn1275102@gmail.com</td>
+              <td><span class="role-badge">Administrator</span></td>
+              <td><code>Password@123</code></td>
+              <td><button class="btn-copy" onclick="copyText('dangnguyen')">Copy User</button></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><strong>Quản Trị Viên Nhóm C</strong></td>
+              <td><span class="user-pill">admin_nhomc</span></td>
+              <td>admin_nhomc@fit.tdc.edu.vn</td>
+              <td><span class="role-badge">Administrator</span></td>
+              <td><code>Password@123</code></td>
+              <td><button class="btn-copy" onclick="copyText('admin_nhomc')">Copy User</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 4: FIGMA PAGES -->
+    <section id="tab-pages" class="os-tab-content">
+      <div class="pages-grid">
+        <div class="page-box">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Trang Chủ (Home)</div>
+              <div class="page-slug">slug: /home</div>
+            </div>
+            <span class="badge-chip">Front Page</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-muted);">Giao diện chính với bộ tìm kiếm việc làm, danh mục nổi bật, thống kê.</p>
+          <a href="http://localhost:8080/" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
+        </div>
+
+        <div class="page-box">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Giới Thiệu (About Us)</div>
+              <div class="page-slug">slug: /about-us</div>
+            </div>
+            <span class="badge-chip">Page</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-muted);">Thông tin sứ mệnh, tầm nhìn, đội ngũ phát triển JobScout.</p>
+          <a href="http://localhost:8080/about-us" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
+        </div>
+
+        <div class="page-box">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Tin Tức (News)</div>
+              <div class="page-slug">slug: /news</div>
+            </div>
+            <span class="badge-chip">Posts Page</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-muted);">Trang bài viết blog, tư vấn nghề nghiệp và xu hướng tuyển dụng.</p>
+          <a href="http://localhost:8080/news" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
+        </div>
+
+        <div class="page-box">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Tất Cả Việc Làm (All Jobs)</div>
+              <div class="page-slug">slug: /all-jobs</div>
+            </div>
+            <span class="badge-chip">Listing Page</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-muted);">Bộ lọc việc làm chuyên sâu, tìm kiếm theo ngành nghề và địa điểm.</p>
+          <a href="http://localhost:8080/all-jobs" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
+        </div>
+
+        <div class="page-box">
+          <div class="page-header">
+            <div>
+              <div class="page-title">Liên Hệ (Contact Us)</div>
+              <div class="page-slug">slug: /contact-us</div>
+            </div>
+            <span class="badge-chip">Page</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-muted);">Biểu mẫu gửi tin nhắn, bản đồ địa chỉ văn phòng hỗ trợ ứng viên.</p>
+          <a href="http://localhost:8080/contact-us" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: DATABASE & ISOLATION -->
+    <section id="tab-db" class="os-tab-content">
+      <div class="arch-grid">
+        <div class="card">
+          <div class="card-title">
+            <span>Thông Số Kết Nối Cơ Sở Dữ Liệu</span>
+            <div class="icon-box">🔑</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:12px; font-size:14px;">
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-subtle);">
+              <span style="color:var(--text-muted);">Host nội bộ Docker:</span>
+              <code>db:3306</code>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-subtle);">
+              <span style="color:var(--text-muted);">Host kết nối ngoài (DBeaver/Navicat):</span>
+              <code>localhost:3307</code>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-subtle);">
+              <span style="color:var(--text-muted);">Tên Cơ sở dữ liệu:</span>
+              <strong style="color:var(--accent-cyan);">wordpress</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-subtle);">
+              <span style="color:var(--text-muted);">Tên Tài Khoản DB:</span>
+              <code>wordpress</code> (hoặc <code>root</code>)
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:8px 0;">
+              <span style="color:var(--text-muted);">Mật khẩu DB:</span>
+              <code>wordpresspassword</code> (hoặc <code>rootpassword</code>)
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>Cơ Chế Bảo Vệ FIT-TDC</span>
+            <div class="icon-box">🛡️</div>
+          </div>
+          <p style="font-size:14px; color:var(--text-muted); line-height:1.6; margin-bottom:16px;">
+            Hệ thống áp dụng chính sách tách biệt cổng và container độc lập:
+          </p>
+          <ul style="font-size:13px; color:var(--text-muted); line-height:1.8; padding-left:18px;">
+            <li>Mọi câu lệnh SQL trong dự án này chỉ thực thi trên container <code>wordpress_db</code>.</li>
+            <li>Đã gỡ bỏ vĩnh viễn tệp <code>cleanup_fit_tdc.sql</code>.</li>
+            <li>Container FIT-TDC (<code>wordpressc_db</code>) đã được hoàn nguyên dữ liệu 100%.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: CLI & START.BAT -->
+    <section id="tab-cli" class="os-tab-content">
+      <div class="card">
+        <div class="card-title">
+          <span>Hướng Dẫn Sử Dụng start.bat</span>
+          <div class="icon-box">⌨️</div>
+        </div>
+        <p style="font-size:14px; color:var(--text-muted); margin-bottom:16px;">
+          Tệp <code>start.bat</code> được trang bị bảng menu 2D trực quan trong cmd với đầy đủ các phím chức năng:
+        </p>
+        <div class="code-block">
+[1] Khởi Động Toàn Diện [Docker + Database + Mở Web & OS Tab]
+[2] Đồng Bộ Dữ Liệu Thiết Kế [7 Trang Figma]
+[3] Đặt Lại 6 Tài Khoản Administrator [Password@123]
+[4] Cấu Hình Thương Hiệu JobScout [Title, Tagline, Front Page]
+[5] Kích Hoạt Theme JobScout & 4 Plugin
+[6] Mở Trình Duyệt Web [Website / Admin / phpMyAdmin]
+[7] Sao Lưu Database [Xuất file .sql an toàn]
+[8] Xem Trạng Thái Hệ Thống
+[9] Khởi Động Lại / Dừng Containers
+[M] Mở Tab Bảng Điều Khiển 2D Này
+[0] Thoát
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="os-footer">
+    JobScout OS v2.0 &bull; Nhóm C - Đồ Án Cuối Kỳ Khoa CNTT &bull; Môi trường điều hành 2D độc lập & an toàn
+  </footer>
+
+  <div id="toast" class="toast">
+    <span>✅</span>
+    <span id="toast-msg">Đã sao chép!</span>
+  </div>
+
+  <script>
+    // Tab switching
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.os-tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.os-tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // Copy to clipboard with toast
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Đã sao chép: ' + text);
+      }).catch(() => {
+        showToast('Đã chọn: ' + text);
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2400);
+    }
+
+    // Live clock
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clock').innerText = `${h}:${m}:${s}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
