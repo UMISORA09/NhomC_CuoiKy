@@ -13,6 +13,23 @@ bin-release/
 *.ipa
 *.apk
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+# WordPress Sensitive & Upload Files
+wp-config.php
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/cache/
+wp-content/backup-db/
+wp-content/backups/
+
+# Environment & Logs
+.env
+*.log
+
+# Operating System
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor
+.vscode/
+.idea/
