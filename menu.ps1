@@ -41,7 +41,7 @@ function Exec-SqlFile ($sqlFile) {
     if (Test-Path $sqlFile) {
         docker cp $sqlFile "${DB_CONTAINER}:/tmp/$sqlFile" 2>$null
         docker exec $DB_CONTAINER mysql -u root -prootpassword --default-character-set=utf8mb4 $DB_NAME -e "source /tmp/$sqlFile;" 2>$null
-        Write-Host "  [+] Thuc thi $sqlFile: Thanh cong." -ForegroundColor Green
+        Write-Host "  [+] Thuc thi ${sqlFile} - Thanh cong." -ForegroundColor Green
     } else {
         Write-Host "  [-] File $sqlFile khong ton tai!" -ForegroundColor Red
     }
