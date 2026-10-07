@@ -18,14 +18,31 @@ Hệ thống đã tích hợp sẵn tài khoản Quản trị viên (Administrat
 
 ---
 
-## 2. QUY TRÌNH 1-CLICK DÀNH CHO THÀNH VIÊN MỚI (CHẠY LÀ CÓ NGAY)
+## 2. CẤU TRÚC PHÂN NHÁNH GIT & CSDL THEO ĐÚNG HÌNH ẢNH HƯỚNG DẪN
+
+Theo đúng sơ đồ quy định trong tệp Excel của giảng viên:
+
+```text
+Local Branches / Origin:
+├── 1-core    : Source core WordPress 6.0.2 sạch, KHÔNG ĐƯỢC CODE Ở ĐÂY
+├── 1-master  : Source chính của nhóm (chứa toàn bộ giao diện & tính năng hoàn chỉnh)
+├── 3-job     : Source phát triển công việc, trạng thái đang phát triển
+└── main      : Nhánh mặc định sơ khai
+```
+
+- **Tên Cơ Sở Dữ Liệu (Database):** `wordpress_602_core` (và `wordpress`)
+- **Tên miền VirtualHost (Bước 2):** `http://wordpress.local:8080` (hoặc `http://wordpressc:8080`)
+
+---
+
+## 3. QUY TRÌNH 1-CLICK DÀNH CHO THÀNH VIÊN MỚI (CHẠY LÀ CÓ NGAY)
 
 Khi một thành viên trong nhóm clone project về máy cá nhân:
 
 ```bash
 git clone git@github.com:UMISORA09/NhomC_CuoiKy.git
 cd NhomC_CuoiKy
-git checkout master
+git checkout 1-master
 ```
 
 ### Bước 1: Thiết lập tên miền Virtual Host (Chỉ cần chạy 1 lần)
