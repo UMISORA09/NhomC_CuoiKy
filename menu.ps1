@@ -14,10 +14,24 @@ $WP_PORT = "8080"
 $PMA_PORT = "8085"
 $DB_PORT = "3307"
 
-$URL_WEB = "http://localhost:8080"
-$URL_ADMIN = "http://localhost:8080/wp-admin"
-$URL_PMA = "http://localhost:8085"
-$URL_DASHBOARD = "http://localhost:8080/dashboard.html"
+# Tu dong nhan dien ten mien wordpressc, WordpressC.local hoac localhost
+$DOMAIN = "wordpressc"
+try {
+    [System.Net.Dns]::GetHostAddresses("wordpressc") | Out-Null
+    $DOMAIN = "wordpressc"
+} catch {
+    try {
+        [System.Net.Dns]::GetHostAddresses("WordpressC.local") | Out-Null
+        $DOMAIN = "WordpressC.local"
+    } catch {
+        $DOMAIN = "localhost"
+    }
+}
+
+$URL_WEB = "http://${DOMAIN}:8080"
+$URL_ADMIN = "http://${DOMAIN}:8080/wp-admin"
+$URL_PMA = "http://${DOMAIN}:8085"
+$URL_DASHBOARD = "http://${DOMAIN}:8080/dashboard.html"
 
 # Browser tim Edge hoac Chrome
 $APP_BROWSER = $null
@@ -203,6 +217,21 @@ function Run-DockerStop {
     Start-Sleep -Seconds 1
 }
 
+function Run-SetupHosts {
+    Clear-Host
+    Write-Host "[TIEN TRINH] Cap nhat ten mien Virtual Host 'wordpressc'..." -ForegroundColor Cyan
+    Write-Host "-------------------------------------------------------------------------------" -ForegroundColor Gray
+    if (Test-Path "$PSScriptRoot\setup-hosts.bat") {
+        Start-Process "$PSScriptRoot\setup-hosts.bat" -Verb RunAs -Wait
+        Write-Host "[OK] Da kich hoat cap nhat file hosts!" -ForegroundColor Green
+    } else {
+        Write-Host "[-] Khong tim thay setup-hosts.bat!" -ForegroundColor Red
+    }
+    Write-Host ""
+    Write-Host "Nhan phim bat ky de quay lai menu..." -ForegroundColor Gray
+    [Console]::ReadKey($true) | Out-Null
+}
+
 # ===============================================================================
 # DATA STRUCTURE FOR TABS AND ITEMS
 # ===============================================================================
@@ -213,8 +242,8 @@ $tabs = @(
         Items = @(
             @{ Key = "A"; Label = "[A] KHOI DONG TOAN DIEN (1-Click Docker + CSDL + Mo Tab 2D)"; Action = { Run-StartAll } }
             @{ Key = "M"; Label = "[M] MO NGAY CUA SO TAB NOI 2D (Floating 2D OS Dashboard)"; Action = { Open-FloatingWindow } }
-            @{ Key = "W"; Label = "[W] Mo Website JobScout (http://localhost:8080)"; Action = { Start-Process $URL_WEB } }
-            @{ Key = "P"; Label = "[P] Mo phpMyAdmin Quan Ly CSDL (http://localhost:8085)"; Action = { Start-Process $URL_PMA } }
+            @{ Key = "W"; Label = "[W] Mo Website JobScout ($URL_WEB)"; Action = { Start-Process $URL_WEB } }
+            @{ Key = "P"; Label = "[P] Mo phpMyAdmin Quan Ly CSDL ($URL_PMA)"; Action = { Start-Process $URL_PMA } }
             @{ Key = "S"; Label = "[S] Kiem Tra Suc Khoe & Tien Trinh Containers"; Action = { Run-Status } }
         )
     },
@@ -232,12 +261,13 @@ $tabs = @(
         Items = @(
             @{ Key = "U"; Label = "[U] Cap Nhat & Dat Lai 6 Tai Khoan Admin [Password@123]"; Action = { Run-SetupUsers } }
             @{ Key = "L"; Label = "[L] Xem Danh Sach 6 Quan Tri Vien (Ho ten, User, Email)"; Action = { Run-ListUsers } }
-            @{ Key = "G"; Label = "[G] Mo Trang Dang Nhap WP-Admin (http://localhost:8080/wp-admin)"; Action = { Start-Process $URL_ADMIN } }
+            @{ Key = "G"; Label = "[G] Mo Trang Dang Nhap WP-Admin ($URL_ADMIN)"; Action = { Start-Process $URL_ADMIN } }
         )
     },
     @{
         Title = "4. CSDL & DOCKER"
         Items = @(
+            @{ Key = "H"; Label = "[H] Cap Nhat Ten Mien 'wordpressc' Vao File Hosts (Admin)"; Action = { Run-SetupHosts } }
             @{ Key = "X"; Label = "[X] Sao Luu Co So Du Lieu (.sql vao backups/)"; Action = { Run-BackupDb } }
             @{ Key = "R"; Label = "[R] Khoi Dong Lai Tat Ca Containers (Restart Docker)"; Action = { Run-DockerRestart } }
             @{ Key = "Q"; Label = "[Q] Tam Dung Tat Ca Dich Vu Containers (Stop Docker)"; Action = { Run-DockerStop } }
