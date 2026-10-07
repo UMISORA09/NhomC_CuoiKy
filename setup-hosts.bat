@@ -21,17 +21,19 @@ if %errorLevel% neq 0 (
     echo 127.0.0.1   wordpressc.local>> "%HOSTS_FILE%"
     echo 127.0.0.1   WordpressC.local>> "%HOSTS_FILE%"
     echo 127.0.0.1   www.WordpressC.local>> "%HOSTS_FILE%"
+    echo 127.0.0.1   wordpress.local>> "%HOSTS_FILE%"
+    echo 127.0.0.1   www.wordpress.local>> "%HOSTS_FILE%"
     echo [+] Da them thanh cong cac ten mien vao file hosts!
 ) else (
-    echo [*] Ten mien wordpressc da ton tai trong file hosts.
+    echo [*] Ten mien da ton tai trong file hosts.
 )
 
 ipconfig /flushdns >nul
 echo.
 echo ==============================================================
 echo   DA CAU HINH XONG TEN MIEN VIRTUAL HOST CHO WINDOWS!
+echo   - http://wordpress.local:8080 (Theo huong dan Excel)
 echo   - http://wordpressc:8080
-echo   - http://wordpressc.local:8080
 echo   - http://WordpressC.local:8080
 echo ==============================================================
 timeout /t 3 >nul
