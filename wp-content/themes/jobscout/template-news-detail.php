@@ -12,39 +12,105 @@ $site_url = home_url();
 $theme_uri = get_template_directory_uri();
 $news_img_dir = $theme_uri . '/images/news/';
 
-// Lấy thông tin bài viết hiện tại (nếu đang trong vòng lặp WordPress single post)
-$current_post = get_post();
-$is_single = is_single() || (isset($_GET['post']) && !empty($_GET['post']));
+// Danh mục bài viết chuẩn với thông tin chi tiết riêng biệt
+$articles_catalog = [
+    'project-development' => [
+        'title'    => 'Project Development',
+        'date'     => 'Oct 24, 2022',
+        'category' => 'Real Estate',
+        'location' => 'Ho Chi Minh City',
+        'thumb'    => $news_img_dir . 'blog-project-dev.jpg',
+    ],
+    'restaurant-hotel-management-and-operations' => [
+        'title'    => 'Restaurant & Hotel Management And Operations',
+        'date'     => 'Oct 22, 2022',
+        'category' => 'Hospitality',
+        'location' => 'Da Nang City',
+        'thumb'    => $news_img_dir . 'blog-restaurant-hotel.jpg',
+    ],
+    'hospitality-consulting' => [
+        'title'    => 'Hospitality Consulting',
+        'date'     => 'Oct 21, 2022',
+        'category' => 'Consulting',
+        'location' => 'Ha Noi Capital',
+        'thumb'    => $news_img_dir . 'blog-hospitality-consulting.jpg',
+    ],
+    'venue-and-interior-design' => [
+        'title'    => 'Venue And Interior Design',
+        'date'     => 'Oct 20, 2022',
+        'category' => 'Architecture',
+        'location' => 'Ho Chi Minh City',
+        'thumb'    => $news_img_dir . 'blog-interior-design.jpg',
+    ],
+    'coo-hotel-resort-chain-update' => [
+        'title'    => 'CHIEF OPERATING OFFICER HOTEL/ RESORT CHAIN',
+        'date'     => 'Oct 20, 2022',
+        'category' => 'Category Name',
+        'location' => 'Ho Chi Minh City',
+        'thumb'    => $news_img_dir . 'detail-thumb.jpg',
+    ],
+];
 
-if ($is_single && isset($_GET['post'])) {
-    $found_by_slug = get_page_by_path(sanitize_title($_GET['post']), OBJECT, 'post');
-    if ($found_by_slug) {
-        $current_post = $found_by_slug;
+// Nhận diện bài viết dựa theo $_GET['post'] hoặc WordPress query
+$requested_slug = '';
+if (!empty($_GET['post'])) {
+    $requested_slug = sanitize_title($_GET['post']);
+    $requested_slug = preg_replace('/-\d+$/', '', $requested_slug);
+} elseif (is_single()) {
+    $single_post = get_queried_object();
+    if ($single_post && !empty($single_post->post_name)) {
+        $requested_slug = $single_post->post_name;
     }
 }
 
-// Tiêu đề, Ngày, Danh mục, Ảnh thumbnail
-$post_title = ($current_post && !empty($current_post->post_title) && $current_post->post_name !== 'news-detail') ? $current_post->post_title : 'CHIEF OPERATING OFFICER HOTEL/ RESORT CHAIN';
-$post_date = ($current_post && !empty($current_post->post_date) && $current_post->post_name !== 'news-detail') ? date('M d, Y', strtotime($current_post->post_date)) : 'Oct 20, 2022';
-
-// Danh mục
-$categories_list = [];
-if ($current_post) {
-    $cats = get_the_category($current_post->ID);
-    if (!empty($cats)) {
-        foreach ($cats as $cat) {
-            $categories_list[] = $cat->name;
+$found_post = null;
+if (!empty($requested_slug)) {
+    $found_post = get_page_by_path($requested_slug, OBJECT, 'post');
+    if (!$found_post) {
+        $query_posts = get_posts([
+            'name'        => $requested_slug,
+            'post_type'   => 'post',
+            'post_status' => 'publish',
+            'numberposts' => 1
+        ]);
+        if (!empty($query_posts)) {
+            $found_post = $query_posts[0];
         }
     }
-}
-if (empty($categories_list)) {
-    $categories_list = ['Category Name', 'Ho Chi Minh City'];
-} elseif (count($categories_list) === 1) {
-    $categories_list[] = 'Ho Chi Minh City';
+} elseif (is_single()) {
+    $found_post = get_post();
 }
 
-// Ảnh đại diện thumbnail
-$thumb_url = ($current_post && has_post_thumbnail($current_post->ID)) ? get_the_post_thumbnail_url($current_post->ID, 'medium') : ($news_img_dir . 'detail-thumb.jpg');
+if ($found_post && !empty($found_post->post_title) && $found_post->post_name !== 'news-detail') {
+    $current_post = $found_post;
+    $post_title = $found_post->post_title;
+    $post_date = date('M d, Y', strtotime($found_post->post_date));
+    $badge_cat = 'Category Name';
+    $badge_loc = 'Ho Chi Minh City';
+    $cats = get_the_category($found_post->ID);
+    if (!empty($cats)) {
+        $badge_cat = $cats[0]->name;
+    }
+    $thumb_url = has_post_thumbnail($found_post->ID) 
+        ? get_the_post_thumbnail_url($found_post->ID, 'medium') 
+        : (isset($articles_catalog[$requested_slug]['thumb']) ? $articles_catalog[$requested_slug]['thumb'] : ($news_img_dir . 'detail-thumb.jpg'));
+} elseif (!empty($requested_slug) && isset($articles_catalog[$requested_slug])) {
+    $cat_data = $articles_catalog[$requested_slug];
+    $post_title = $cat_data['title'];
+    $post_date = $cat_data['date'];
+    $badge_cat = $cat_data['category'];
+    $badge_loc = $cat_data['location'];
+    $thumb_url = $cat_data['thumb'];
+    $current_post = null;
+} else {
+    // Mặc định chuẩn 100% bản vẽ thiết kế 6-news detail.png
+    $post_title = 'CHIEF OPERATING OFFICER HOTEL/ RESORT CHAIN';
+    $post_date = 'Oct 20, 2022';
+    $badge_cat = 'Category Name';
+    $badge_loc = 'Ho Chi Minh City';
+    $thumb_url = $news_img_dir . 'detail-thumb.jpg';
+    $current_post = null;
+}
 
 // Hình ảnh trong nội dung bài viết
 $body_img_1 = $news_img_dir . 'detail-body-1.jpg';
@@ -1001,7 +1067,7 @@ foreach ($recent_news as $r_item) {
         <span class="nd-breadcrumb-sep">/</span>
         <a href="<?php echo esc_url($site_url); ?>/news/" class="nd-breadcrumb-link">All News</a>
         <span class="nd-breadcrumb-sep">/</span>
-        <span class="nd-breadcrumb-current">News Detail</span>
+        <span class="nd-breadcrumb-current"><?php echo (!empty($requested_slug) && $requested_slug !== 'coo-hotel-resort-chain-update') ? esc_html($post_title) : 'News Detail'; ?></span>
     </div>
 </div>
 
@@ -1016,9 +1082,9 @@ foreach ($recent_news as $r_item) {
                 <h1 class="nd-header-title"><?php echo esc_html($post_title); ?></h1>
                 <div class="nd-header-meta">Posted: <?php echo esc_html($post_date); ?></div>
                 <div class="nd-header-badge-box">
-                    <span>Category Name</span>
+                    <span><?php echo esc_html($badge_cat); ?></span>
                     <span class="nd-badge-sep">|</span>
-                    <span>Ho Chi Minh City</span>
+                    <span><?php echo esc_html($badge_loc); ?></span>
                 </div>
             </div>
         </div>

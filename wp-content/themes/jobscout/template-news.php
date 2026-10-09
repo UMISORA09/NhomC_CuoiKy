@@ -68,8 +68,8 @@ $default_news = [
 // Đường dẫn chuyển đến trang chi tiết tin tức chuẩn thiết kế 6-news detail.png
 $news_items = [];
 foreach ($default_news as $idx => $item) {
-    // Luôn liên kết trực tiếp đến trang News Detail (/news-detail/)
-    $item['link'] = esc_url($site_url . '/news-detail/');
+    // Mỗi bài viết trỏ đến trang chi tiết riêng với tiêu đề và nội dung tương ứng
+    $item['link'] = esc_url($site_url . '/news-detail/?post=' . urlencode($item['slug']));
     $news_items[] = $item;
 }
 ?>
