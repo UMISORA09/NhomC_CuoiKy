@@ -65,19 +65,11 @@ $default_news = [
     ],
 ];
 
-// Lấy link chi tiết bài viết từ database nếu có bài viết tương ứng
+// Đường dẫn chuyển đến trang chi tiết tin tức chuẩn thiết kế 6-news detail.png
 $news_items = [];
 foreach ($default_news as $idx => $item) {
-    // Tìm post trong WP theo slug gốc
-    $base_slug = preg_replace('/-\d+$/', '', $item['slug']);
-    $wp_post = get_page_by_path($base_slug, OBJECT, 'post');
-    if (!$wp_post) {
-        $wp_post = get_page_by_path($item['slug'], OBJECT, 'post');
-    }
-    
-    $detail_link = $wp_post ? get_permalink($wp_post->ID) : esc_url($site_url . '/news-detail/?post=' . urlencode($item['slug']));
-    
-    $item['link'] = $detail_link;
+    // Luôn liên kết trực tiếp đến trang News Detail (/news-detail/)
+    $item['link'] = esc_url($site_url . '/news-detail/');
     $news_items[] = $item;
 }
 ?>
