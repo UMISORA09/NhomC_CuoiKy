@@ -364,30 +364,34 @@ foreach ($recent_news as $r_item) {
         /* === 2. BREADCRUMB === */
         .nd-breadcrumb-section {
             width: 100%;
-            padding: 28px 20px 20px 20px;
+            padding: 26px 20px 20px 20px;
         }
         .nd-breadcrumb-inner {
             max-width: 1050px;
             margin: 0 auto;
             font-size: 13px;
-            color: #777777;
+            font-weight: 400;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
-        .nd-breadcrumb-inner a {
-            color: #777777;
-        }
-        .nd-breadcrumb-inner a:hover {
+        .nd-breadcrumb-link {
             color: #ea751e;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .nd-breadcrumb-link:hover {
+            color: #d66412;
+            text-decoration: underline;
         }
         .nd-breadcrumb-sep {
-            color: #aaaaaa;
-            margin: 0 4px;
+            color: #cccccc;
+            font-weight: 300;
+            user-select: none;
         }
         .nd-breadcrumb-current {
             color: #333333;
-            font-weight: 600;
+            font-weight: 400;
         }
 
         /* === 3. ARTICLE HEADER CARD === */
@@ -432,12 +436,12 @@ foreach ($recent_news as $r_item) {
             justify-content: center;
         }
         .nd-header-title {
-            font-size: 21px;
-            font-weight: 800;
+            font-size: 20px;
+            font-weight: 700;
             color: #111111;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            line-height: 1.3;
+            line-height: 1.35;
             margin-bottom: 8px;
         }
         .nd-header-meta {
@@ -445,34 +449,32 @@ foreach ($recent_news as $r_item) {
             color: #888888;
             margin-bottom: 12px;
         }
-        .nd-header-badges {
-            display: flex;
+        .nd-header-badge-box {
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .nd-badge {
-            display: inline-block;
-            background-color: #f5f5f5;
+            background-color: #f2f2f2;
+            border-radius: 4px;
+            padding: 6px 16px;
+            font-size: 12.5px;
             color: #555555;
-            font-size: 12px;
-            font-weight: 500;
-            padding: 4px 14px;
-            border-radius: 14px;
-            border: 1px solid #e8e8e8;
+            gap: 12px;
+            width: fit-content;
+        }
+        .nd-badge-sep {
+            color: #cccccc;
         }
 
         /* Nút SHARE */
         .nd-header-share-btn {
             background-color: #ffffff;
-            color: #222222;
-            border: 1px solid #333333;
+            color: #111111;
+            border: 1px solid #111111;
             font-size: 12px;
             font-weight: 700;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            padding: 10px 32px;
-            border-radius: 2px;
+            padding: 10px 34px;
+            border-radius: 0;
             cursor: pointer;
             transition: all 0.25s ease;
             white-space: nowrap;
@@ -972,9 +974,9 @@ foreach ($recent_news as $r_item) {
 <!-- 2. BREADCRUMB -->
 <div class="nd-breadcrumb-section">
     <div class="nd-breadcrumb-inner">
-        <a href="<?php echo esc_url($site_url); ?>">Home</a>
+        <a href="<?php echo esc_url($site_url); ?>" class="nd-breadcrumb-link">Home</a>
         <span class="nd-breadcrumb-sep">/</span>
-        <a href="<?php echo esc_url($site_url); ?>/news/">All News</a>
+        <a href="<?php echo esc_url($site_url); ?>/news/" class="nd-breadcrumb-link">All News</a>
         <span class="nd-breadcrumb-sep">/</span>
         <span class="nd-breadcrumb-current">News Detail</span>
     </div>
@@ -990,10 +992,10 @@ foreach ($recent_news as $r_item) {
             <div class="nd-header-info">
                 <h1 class="nd-header-title"><?php echo esc_html($post_title); ?></h1>
                 <div class="nd-header-meta">Posted: <?php echo esc_html($post_date); ?></div>
-                <div class="nd-header-badges">
-                    <?php foreach ($categories_list as $cat_badge): ?>
-                        <span class="nd-badge"><?php echo esc_html($cat_badge); ?></span>
-                    <?php endforeach; ?>
+                <div class="nd-header-badge-box">
+                    <span>Category Name</span>
+                    <span class="nd-badge-sep">|</span>
+                    <span>Ho Chi Minh City</span>
                 </div>
             </div>
         </div>
