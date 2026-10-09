@@ -115,6 +115,9 @@ function nhomc_get_job_badges( $post_id ) {
         $first_type = reset( $types );
         $type_name = $first_type->name;
     }
+    if ( strtolower( str_replace( array( ' ', '-' ), '', $type_name ) ) === 'fulltime' ) {
+        $type_name = 'Fulltime';
+    }
 
     // 2. Category
     $cats = get_the_terms( $post_id, 'job_listing_category' );
