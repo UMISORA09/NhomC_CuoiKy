@@ -14,7 +14,7 @@ $theme_img_uri = get_template_directory_uri() . '/images/alljobs';
 $args = array(
     'post_type'      => 'job_listing',
     'post_status'    => 'publish',
-    'posts_per_page' => 24,
+    'posts_per_page' => -1,
     'orderby'        => 'date',
     'order'          => 'DESC'
 );
@@ -25,6 +25,7 @@ if ($jobs_query->have_posts()) {
         $jobs_query->the_post();
         $jid = get_the_ID();
         $loc = get_post_meta($jid, '_job_location', true);
+        $cname_meta = get_post_meta($jid, '_company_name', true);
         $terms = wp_get_post_terms($jid, 'job_listing_type');
         $tname = (!is_wp_error($terms) && !empty($terms)) ? $terms[0]->name : 'Fulltime';
         $cat_terms = wp_get_post_terms($jid, 'job_listing_category');
@@ -33,6 +34,7 @@ if ($jobs_query->have_posts()) {
         $db_jobs[] = array(
             'id'       => $jid,
             'title'    => strtoupper(get_the_title()),
+            'company'  => $cname_meta ? $cname_meta : 'THE SODOH',
             'date'     => get_the_date('M d, Y'),
             'type'     => $tname,
             'category' => $cname,
@@ -428,6 +430,9 @@ if ($jobs_query->have_posts()) {
         }
         .aj-job-card:hover .aj-card-title a {
             color: #f26522;
+        }
+        .aj-job-card.aj-card-hidden {
+            display: none !important;
         }
 
         /* Ô vuông Logo Công ty sắc nét */
@@ -1017,28 +1022,35 @@ if ($jobs_query->have_posts()) {
                 )
             );
 
-            // Tạo danh sách 12 card
-            $total_display = 12;
+            // Tạo danh sách card từ database seeder (mặc định hiện 12 card, Load More sẽ mở thêm)
+            $total_display = max(count($db_jobs), 12);
             for ($i = 0; $i < $total_display; $i++) {
                 $brand = $preset_brands[$i % 6];
                 
-                $title = $brand['default_title'];
-                $date = $brand['date'];
-                $type = 'Fulltime';
+                $title    = $brand['default_title'];
+                $date     = $brand['date'];
+                $type     = 'Fulltime';
                 $category = 'Category Name';
                 $location = 'Ho Chi Minh City';
-                $link = home_url('/job-detail/?job_id=19');
+                $link     = home_url('/job-detail/?job_id=19');
 
                 // Lấy thông tin từ database nếu có
                 if (isset($db_jobs[$i])) {
-                    $title = $db_jobs[$i]['title'];
+                    $title    = $db_jobs[$i]['title'];
                     $location = $db_jobs[$i]['location'];
-                    $link = $db_jobs[$i]['link'];
-                    if (!empty($db_jobs[$i]['type'])) $type = $db_jobs[$i]['type'];
+                    $link     = $db_jobs[$i]['link'];
+                    if (!empty($db_jobs[$i]['date']))     $date = $db_jobs[$i]['date'];
+                    if (!empty($db_jobs[$i]['type']))     $type = $db_jobs[$i]['type'];
                     if (!empty($db_jobs[$i]['category'])) $category = $db_jobs[$i]['category'];
+                    if (!empty($db_jobs[$i]['company'])) {
+                        $brand['name'] = $db_jobs[$i]['company'];
+                        $brand['sub']  = '';
+                    }
                 }
+
+                $hidden_class = ($i >= 12) ? ' aj-card-hidden' : '';
             ?>
-                <article class="aj-job-card" data-title="<?php echo esc_attr($title); ?>" data-idx="<?php echo $i; ?>" onclick="window.location.href='<?php echo esc_url($link); ?>';" role="link" tabindex="0" onkeydown="if(event.key==='Enter') window.location.href='<?php echo esc_url($link); ?>';">
+                <article class="aj-job-card<?php echo $hidden_class; ?>" data-title="<?php echo esc_attr($title); ?>" data-idx="<?php echo $i; ?>" onclick="window.location.href='<?php echo esc_url($link); ?>';" role="link" tabindex="0" onkeydown="if(event.key==='Enter') window.location.href='<?php echo esc_url($link); ?>';">
                     <div class="aj-card-logo-box">
                         <i class="<?php echo esc_attr($brand['icon']); ?> aj-logo-vector-icon"></i>
                         <span class="aj-logo-vector-name"><?php echo esc_html($brand['name']); ?></span>
@@ -1165,17 +1177,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 3. Hiệu ứng nút Load More
+    // 3. Hiệu ứng nút Load More mở thêm jobs thật từ Seeder
     const btnLoadMore = document.getElementById('btnLoadMore');
     if (btnLoadMore) {
         btnLoadMore.addEventListener('click', function() {
-            this.textContent = 'LOADING...';
-            setTimeout(() => {
+            const hiddenCards = Array.from(document.querySelectorAll('.aj-job-card.aj-card-hidden'));
+            if (hiddenCards.length > 0) {
+                this.textContent = 'LOADING...';
+                setTimeout(() => {
+                    const batch = hiddenCards.slice(0, 6);
+                    batch.forEach(card => card.classList.remove('aj-card-hidden'));
+                    
+                    const remaining = document.querySelectorAll('.aj-job-card.aj-card-hidden').length;
+                    if (remaining === 0) {
+                        btnLoadMore.textContent = 'NO MORE JOBS';
+                        btnLoadMore.style.opacity = '0.6';
+                        btnLoadMore.style.cursor = 'default';
+                        btnLoadMore.disabled = true;
+                    } else {
+                        btnLoadMore.textContent = 'LOAD MORE JOBS';
+                    }
+                }, 300);
+            } else {
                 this.textContent = 'NO MORE JOBS';
                 this.style.opacity = '0.6';
                 this.style.cursor = 'default';
                 this.disabled = true;
-            }, 600);
+            }
         });
     }
 });
