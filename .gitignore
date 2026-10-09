@@ -1,47 +1,38 @@
-# WordPress Git Ignore
-# Ignore uploads & cache to prevent large binary files in git
-wp-content/uploads/
-wp-content/upgrade/
-wp-content/cache/
-wp-content/backup-db/
-wp-content/backups/
+# Build and Release Folders
+bin-debug/
+bin-release/
+[Oo]bj/
+[Bb]in/
 
-# Ignore local configuration files with sensitive credentials
-wp-config.php
-.env
+# Other files and folders
+.settings/
 
-# Log files
-*.log
+# Executables
+*.swf
+*.air
+*.ipa
+*.apk
 
-<<<<<<< HEAD
-# OS generated files
-=======
 # WordPress Sensitive & Upload Files
-wp-config.php
+# wp-config.php (Giu lai de khi clone ve may khac luon co san cau hinh Docker dong)
 wp-content/uploads/
 wp-content/upgrade/
 wp-content/cache/
 wp-content/backup-db/
 wp-content/backups/
+backups/
 
 # Environment & Logs
 .env
 *.log
 
 # Operating System
->>>>>>> 9f40b57ed12bd17dbe918c6514805fb82c473730
 .DS_Store
 Thumbs.db
 desktop.ini
 
-<<<<<<< HEAD
-# IDE & Editor files
+# IDE & Editor
 .vscode/
 .idea/
 *.sublime-project
 *.sublime-workspace
-=======
-# IDE & Editor
-.vscode/
-.idea/
->>>>>>> 9f40b57ed12bd17dbe918c6514805fb82c473730

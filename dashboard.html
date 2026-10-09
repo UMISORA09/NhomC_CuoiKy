@@ -760,13 +760,19 @@
     </div>
 
     <div class="os-quick-actions">
-      <a href="http://localhost:8080" target="_blank" class="btn-topbar primary">
-        <span>🌐 Mở Website (8080)</span>
+      <a href="http://wordpress.local:8080" target="_blank" class="btn-topbar primary">
+        <span>🌐 wordpress.local:8080</span>
       </a>
-      <a href="http://localhost:8080/wp-admin" target="_blank" class="btn-topbar">
+      <a href="http://wordpressc:8080" target="_blank" class="btn-topbar">
+        <span>🔗 wordpressc:8080</span>
+      </a>
+      <a href="http://WordpressC.local:8080" target="_blank" class="btn-topbar">
+        <span>🔗 WordpressC.local</span>
+      </a>
+      <a href="http://wordpressc:8080/wp-admin" target="_blank" class="btn-topbar">
         <span>⚙️ WP-Admin</span>
       </a>
-      <a href="http://localhost:8085" target="_blank" class="btn-topbar">
+      <a href="http://wordpressc:8085" target="_blank" class="btn-topbar">
         <span>🗄️ phpMyAdmin (8085)</span>
       </a>
       <div class="clock-display" id="clock">00:00:00</div>
@@ -885,7 +891,7 @@
             </div>
             <div class="node-details">
               - Quản lý trực quan CSDL Cột, Bảng, Index<br>
-              - Truy cập ngay tại: <code>http://localhost:8085</code>
+              - Truy cập ngay tại: <code>http://wordpressc:8085</code> (hoặc <code>http://localhost:8085</code>)
             </div>
           </div>
         </div>
@@ -906,8 +912,8 @@
           <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
             <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
               <strong style="color: var(--accent-cyan);">Dự Án Cuối Kỳ (JobScout - Thư Mục Này):</strong><br>
-              • Web App: <code>http://localhost:8080</code> (Container: <code>wordpress_app</code>)<br>
-              • phpMyAdmin: <code>http://localhost:8085</code> (Container: <code>wordpress_phpmyadmin</code>)<br>
+              • Web App: <code>http://wordpressc:8080</code> | <code>http://WordpressC.local:8080</code> (Container: <code>wordpress_app</code>)<br>
+              • phpMyAdmin: <code>http://wordpressc:8085</code> (Container: <code>wordpress_phpmyadmin</code>)<br>
               • MySQL Port: <code>3307</code> | Database: <code>wordpress</code>
             </div>
 
@@ -935,11 +941,16 @@
                 <p>Website tuyển dụng việc làm với giao diện hoàn chỉnh theo bản thiết kế mẫu.</p>
               </div>
             </div>
-            <div class="service-url">http://localhost:8080</div>
+            <div class="service-url">http://wordpressc:8080</div>
           </div>
-          <a href="http://localhost:8080" target="_blank" class="btn-action">
-            <span>Truy Cập Trang Chủ ↗</span>
-          </a>
+          <div style="display:flex; gap:8px;">
+            <a href="http://wordpressc:8080" target="_blank" class="btn-action" style="flex:1;">
+              <span>wordpressc:8080 ↗</span>
+            </a>
+            <a href="http://WordpressC.local:8080" target="_blank" class="btn-action" style="flex:1;">
+              <span>WordpressC.local ↗</span>
+            </a>
+          </div>
         </div>
 
         <!-- CARD 2 -->
@@ -952,9 +963,9 @@
                 <p>Khu vực quản lý bài viết, trang, giao diện, plugin và quản trị viên.</p>
               </div>
             </div>
-            <div class="service-url">http://localhost:8080/wp-admin</div>
+            <div class="service-url">http://wordpressc:8080/wp-admin</div>
           </div>
-          <a href="http://localhost:8080/wp-admin" target="_blank" class="btn-action">
+          <a href="http://wordpressc:8080/wp-admin" target="_blank" class="btn-action">
             <span>Mở Bảng Quản Trị WP ↗</span>
           </a>
         </div>
@@ -969,9 +980,9 @@
                 <p>Công cụ quản trị CSDL trực quan, xem bảng wp_posts, wp_users, truy vấn SQL.</p>
               </div>
             </div>
-            <div class="service-url">http://localhost:8085</div>
+            <div class="service-url">http://wordpressc:8085</div>
           </div>
-          <a href="http://localhost:8085" target="_blank" class="btn-action">
+          <a href="http://wordpressc:8085" target="_blank" class="btn-action">
             <span>Mở phpMyAdmin ↗</span>
           </a>
         </div>
@@ -1154,7 +1165,7 @@
             <span class="badge-chip">Front Page</span>
           </div>
           <p style="font-size:13px; color:var(--text-muted);">Giao diện chính với bộ tìm kiếm việc làm, danh mục nổi bật, thống kê.</p>
-          <a href="http://localhost:8080/" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
+          <a href="http://wordpressc:8080/" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
         </div>
 
         <div class="page-box">
@@ -1166,7 +1177,7 @@
             <span class="badge-chip">Page</span>
           </div>
           <p style="font-size:13px; color:var(--text-muted);">Thông tin sứ mệnh, tầm nhìn, đội ngũ phát triển JobScout.</p>
-          <a href="http://localhost:8080/about-us" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
+          <a href="http://wordpressc:8080/about-us" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
         </div>
 
         <div class="page-box">
@@ -1178,7 +1189,7 @@
             <span class="badge-chip">Posts Page</span>
           </div>
           <p style="font-size:13px; color:var(--text-muted);">Trang bài viết blog, tư vấn nghề nghiệp và xu hướng tuyển dụng.</p>
-          <a href="http://localhost:8080/news" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
+          <a href="http://wordpressc:8080/news" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
         </div>
 
         <div class="page-box">
@@ -1190,7 +1201,7 @@
             <span class="badge-chip">Listing Page</span>
           </div>
           <p style="font-size:13px; color:var(--text-muted);">Bộ lọc việc làm chuyên sâu, tìm kiếm theo ngành nghề và địa điểm.</p>
-          <a href="http://localhost:8080/all-jobs" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
+          <a href="http://wordpressc:8080/all-jobs" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
         </div>
 
         <div class="page-box">
@@ -1202,7 +1213,7 @@
             <span class="badge-chip">Page</span>
           </div>
           <p style="font-size:13px; color:var(--text-muted);">Biểu mẫu gửi tin nhắn, bản đồ địa chỉ văn phòng hỗ trợ ứng viên.</p>
-          <a href="http://localhost:8080/contact-us" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
+          <a href="http://wordpressc:8080/contact-us" target="_blank" class="btn-sm-link">Xem Trang Trực Tiếp ↗</a>
         </div>
       </div>
     </section>
@@ -1222,7 +1233,7 @@
             </div>
             <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-subtle);">
               <span style="color:var(--text-muted);">Host kết nối ngoài (DBeaver/Navicat):</span>
-              <code>localhost:3307</code>
+              <code>wordpressc:3307 / 127.0.0.1:3307</code>
             </div>
             <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-subtle);">
               <span style="color:var(--text-muted);">Tên Cơ sở dữ liệu:</span>

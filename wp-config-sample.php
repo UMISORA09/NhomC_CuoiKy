@@ -18,6 +18,14 @@
  * @package WordPress
  */
 
+// ** Cau hinh Domain dong ho tro ca wordpressc:8080, WordpressC.local:8080 va localhost:8080 ** //
+if ( ! defined( 'WP_HOME' ) ) {
+	$proto = ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ) ? 'https://' : 'http://';
+	$host = isset( $_SERVER['HTTP_HOST'] ) && ! empty( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : 'wordpressc:8080';
+	define( 'WP_HOME', $proto . $host );
+	define( 'WP_SITEURL', $proto . $host );
+}
+
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define( 'DB_NAME', 'database_name_here' );
