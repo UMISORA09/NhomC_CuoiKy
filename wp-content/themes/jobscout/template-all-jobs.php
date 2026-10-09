@@ -31,12 +31,13 @@ if ($jobs_query->have_posts()) {
         $cname = (!is_wp_error($cat_terms) && !empty($cat_terms)) ? $cat_terms[0]->name : 'Category Name';
         
         $db_jobs[] = array(
-            'title' => strtoupper(get_the_title()),
-            'date' => get_the_date('M d, Y'),
-            'type' => $tname,
+            'id'       => $jid,
+            'title'    => strtoupper(get_the_title()),
+            'date'     => get_the_date('M d, Y'),
+            'type'     => $tname,
             'category' => $cname,
             'location' => $loc ? $loc : 'Ho Chi Minh City',
-            'link' => get_permalink($jid)
+            'link'     => home_url('/job-detail/?job_id=' . $jid)
         );
     }
     wp_reset_postdata();
@@ -418,11 +419,15 @@ if ($jobs_query->have_posts()) {
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
             box-shadow: 0 1px 3px rgba(0,0,0,0.02);
             min-width: 0; /* Giúp flexbox không bị tràn text */
+            cursor: pointer;
         }
         .aj-job-card:hover {
-            border-color: #d0d0d0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border-color: #f26522;
+            box-shadow: 0 4px 12px rgba(242, 101, 34, 0.12);
             transform: translateY(-2px);
+        }
+        .aj-job-card:hover .aj-card-title a {
+            color: #f26522;
         }
 
         /* Ô vuông Logo Công ty sắc nét */
@@ -1022,7 +1027,7 @@ if ($jobs_query->have_posts()) {
                 $type = 'Fulltime';
                 $category = 'Category Name';
                 $location = 'Ho Chi Minh City';
-                $link = home_url('/jobs/');
+                $link = home_url('/job-detail/?job_id=19');
 
                 // Lấy thông tin từ database nếu có
                 if (isset($db_jobs[$i])) {
@@ -1033,7 +1038,7 @@ if ($jobs_query->have_posts()) {
                     if (!empty($db_jobs[$i]['category'])) $category = $db_jobs[$i]['category'];
                 }
             ?>
-                <article class="aj-job-card" data-title="<?php echo esc_attr($title); ?>" data-idx="<?php echo $i; ?>">
+                <article class="aj-job-card" data-title="<?php echo esc_attr($title); ?>" data-idx="<?php echo $i; ?>" onclick="window.location.href='<?php echo esc_url($link); ?>';" role="link" tabindex="0" onkeydown="if(event.key==='Enter') window.location.href='<?php echo esc_url($link); ?>';">
                     <div class="aj-card-logo-box">
                         <i class="<?php echo esc_attr($brand['icon']); ?> aj-logo-vector-icon"></i>
                         <span class="aj-logo-vector-name"><?php echo esc_html($brand['name']); ?></span>
