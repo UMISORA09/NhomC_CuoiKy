@@ -1,0 +1,846 @@
+/* ==========================================================================
+   HOMEPAGE STYLES - NHÓM C (FIT - TDC)
+   Giao diện chuẩn 100% theo bản vẽ: job-design/1-home.png
+   ========================================================================== */
+
+:root {
+    --primary-orange: #eb6723;
+    --primary-orange-hover: #d35616;
+    --text-dark: #1f1f1f;
+    --text-gray: #666666;
+    --text-light-gray: #999999;
+    --bg-section: #f5f6f8;
+    --border-light: #e8e8e8;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body.home-design {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--text-dark);
+    background-color: #ffffff;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+.home-container {
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* ==========================================================================
+   1. HEADER
+   ========================================================================== */
+.home-header {
+    background: #ffffff;
+    border-bottom: 1px solid #eaeaea;
+    position: relative;
+    z-index: 100;
+}
+
+.home-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 76px;
+}
+
+.home-brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.home-brand img {
+    height: 42px;
+    width: auto;
+    object-fit: contain;
+}
+
+.home-header-right {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+}
+
+.home-nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    list-style: none;
+}
+
+.home-nav a {
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #222222;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    position: relative;
+    padding: 6px 0;
+}
+
+.home-nav a:hover,
+.home-nav a.active {
+    color: #111111;
+}
+
+.home-nav a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #222222;
+}
+
+.home-btn-submit {
+    display: inline-block;
+    padding: 9px 24px;
+    background-color: var(--primary-orange);
+    color: #ffffff !important;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+.home-btn-submit:hover {
+    background-color: var(--primary-orange-hover);
+}
+
+/* ==========================================================================
+   2. HERO BANNER & SEARCH BAR
+   ========================================================================== */
+.home-hero {
+    position: relative;
+    min-height: 540px;
+    background-size: cover;
+    background-position: center right;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    padding: 85px 0;
+}
+
+.home-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.25) 60%, rgba(0, 0, 0, 0.15) 100%);
+}
+
+.home-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 960px;
+}
+
+.home-hero-title {
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    line-height: 1.2;
+}
+
+.home-hero-subtitle {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: #ffffff;
+    max-width: 760px;
+    margin-bottom: 35px;
+    font-weight: 400;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Search Form Bar */
+.home-search-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 860px;
+}
+
+.home-search-input-box {
+    flex: 1.8;
+    background: #ffffff;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    height: 48px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.home-search-input-box i,
+.hm-icon-search {
+    color: var(--primary-orange);
+    margin-right: 12px;
+    font-size: 15px;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+.home-search-input-box input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: #333333;
+}
+
+.home-search-input-box input::placeholder {
+    color: #999999;
+}
+
+.home-search-location-box {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    height: 48px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    position: relative;
+}
+
+.home-search-location-box i.fa-location-dot,
+.hm-icon-location {
+    color: var(--primary-orange);
+    margin-right: 10px;
+    font-size: 15px;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+.home-search-location-box select {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: #333333;
+    background: transparent;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 20px;
+}
+
+.home-search-location-box .fa-chevron-down,
+.hm-icon-chevron {
+    position: absolute;
+    right: 12px;
+    color: #666666;
+    font-size: 11px;
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+.home-search-submit-btn {
+    padding: 0 28px;
+    height: 48px;
+    background-color: var(--primary-orange);
+    color: #ffffff;
+    border: none;
+    border-radius: 3px;
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.home-search-submit-btn:hover {
+    background-color: var(--primary-orange-hover);
+}
+
+/* ==========================================================================
+   3. SECTION: TOP JOBS
+   ========================================================================== */
+.home-section-jobs {
+    padding: 65px 0 60px 0;
+    background-color: var(--bg-section);
+}
+
+.home-section-heading {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #111111;
+    margin-bottom: 42px;
+}
+
+.home-jobs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+    margin-bottom: 40px;
+}
+
+.home-job-card {
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 22px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #ededed;
+}
+
+.home-job-logo {
+    width: 104px;
+    height: 104px;
+    min-width: 104px;
+    border: 1px solid #e2e2e2;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    text-align: center;
+    background: #ffffff;
+    flex-shrink: 0;
+}
+
+.hm-logo-vector-icon {
+    font-size: 26px;
+    color: #222222;
+    margin-bottom: 4px;
+}
+
+.hm-logo-vector-name {
+    font-size: 9px;
+    font-weight: 700;
+    color: #333333;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    line-height: 1.2;
+    display: block;
+}
+
+.hm-logo-vector-sub {
+    font-size: 8px;
+    color: #888888;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 2px;
+}
+
+.home-job-info {
+    flex: 1;
+}
+
+.home-job-title {
+    font-size: 15.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    line-height: 1.35;
+}
+
+.home-job-title a {
+    color: #111111;
+    text-decoration: none;
+}
+
+.home-job-title a:hover {
+    color: var(--primary-orange);
+}
+
+.home-job-date {
+    font-size: 11.5px;
+    color: #888888;
+    margin-bottom: 8px;
+}
+
+.home-job-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.home-job-tag {
+    background: #f0f0f0;
+    color: #555555;
+    padding: 2px 9px;
+    border-radius: 2px;
+    font-size: 11.5px;
+    font-weight: 500;
+}
+
+.home-job-bullets {
+    list-style: none;
+}
+
+.home-job-bullets li {
+    font-size: 12px;
+    color: #555555;
+    line-height: 1.5;
+    position: relative;
+    padding-left: 14px;
+    margin-bottom: 3px;
+}
+
+.home-job-bullets li::before {
+    content: "•";
+    color: #555555;
+    font-size: 14px;
+    position: absolute;
+    left: 2px;
+    top: -1px;
+}
+
+/* Nút VIEW MORE JOBS viền cam chuẩn bản vẽ */
+.home-more-jobs-wrap {
+    text-align: center;
+}
+
+.home-btn-view-more {
+    display: inline-block;
+    padding: 10px 42px;
+    background-color: transparent;
+    border: 1px solid var(--primary-orange);
+    color: var(--primary-orange) !important;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all 0.2s;
+}
+
+.home-btn-view-more:hover {
+    background-color: var(--primary-orange);
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   4. SECTION: CAREER WITH US
+   ========================================================================== */
+.home-section-career {
+    position: relative;
+    padding: 90px 0 95px 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #ffffff;
+    text-align: center;
+}
+
+.home-career-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.home-career-content {
+    position: relative;
+    z-index: 2;
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+.home-career-title {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+}
+
+.home-career-desc {
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: #ffffff;
+    margin-bottom: 18px;
+    font-weight: 400;
+}
+
+.home-career-btn-wrap {
+    margin-top: 32px;
+}
+
+.home-btn-more-about {
+    display: inline-block;
+    padding: 10px 36px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid #ffffff;
+    color: #ffffff !important;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all 0.2s;
+}
+
+.home-btn-more-about:hover {
+    background: #ffffff;
+    color: #111111 !important;
+}
+
+/* ==========================================================================
+   5. SECTION: NEWEST BLOG ENTRIES (2 Cột x 2 Hàng Layout ngang)
+   ========================================================================== */
+.home-section-blogs {
+    padding: 70px 0 80px 0;
+    background-color: var(--bg-section);
+}
+
+.home-blogs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+}
+
+.home-blog-card {
+    background: #ffffff;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #ededed;
+    min-height: 220px;
+    height: auto;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.home-blog-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.home-blog-thumb {
+    width: 180px;
+    height: 180px;
+    min-width: 180px;
+    max-width: 180px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 2px;
+    background-color: #f0f0f0;
+    display: block;
+    position: relative;
+}
+
+.home-blog-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.home-blog-body {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    min-width: 0;
+}
+
+.home-blog-title {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 6px;
+}
+
+.home-blog-title a {
+    color: #111111;
+    text-decoration: none;
+}
+
+.home-blog-title a:hover {
+    color: var(--primary-orange);
+}
+
+.home-blog-excerpt {
+    font-size: 12px;
+    color: #666666;
+    line-height: 1.55;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.home-blog-readmore {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--primary-orange);
+    text-decoration: none;
+}
+
+.home-blog-readmore:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   6. SECTION: SUBSCRIBE TO OUR NEWSLETTER (Nền màu cam toàn phần)
+   ========================================================================== */
+.home-section-newsletter {
+    background-color: var(--primary-orange);
+    color: #ffffff;
+    padding: 38px 0;
+}
+
+.home-newsletter-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.home-newsletter-heading {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    line-height: 1.25;
+}
+
+.home-newsletter-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    max-width: 620px;
+}
+
+.home-newsletter-input-box {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    height: 44px;
+}
+
+.home-newsletter-input-box i,
+.hm-icon-mail {
+    color: var(--primary-orange);
+    margin-right: 12px;
+    font-size: 15px;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+.home-newsletter-input-box input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 13.5px;
+    color: #333333;
+}
+
+.home-newsletter-btn {
+    height: 44px;
+    padding: 0 30px;
+    background: transparent;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.home-newsletter-btn:hover {
+    background: #ffffff;
+    color: var(--primary-orange);
+}
+
+/* ==========================================================================
+   7. FOOTER
+   ========================================================================== */
+.home-footer {
+    background-color: #ffffff;
+    padding: 45px 0 25px 0;
+    text-align: center;
+}
+
+.home-footer-logo {
+    margin-bottom: 22px;
+}
+
+.home-footer-logo img {
+    height: 38px;
+    width: auto;
+    object-fit: contain;
+}
+
+.home-footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    list-style: none;
+    margin-bottom: 24px;
+}
+
+.home-footer-nav a {
+    color: #222222;
+    text-decoration: none;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+}
+
+.home-footer-nav a:hover {
+    color: var(--primary-orange);
+}
+
+.home-footer-socials {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 30px;
+}
+
+.home-social-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+    transition: opacity 0.2s;
+}
+
+.home-social-icon:hover {
+    opacity: 0.85;
+}
+
+.home-social-fb { background-color: #3b5998; }
+.home-social-gg { background-color: #ea4335; }
+.home-social-line { background-color: #00b900; }
+.home-social-tw { background-color: #1da1f2; }
+
+.home-footer-copyright-bar {
+    background-color: #000000;
+    color: #777777;
+    padding: 12px 0;
+    font-size: 11.5px;
+    text-align: center;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 992px) {
+    .home-hero-title {
+        font-size: 32px;
+    }
+    .home-search-form {
+        flex-wrap: wrap;
+    }
+    .home-jobs-grid {
+        grid-template-columns: 1fr;
+    }
+    .home-blogs-grid {
+        grid-template-columns: 1fr;
+    }
+    .home-newsletter-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+    .home-newsletter-form {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .home-header-inner {
+        height: 64px;
+    }
+    .home-nav {
+        display: none;
+    }
+    .home-hero {
+        min-height: 420px;
+        padding: 50px 0;
+    }
+    .home-hero-title {
+        font-size: 26px;
+    }
+    .home-search-form {
+        flex-direction: column;
+        width: 100%;
+    }
+    .home-search-input-box,
+    .home-search-location-box,
+    .home-search-submit-btn {
+        width: 100%;
+    }
+    .home-job-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .home-job-tags {
+        justify-content: center;
+    }
+    .home-job-bullets li {
+        text-align: left;
+    }
+    .home-blog-card {
+        flex-direction: column;
+        height: auto;
+    }
+    .home-blog-thumb {
+        width: 100%;
+        height: 180px;
+    }
+    .home-newsletter-form {
+        flex-direction: column;
+    }
+    .home-newsletter-input-box,
+    .home-newsletter-btn {
+        width: 100%;
+    }
+    .home-footer-nav {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+}
