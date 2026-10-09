@@ -451,7 +451,7 @@ $banner_img = $theme_uri . '/images/contact/contact-hero-banner.jpg';
         .cu-nl-input-group {
             position: relative;
             background: #ffffff;
-            border-radius: 2px;
+            border-radius: 0;
             display: flex;
             align-items: center;
             padding: 0 16px;
@@ -487,7 +487,7 @@ $banner_img = $theme_uri . '/images/contact/contact-hero-banner.jpg';
             letter-spacing: 1px;
             text-transform: uppercase;
             cursor: pointer;
-            border-radius: 2px;
+            border-radius: 0;
             transition: all 0.25s ease;
             white-space: nowrap;
             flex-shrink: 0;
