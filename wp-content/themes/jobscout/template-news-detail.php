@@ -618,52 +618,57 @@ foreach ($recent_news as $r_item) {
         /* === 6. SUBSCRIBE TO OUR NEWSLETTER === */
         .nd-newsletter {
             background-color: #ea751e;
-            padding: 36px 20px;
+            padding: 30px 20px;
             width: 100%;
         }
         .nd-nl-inner {
-            max-width: 1050px;
+            max-width: 920px;
             margin: 0 auto;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 30px;
+            justify-content: center;
+            gap: 28px;
         }
         .nd-nl-title {
-            font-size: 22px;
-            font-weight: 800;
+            font-size: 20px;
+            font-weight: 700;
             color: #ffffff;
             line-height: 1.25;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin: 0;
         }
         .nd-nl-form {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 20px;
             flex: 1;
-            max-width: 620px;
-            justify-content: flex-end;
+            max-width: 700px;
         }
         .nd-nl-input-group {
             position: relative;
             background: #ffffff;
-            border-radius: 2px;
+            border-radius: 0;
             display: flex;
             align-items: center;
             padding: 0 16px;
-            width: 100%;
-            max-width: 420px;
-            height: 48px;
+            height: 52px;
+            flex: 1;
+            min-width: 260px;
         }
-        .nd-nl-input-group i {
-            color: #999999;
-            font-size: 16px;
+        .nd-nl-input-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             margin-right: 12px;
+            flex-shrink: 0;
+            color: #ea751e;
         }
         .nd-nl-input {
             border: none;
             outline: none;
-            font-size: 13.5px;
+            font-size: 14px;
             font-family: inherit;
             color: #333333;
             width: 100%;
@@ -671,21 +676,23 @@ foreach ($recent_news as $r_item) {
         }
         .nd-nl-input::placeholder {
             color: #999999;
+            font-size: 14px;
         }
         .nd-btn-subscribe {
             background-color: transparent;
             color: #ffffff;
-            border: 1.5px solid #ffffff;
-            padding: 0 26px;
-            height: 48px;
-            font-size: 13px;
+            border: 1px solid #ffffff;
+            padding: 0 28px;
+            height: 52px;
+            font-size: 13.5px;
             font-weight: 700;
-            letter-spacing: 1.2px;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
-            border-radius: 2px;
+            border-radius: 0;
             cursor: pointer;
             transition: all 0.25s ease;
             white-space: nowrap;
+            flex-shrink: 0;
         }
         .nd-btn-subscribe:hover {
             background-color: #ffffff;
@@ -854,16 +861,21 @@ foreach ($recent_news as $r_item) {
                 margin: 0 auto;
                 width: 100%;
             }
+        }
+
+        @media screen and (max-width: 768px) {
             .nd-nl-inner {
                 flex-direction: column;
                 text-align: center;
+                gap: 18px;
             }
             .nd-nl-form {
                 flex-direction: column;
                 width: 100%;
+                gap: 14px;
             }
             .nd-nl-input-group {
-                max-width: 100%;
+                width: 100%;
             }
             .nd-btn-subscribe {
                 width: 100%;
@@ -1053,7 +1065,12 @@ foreach ($recent_news as $r_item) {
         <h3 class="nd-nl-title">Subscribe To<br>Our Newsletter</h3>
         <form class="nd-nl-form" onsubmit="event.preventDefault(); alert('Cảm ơn bạn đã đăng ký nhận bản tin tuyển dụng NhomC!'); this.reset();">
             <div class="nd-nl-input-group">
-                <i class="fa-regular fa-envelope"></i>
+                <span class="nd-nl-input-icon">
+                    <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="1" y="1" width="18" height="13" rx="1" stroke="#ea751e" stroke-width="1.8"/>
+                        <path d="M2 2.5L10 8.5L18 2.5" stroke="#ea751e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
                 <input type="email" class="nd-nl-input" placeholder="Input your email address" required>
             </div>
             <button type="submit" class="nd-btn-subscribe">SUBSCRIBE</button>
