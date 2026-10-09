@@ -755,56 +755,7 @@ foreach ($default_news as $idx => $item) {
 <body <?php body_class('nhomc-news-page'); ?>>
 
 <!-- 1. HEADER / NAVBAR -->
-<header class="news-header">
-    <div class="news-header-inner">
-        
-        <!-- Logo Nhom C -->
-        <a href="<?php echo esc_url($site_url); ?>" class="news-logo-brand">
-            <div class="news-logo-box">
-                <span class="news-logo-text-main">NHOM C</span>
-            </div>
-            <span class="news-logo-sub">CAREER &amp; RECRUITING PLATFORM</span>
-        </a>
-
-        <!-- Header Right: Nav Desktop & Submit Job -->
-        <div class="news-header-right">
-            <nav>
-                <ul class="news-nav">
-                    <li><a href="<?php echo esc_url($site_url); ?>">HOME</a></li>
-                    <li><a href="<?php echo esc_url($site_url); ?>/jobs/">JOBS</a></li>
-                    <li class="active"><a href="<?php echo esc_url($site_url); ?>/news/">NEWS</a></li>
-                    <li><a href="<?php echo esc_url($site_url); ?>/about-us/">ABOUT</a></li>
-                    <li><a href="<?php echo esc_url($site_url); ?>/contact-us/">CONTACT</a></li>
-                </ul>
-            </nav>
-
-            <a href="<?php echo esc_url($site_url); ?>/post-a-job/" class="news-btn-submit-job">SUBMIT JOB</a>
-        </div>
-
-        <!-- Mobile Toggle Button -->
-        <button class="news-mobile-toggle" id="newsMobileToggle" aria-label="Toggle Navigation">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-    </div>
-</header>
-
-<!-- Mobile Navigation Drawer -->
-<div class="news-mobile-overlay" id="newsMobileOverlay"></div>
-<aside class="news-mobile-drawer" id="newsMobileDrawer">
-    <button class="news-drawer-close" id="newsDrawerClose" aria-label="Close Navigation Menu">
-        <i class="fa-solid fa-xmark"></i>
-    </button>
-    <ul class="news-mobile-nav">
-        <li><a href="<?php echo esc_url($site_url); ?>">HOME</a></li>
-        <li><a href="<?php echo esc_url($site_url); ?>/jobs/">JOBS</a></li>
-        <li class="active"><a href="<?php echo esc_url($site_url); ?>/news/">NEWS</a></li>
-        <li><a href="<?php echo esc_url($site_url); ?>/about-us/">ABOUT</a></li>
-        <li><a href="<?php echo esc_url($site_url); ?>/contact-us/">CONTACT</a></li>
-    </ul>
-    <div style="margin-top: 30px;">
-        <a href="<?php echo esc_url($site_url); ?>/post-a-job/" class="news-btn-submit-job" style="display: flex; width: 100%; text-align: center;">SUBMIT JOB</a>
-    </div>
-</aside>
+<?php get_template_part( 'template-parts/nhomc-header' ); ?>
 
 <!-- 2. HERO BANNER: PDS NEWS (Hình ảnh gốc chứa sẵn tiêu đề PDS NEWS sắc nét) -->
 <section class="news-hero">
