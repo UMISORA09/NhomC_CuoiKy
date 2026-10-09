@@ -766,8 +766,16 @@ if ($jobs_query->have_posts()) {
                 grid-template-columns: 1fr; /* 1 cột cho máy tính bảng */
                 gap: 20px;
             }
-            .aj-hero-banner {
+            .aj-hero-banner,
+            .aj-hero-slider-wrap {
                 height: 280px;
+            }
+            .aj-slide-title {
+                font-size: 26px;
+                letter-spacing: 3px;
+            }
+            .aj-slide-desc {
+                font-size: 13px;
             }
         }
 
@@ -793,9 +801,29 @@ if ($jobs_query->have_posts()) {
             .aj-btn-submit {
                 display: none; /* Trên mobile nút Submit gom vào menu Drawer */
             }
-            .aj-hero-banner {
-                height: 210px;
+            .aj-hero-banner,
+            .aj-hero-slider-wrap {
+                height: 220px;
             }
+            .aj-slide-title {
+                font-size: 20px;
+                letter-spacing: 2px;
+            }
+            .aj-slide-desc {
+                display: none;
+            }
+            .aj-slide-badge {
+                font-size: 9px;
+                padding: 2px 10px;
+                margin-bottom: 6px;
+            }
+            .aj-slider-arrow {
+                width: 34px;
+                height: 34px;
+                font-size: 13px;
+            }
+            .aj-slider-prev { left: 10px; }
+            .aj-slider-next { right: 10px; }
             .aj-main-content {
                 padding: 35px 0 50px 0;
             }
