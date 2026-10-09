@@ -918,56 +918,7 @@ foreach ($recent_news as $r_item) {
 <body <?php body_class('nhomc-news-detail-page'); ?>>
 
 <!-- 1. HEADER / NAVBAR -->
-<header class="nd-header">
-    <div class="nd-header-inner">
-        
-        <!-- Logo Nhom C -->
-        <a href="<?php echo esc_url($site_url); ?>" class="nd-logo-brand">
-            <div class="nd-logo-box">
-                <span class="nd-logo-text-main">NHOM C</span>
-            </div>
-            <span class="nd-logo-sub">CAREER &amp; RECRUITING PLATFORM</span>
-        </a>
-
-        <!-- Header Right: Nav Desktop & Submit Job -->
-        <div class="nd-header-right">
-            <nav>
-                <ul class="nd-nav">
-                    <li><a href="<?php echo esc_url($site_url); ?>">HOME</a></li>
-                    <li><a href="<?php echo esc_url($site_url); ?>/jobs/">JOBS</a></li>
-                    <li class="active"><a href="<?php echo esc_url($site_url); ?>/news/">NEWS</a></li>
-                    <li><a href="<?php echo esc_url($site_url); ?>/about-us/">ABOUT</a></li>
-                    <li><a href="<?php echo esc_url($site_url); ?>/contact-us/">CONTACT</a></li>
-                </ul>
-            </nav>
-
-            <a href="<?php echo esc_url($site_url); ?>/post-a-job/" class="nd-btn-submit-job">SUBMIT JOB</a>
-        </div>
-
-        <!-- Mobile Toggle Button -->
-        <button class="nd-mobile-toggle" id="ndMobileToggle" aria-label="Toggle Navigation">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-    </div>
-</header>
-
-<!-- Mobile Navigation Drawer -->
-<div class="nd-mobile-overlay" id="ndMobileOverlay"></div>
-<aside class="nd-mobile-drawer" id="ndMobileDrawer">
-    <button class="nd-drawer-close" id="ndDrawerClose" aria-label="Close Navigation Menu">
-        <i class="fa-solid fa-xmark"></i>
-    </button>
-    <ul class="nd-mobile-nav">
-        <li><a href="<?php echo esc_url($site_url); ?>">HOME</a></li>
-        <li><a href="<?php echo esc_url($site_url); ?>/jobs/">JOBS</a></li>
-        <li class="active"><a href="<?php echo esc_url($site_url); ?>/news/">NEWS</a></li>
-        <li><a href="<?php echo esc_url($site_url); ?>/about-us/">ABOUT</a></li>
-        <li><a href="<?php echo esc_url($site_url); ?>/contact-us/">CONTACT</a></li>
-    </ul>
-    <div style="margin-top: 30px;">
-        <a href="<?php echo esc_url($site_url); ?>/post-a-job/" class="nd-btn-submit-job" style="display: flex; width: 100%; text-align: center;">SUBMIT JOB</a>
-    </div>
-</aside>
+<?php get_template_part( 'template-parts/nhomc-header' ); ?>
 
 <!-- 2. BREADCRUMB -->
 <div class="nd-breadcrumb-section">

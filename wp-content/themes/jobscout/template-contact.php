@@ -672,53 +672,7 @@ $banner_img = $theme_uri . '/images/contact/contact-hero-banner.jpg';
 <body <?php body_class('contact-page-body'); ?>>
 
 <!-- 1. TOP NAVBAR / HEADER -->
-<header class="cu-header">
-    <div class="cu-header-inner">
-        <!-- Logo NhomC -->
-        <a href="<?php echo esc_url($site_url); ?>" class="cu-logo-brand">
-            <div class="cu-logo-box">
-                <span class="cu-logo-text-main">NHOM C</span>
-            </div>
-            <span class="cu-logo-sub">RECRUITING</span>
-        </a>
-
-        <!-- Desktop Navigation & Submit Job -->
-        <div class="cu-header-right">
-            <ul class="cu-nav">
-                <li><a href="<?php echo esc_url($site_url); ?>">HOME</a></li>
-                <li><a href="<?php echo esc_url($site_url); ?>/jobs/">JOBS</a></li>
-                <li><a href="<?php echo esc_url($site_url); ?>/blog/">NEWS</a></li>
-                <li><a href="<?php echo esc_url($site_url); ?>/about-us/">ABOUT</a></li>
-                <li class="active"><a href="<?php echo esc_url($site_url); ?>/contact/">CONTACT</a></li>
-            </ul>
-
-            <a href="<?php echo esc_url($site_url); ?>/post-a-job/" class="cu-btn-submit-job">SUBMIT JOB</a>
-        </div>
-
-        <!-- Mobile Hamburger Button -->
-        <button class="cu-mobile-toggle" id="cuMobileToggle" aria-label="Open Navigation Menu">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-    </div>
-</header>
-
-<!-- Mobile Navigation Drawer -->
-<div class="cu-mobile-overlay" id="cuMobileOverlay"></div>
-<aside class="cu-mobile-drawer" id="cuMobileDrawer">
-    <button class="cu-drawer-close" id="cuDrawerClose" aria-label="Close Navigation Menu">
-        <i class="fa-solid fa-xmark"></i>
-    </button>
-    <ul class="cu-mobile-nav">
-        <li><a href="<?php echo esc_url($site_url); ?>">HOME</a></li>
-        <li><a href="<?php echo esc_url($site_url); ?>/jobs/">JOBS</a></li>
-        <li><a href="<?php echo esc_url($site_url); ?>/blog/">NEWS</a></li>
-        <li><a href="<?php echo esc_url($site_url); ?>/about-us/">ABOUT</a></li>
-        <li class="active"><a href="<?php echo esc_url($site_url); ?>/contact/">CONTACT</a></li>
-    </ul>
-    <div style="margin-top: 30px;">
-        <a href="<?php echo esc_url($site_url); ?>/post-a-job/" class="cu-btn-submit-job" style="display: flex; width: 100%; text-align: center;">SUBMIT JOB</a>
-    </div>
-</aside>
+<?php get_template_part( 'template-parts/nhomc-header' ); ?>
 
 <!-- 2. HERO BANNER: CONTACT US (Hình ảnh nguyên bản có sẵn chữ CONTACT US sắc nét) -->
 <section class="cu-hero">
