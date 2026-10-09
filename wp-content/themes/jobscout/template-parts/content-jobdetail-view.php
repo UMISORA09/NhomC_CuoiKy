@@ -204,9 +204,9 @@ $company_gallery = array(
                         $oj_badges   = nhomc_get_job_badges( $oj_id );
                         $oj_bullets  = nhomc_get_job_bullets( $oj_id, $job_item->post_content );
                         $oj_date     = date( 'M d, Y', strtotime( $job_item->post_date ) );
-                        $oj_link     = get_permalink( $oj_id );
+                        $oj_link     = esc_url( home_url( '/job-detail/?job_id=' . $oj_id ) );
                         ?>
-                        <div class="nhomc-other-job-card">
+                        <div class="nhomc-other-job-card" onclick="window.location.href='<?php echo esc_url( $oj_link ); ?>';" style="cursor: pointer;">
                             <div class="nhomc-oj-top">
                                 <!-- Company Logo -->
                                 <div class="nhomc-oj-logo">

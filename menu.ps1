@@ -98,9 +98,13 @@ function Start-JobScoutAll {
     Write-Host "[5/6] Thiet lap thuong hieu JobScout va Front Page..." -ForegroundColor Yellow
     Invoke-SqlFile "setup_jobscout_brand.sql"
 
-    Write-Host "[6/6] Kich hoat Theme JobScout, 5 Plugins va Dong bo Doanh Nghiep..." -ForegroundColor Yellow
+    Write-Host "[6/6] Kich hoat Theme JobScout, 5 Plugins, Dong bo Doanh Nghiep & Jobs Seeder..." -ForegroundColor Yellow
     Invoke-SqlFile "activate_theme_plugins.sql"
     docker exec $WP_CONTAINER php sync_company_profiles.php 2>$null
+    if (Test-Path "seed_jobs.php") {
+        docker cp "seed_jobs.php" "${WP_CONTAINER}:/var/www/html/seed_jobs.php" 2>$null
+        docker exec $WP_CONTAINER php seed_jobs.php 2>$null
+    }
 
     Write-Host ""
     Write-Host "+--------------------------------------------------------------------------+" -ForegroundColor Green
@@ -108,6 +112,43 @@ function Start-JobScoutAll {
     Write-Host "+--------------------------------------------------------------------------+" -ForegroundColor Green
     Open-FloatingWindow
     Start-Process $URL_WEB
+    Write-Host ""
+    Write-Host "Nhan phim bat ky de quay lai menu..." -ForegroundColor Gray
+    [Console]::ReadKey($true) | Out-Null
+}
+
+function Reload-JobScoutDatabase {
+    Clear-Host
+    Write-Host "+--------------------------------------------------------------------------+" -ForegroundColor Cyan
+    Write-Host "|             TIEN TRINH NAP LAI TOAN BO CO SO DU LIEU JOBSCOUT            |" -ForegroundColor Cyan
+    Write-Host "+--------------------------------------------------------------------------+" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "[1/6] Nap 7 trang thiet ke Figma & CSDL goc vao Database..." -ForegroundColor Yellow
+    Invoke-SqlFile "import_job_design_data.sql"
+
+    Write-Host "[2/6] Dong bo 6 tai khoan Administrator Nhom C..." -ForegroundColor Yellow
+    Invoke-SqlFile "create_users.sql"
+
+    Write-Host "[3/6] Thiet lap thuong hieu JobScout va Front Page..." -ForegroundColor Yellow
+    Invoke-SqlFile "setup_jobscout_brand.sql"
+
+    Write-Host "[4/6] Kich hoat Theme JobScout va 5 Plugins nghiep vu..." -ForegroundColor Yellow
+    Invoke-SqlFile "activate_theme_plugins.sql"
+
+    Write-Host "[5/6] Dong bo 5 Ho So Doanh Nghiep va lien ket viec lam..." -ForegroundColor Yellow
+    docker exec $WP_CONTAINER php sync_company_profiles.php 2>$null
+
+    Write-Host "[6/6] Nap 30+ viec lam mau vao CSDL (seed_jobs.php)..." -ForegroundColor Yellow
+    if (Test-Path "seed_jobs.php") {
+        docker cp "seed_jobs.php" "${WP_CONTAINER}:/var/www/html/seed_jobs.php" 2>$null
+        docker exec $WP_CONTAINER php seed_jobs.php 2>$null
+        Write-Host "  [+] Da thuc thi seed_jobs.php thanh cong!" -ForegroundColor Green
+    }
+
+    Write-Host ""
+    Write-Host "+--------------------------------------------------------------------------+" -ForegroundColor Green
+    Write-Host "| [HOAN TAT] Da nap lai toan bo Co So Du Lieu JobScout thanh cong 100%!    |" -ForegroundColor Green
+    Write-Host "+--------------------------------------------------------------------------+" -ForegroundColor Green
     Write-Host ""
     Write-Host "Nhan phim bat ky de quay lai menu..." -ForegroundColor Gray
     [Console]::ReadKey($true) | Out-Null
@@ -329,6 +370,11 @@ $tabs = @(
     @{
         Title = "4. CSDL & DOCKER"
         Items = @(
+            @{
+                Key    = "N"
+                Label  = "[N] NAP LAI TOAN BO CSDL (SQL + 6 Admins + 30+ Jobs Seeder)"
+                Action = { Reload-JobScoutDatabase }
+            },
             @{
                 Key    = "H"
                 Label  = "[H] Cap Nhat Ten Mien 'wordpressc' Vao File Hosts (Admin)"

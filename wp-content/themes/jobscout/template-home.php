@@ -84,7 +84,7 @@ if ( $jobs_query->have_posts() ) {
             'location' => $loc ? $loc : 'Ho Chi Minh City',
             'company'  => $company ? $company : 'Nhóm C Recruiting',
             'brand'    => $brand,
-            'link'     => get_permalink( $jid ),
+            'link'     => esc_url( home_url( '/job-detail/?job_id=' . $jid ) ),
             'bullets'  => array(
                 'Be responsible for the effective operational management of the property',
                 'Excellent salary bonuses & recognition activities',
@@ -627,6 +627,7 @@ $career_bg = $img_home_dir . '/career-bg.jpg?v=' . $cache_bust;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
             border: 1px solid #ededed !important;
             transition: transform 0.2s, box-shadow 0.2s !important;
+            cursor: pointer !important;
         }
 
         .hm-job-card:hover {
@@ -1173,7 +1174,7 @@ $career_bg = $img_home_dir . '/career-bg.jpg?v=' . $cache_bust;
         <h2 class="hm-section-heading">TOP JOBS</h2>
         <div class="hm-jobs-grid">
             <?php foreach ( $home_jobs as $job ) : ?>
-                <div class="hm-job-card">
+                <div class="hm-job-card" onclick="window.location.href='<?php echo esc_url( $job['link'] ); ?>';">
                     <div class="hm-job-logo">
                         <i class="<?php echo esc_attr( $job['brand']['icon'] ); ?> hm-logo-vector-icon"></i>
                         <span class="hm-logo-vector-name"><?php echo esc_html( $job['brand']['name'] ); ?></span>
