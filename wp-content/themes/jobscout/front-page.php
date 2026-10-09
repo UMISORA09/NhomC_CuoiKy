@@ -5,6 +5,12 @@
  * @package JobScout
  */
 
+// Ưu tiên hiển thị Template Home Design chuẩn đồ án Nhóm C theo 1-home.png
+if ( file_exists( get_template_directory() . '/template-home.php' ) ) {
+    include get_template_directory() . '/template-home.php';
+    return;
+}
+
 $home_sections = jobscout_get_home_sections();
 
 if ( 'posts' == get_option( 'show_on_front' ) ) { //Show Static Blog Page

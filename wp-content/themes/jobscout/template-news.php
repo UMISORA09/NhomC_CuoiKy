@@ -65,19 +65,11 @@ $default_news = [
     ],
 ];
 
-// Lấy link chi tiết bài viết từ database nếu có bài viết tương ứng
+// Đường dẫn chuyển đến trang chi tiết tin tức chuẩn thiết kế 6-news detail.png
 $news_items = [];
 foreach ($default_news as $idx => $item) {
-    // Tìm post trong WP theo slug gốc
-    $base_slug = preg_replace('/-\d+$/', '', $item['slug']);
-    $wp_post = get_page_by_path($base_slug, OBJECT, 'post');
-    if (!$wp_post) {
-        $wp_post = get_page_by_path($item['slug'], OBJECT, 'post');
-    }
-    
-    $detail_link = $wp_post ? get_permalink($wp_post->ID) : esc_url($site_url . '/news-detail/?post=' . urlencode($item['slug']));
-    
-    $item['link'] = $detail_link;
+    // Luôn liên kết trực tiếp đến trang News Detail (/news-detail/)
+    $item['link'] = esc_url($site_url . '/news-detail/');
     $news_items[] = $item;
 }
 ?>
@@ -505,35 +497,58 @@ foreach ($default_news as $idx => $item) {
         }
         .news-nl-input-group {
             position: relative;
-            background: #ffffff;
-            border-radius: 0;
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-            height: 52px;
-            flex: 1;
-            min-width: 260px;
+            background: #ffffff !important;
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            display: flex !important;
+            align-items: center !important;
+            padding: 0 16px !important;
+            height: 52px !important;
+            flex: 1 !important;
+            min-width: 260px !important;
+            box-sizing: border-box !important;
         }
         .news-nl-input-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-            flex-shrink: 0;
-            color: #ea751e;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin-right: 12px !important;
+            flex-shrink: 0 !important;
+            color: #ea751e !important;
         }
-        .news-nl-input {
-            border: none;
-            outline: none;
-            font-size: 14px;
-            font-family: inherit;
-            color: #333333;
-            width: 100%;
-            background: transparent;
+        .news-nl-input,
+        input.news-nl-input[type="email"],
+        .news-nl-input-group input[type="email"] {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+            background-color: transparent !important;
+            border-radius: 0 !important;
+            padding: 0 0 0 4px !important;
+            margin: 0 !important;
+            height: 100% !important;
+            line-height: 52px !important;
+            font-size: 14px !important;
+            font-family: inherit !important;
+            color: #333333 !important;
+            width: 100% !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            appearance: none !important;
+        }
+        .news-nl-input:focus,
+        input.news-nl-input[type="email"]:focus,
+        .news-nl-input-group input[type="email"]:focus {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
         }
         .news-nl-input::placeholder {
-            color: #999999;
-            font-size: 14px;
+            color: #999999 !important;
+            font-size: 14px !important;
         }
         .news-btn-subscribe {
             background-color: transparent;
@@ -840,7 +855,7 @@ foreach ($default_news as $idx => $item) {
                         <path d="M2 2.5L10 8.5L18 2.5" stroke="#ea751e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </span>
-                <input type="email" class="news-nl-input" placeholder="Input your email address" required>
+                <input type="email" class="news-nl-input" placeholder="Input your email address" required style="border: none !important; outline: none !important; box-shadow: none !important; background: transparent !important; border-radius: 0 !important; padding: 0 0 0 4px !important; height: 100% !important; margin: 0 !important; -webkit-appearance: none !important;">
             </div>
             <button type="submit" class="news-btn-subscribe">SUBSCRIBE</button>
         </form>

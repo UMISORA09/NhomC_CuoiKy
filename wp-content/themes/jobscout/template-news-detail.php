@@ -650,35 +650,58 @@ foreach ($recent_news as $r_item) {
         }
         .nd-nl-input-group {
             position: relative;
-            background: #ffffff;
-            border-radius: 0;
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-            height: 52px;
-            flex: 1;
-            min-width: 260px;
+            background: #ffffff !important;
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            display: flex !important;
+            align-items: center !important;
+            padding: 0 16px !important;
+            height: 52px !important;
+            flex: 1 !important;
+            min-width: 260px !important;
+            box-sizing: border-box !important;
         }
         .nd-nl-input-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-            flex-shrink: 0;
-            color: #ea751e;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin-right: 12px !important;
+            flex-shrink: 0 !important;
+            color: #ea751e !important;
         }
-        .nd-nl-input {
-            border: none;
-            outline: none;
-            font-size: 14px;
-            font-family: inherit;
-            color: #333333;
-            width: 100%;
-            background: transparent;
+        .nd-nl-input,
+        input.nd-nl-input[type="email"],
+        .nd-nl-input-group input[type="email"] {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+            background-color: transparent !important;
+            border-radius: 0 !important;
+            padding: 0 0 0 4px !important;
+            margin: 0 !important;
+            height: 100% !important;
+            line-height: 52px !important;
+            font-size: 14px !important;
+            font-family: inherit !important;
+            color: #333333 !important;
+            width: 100% !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            appearance: none !important;
+        }
+        .nd-nl-input:focus,
+        input.nd-nl-input[type="email"]:focus,
+        .nd-nl-input-group input[type="email"]:focus {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
         }
         .nd-nl-input::placeholder {
-            color: #999999;
-            font-size: 14px;
+            color: #999999 !important;
+            font-size: 14px !important;
         }
         .nd-btn-subscribe {
             background-color: transparent;
@@ -1073,7 +1096,7 @@ foreach ($recent_news as $r_item) {
                         <path d="M2 2.5L10 8.5L18 2.5" stroke="#ea751e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </span>
-                <input type="email" class="nd-nl-input" placeholder="Input your email address" required>
+                <input type="email" class="nd-nl-input" placeholder="Input your email address" required style="border: none !important; outline: none !important; box-shadow: none !important; background: transparent !important; border-radius: 0 !important; padding: 0 0 0 4px !important; height: 100% !important; margin: 0 !important; -webkit-appearance: none !important;">
             </div>
             <button type="submit" class="nd-btn-subscribe">SUBSCRIBE</button>
         </form>

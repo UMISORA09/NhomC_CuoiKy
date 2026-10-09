@@ -12,6 +12,9 @@ $theme_uri = get_template_directory_uri();
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
     <?php wp_head(); ?>
     <link rel="stylesheet" href="<?php echo esc_url( $theme_uri . '/css/about.css' ); ?>">
 </head>
@@ -19,17 +22,32 @@ $theme_uri = get_template_directory_uri();
 <?php wp_body_open(); ?>
 <a class="ab-skip" href="#about-content">Skip to content</a>
 <header class="ab-header">
+    <div class="ab-header-inner">
     <a class="ab-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>"><strong>NHOM C</strong><small>RECRUITING</small></a>
     <nav aria-label="Main navigation">
         <ul class="ab-nav">
             <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>">HOME</a></li>
             <li><a href="<?php echo esc_url( home_url( '/jobs/' ) ); ?>">JOBS</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">NEWS</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/news/' ) ); ?>">NEWS</a></li>
             <li><a href="<?php echo esc_url( get_permalink() ); ?>" aria-current="page">ABOUT</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">CONTACT</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">CONTACT</a></li>
         </ul>
     </nav>
     <a class="ab-submit" href="<?php echo esc_url( home_url( '/post-a-job/' ) ); ?>">SUBMIT JOB</a>
+    <details class="ab-mobile-menu">
+        <summary aria-label="Navigation menu"><span aria-hidden="true">☰</span></summary>
+        <nav aria-label="Mobile navigation">
+            <ul>
+                <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>">HOME</a></li>
+                <li><a href="<?php echo esc_url( home_url( '/jobs/' ) ); ?>">JOBS</a></li>
+                <li><a href="<?php echo esc_url( home_url( '/news/' ) ); ?>">NEWS</a></li>
+                <li><a href="<?php echo esc_url( get_permalink() ); ?>" aria-current="page">ABOUT</a></li>
+                <li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">CONTACT</a></li>
+            </ul>
+            <a class="ab-submit" href="<?php echo esc_url( home_url( '/post-a-job/' ) ); ?>">SUBMIT JOB</a>
+        </nav>
+    </details>
+    </div>
 </header>
 <main id="about-content">
     <section class="ab-hero" aria-labelledby="about-title">
@@ -76,9 +94,8 @@ $theme_uri = get_template_directory_uri();
     <div class="ab-newsletter-inner">
         <h2 id="newsletter-title">Subscribe To<br>Our Newsletter</h2>
         <div class="ab-newsletter-fields">
-            <label class="ab-email"><span aria-hidden="true">✉</span><span class="ab-sr-only">Email address</span><input type="email" placeholder="Input your email address" aria-describedby="newsletter-note" disabled></label>
-            <button type="button" disabled aria-describedby="newsletter-note">SUBSCRIBE</button>
-            <p id="newsletter-note">Newsletter registration is currently unavailable.</p>
+            <label class="ab-email"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="m3 5 9 7 9-7"/></svg><span class="ab-sr-only">Email address</span><input type="email" placeholder="Input your email address" disabled></label>
+            <button type="button" disabled title="Newsletter signup has not been configured.">SUBSCRIBE</button>
         </div>
     </div>
 </section>

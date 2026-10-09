@@ -31,12 +31,13 @@ if ($jobs_query->have_posts()) {
         $cname = (!is_wp_error($cat_terms) && !empty($cat_terms)) ? $cat_terms[0]->name : 'Category Name';
         
         $db_jobs[] = array(
-            'title' => strtoupper(get_the_title()),
-            'date' => get_the_date('M d, Y'),
-            'type' => $tname,
+            'id'       => $jid,
+            'title'    => strtoupper(get_the_title()),
+            'date'     => get_the_date('M d, Y'),
+            'type'     => $tname,
             'category' => $cname,
             'location' => $loc ? $loc : 'Ho Chi Minh City',
-            'link' => get_permalink($jid)
+            'link'     => home_url('/job-detail/?job_id=' . $jid)
         );
     }
     wp_reset_postdata();
@@ -418,11 +419,15 @@ if ($jobs_query->have_posts()) {
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
             box-shadow: 0 1px 3px rgba(0,0,0,0.02);
             min-width: 0; /* Giúp flexbox không bị tràn text */
+            cursor: pointer;
         }
         .aj-job-card:hover {
-            border-color: #d0d0d0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border-color: #f26522;
+            box-shadow: 0 4px 12px rgba(242, 101, 34, 0.12);
             transform: translateY(-2px);
+        }
+        .aj-job-card:hover .aj-card-title a {
+            color: #f26522;
         }
 
         /* Ô vuông Logo Công ty sắc nét */
@@ -495,7 +500,7 @@ if ($jobs_query->have_posts()) {
         .aj-tag-pill {
             background-color: #f7f7f7;
             border: 1px solid #e4e4e4;
-            border-radius: 12px;
+            border-radius: 0;
             padding: 2px 10px;
             font-size: 11px;
             color: #555555;
@@ -556,8 +561,8 @@ if ($jobs_query->have_posts()) {
 
         /* === 6. NEWSLETTER BANNER (ORANGE) === */
         .aj-newsletter {
-            background-color: #eb5722;
-            padding: 40px 0;
+            background-color: #e56322;
+            padding: 34px 0;
             width: 100%;
         }
         .aj-nl-inner {
@@ -567,16 +572,17 @@ if ($jobs_query->have_posts()) {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 28px;
+            gap: 32px;
             flex-wrap: wrap;
         }
         .aj-nl-title {
             color: #ffffff;
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 20px;
+            font-weight: 600;
             line-height: 1.25;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
             text-align: left;
+            margin: 0;
         }
         .aj-nl-form {
             display: flex;
@@ -586,51 +592,63 @@ if ($jobs_query->have_posts()) {
             max-width: 100%;
         }
         .aj-nl-input-group {
-            position: relative;
-            width: 380px;
+            background-color: #ffffff;
+            border-radius: 0 !important;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            width: 440px;
             max-width: 100%;
+            height: 44px;
+            box-sizing: border-box;
         }
-        .aj-nl-input-group i {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999999;
-            font-size: 15px;
+        .aj-nl-envelope-svg {
+            margin-right: 12px;
+            flex-shrink: 0;
+            display: block;
         }
         .aj-nl-input {
-            width: 100%;
-            height: 46px;
-            background-color: #ffffff;
-            border: none;
-            border-radius: 3px;
-            padding: 0 16px 0 42px;
+            width: 100% !important;
+            height: 100% !important;
+            background-color: transparent !important;
+            border: none !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
             font-size: 13px;
             color: #333333;
             font-family: inherit;
-            outline: none;
+            outline: none !important;
+            box-shadow: none !important;
         }
         .aj-nl-input::placeholder {
-            color: #888888;
+            color: #999999;
+            font-size: 13px;
         }
         .aj-btn-subscribe {
-            height: 46px;
-            background-color: #e34c16;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 3px;
-            color: #ffffff;
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
+            height: 44px !important;
+            background-color: transparent !important;
+            border: 1px solid #ffffff !important;
+            border-radius: 0 !important;
+            color: #ffffff !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
             letter-spacing: 0.6px;
-            padding: 0 32px;
+            padding: 0 28px !important;
+            margin: 0 !important;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: all 0.2s ease;
             font-family: inherit;
             white-space: nowrap;
+            box-shadow: none !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
         .aj-btn-subscribe:hover {
-            background-color: #cf3d08;
+            background-color: #ffffff !important;
+            color: #e56322 !important;
         }
 
         /* === 7. FOOTER === */
@@ -753,8 +771,16 @@ if ($jobs_query->have_posts()) {
                 grid-template-columns: 1fr; /* 1 cột cho máy tính bảng */
                 gap: 20px;
             }
-            .aj-hero-banner {
+            .aj-hero-banner,
+            .aj-hero-slider-wrap {
                 height: 280px;
+            }
+            .aj-slide-title {
+                font-size: 26px;
+                letter-spacing: 3px;
+            }
+            .aj-slide-desc {
+                font-size: 13px;
             }
         }
 
@@ -780,9 +806,29 @@ if ($jobs_query->have_posts()) {
             .aj-btn-submit {
                 display: none; /* Trên mobile nút Submit gom vào menu Drawer */
             }
-            .aj-hero-banner {
-                height: 210px;
+            .aj-hero-banner,
+            .aj-hero-slider-wrap {
+                height: 220px;
             }
+            .aj-slide-title {
+                font-size: 20px;
+                letter-spacing: 2px;
+            }
+            .aj-slide-desc {
+                display: none;
+            }
+            .aj-slide-badge {
+                font-size: 9px;
+                padding: 2px 10px;
+                margin-bottom: 6px;
+            }
+            .aj-slider-arrow {
+                width: 34px;
+                height: 34px;
+                font-size: 13px;
+            }
+            .aj-slider-prev { left: 10px; }
+            .aj-slider-next { right: 10px; }
             .aj-main-content {
                 padding: 35px 0 50px 0;
             }
@@ -1009,7 +1055,7 @@ if ($jobs_query->have_posts()) {
                 $type = 'Fulltime';
                 $category = 'Category Name';
                 $location = 'Ho Chi Minh City';
-                $link = home_url('/jobs/');
+                $link = home_url('/job-detail/?job_id=19');
 
                 // Lấy thông tin từ database nếu có
                 if (isset($db_jobs[$i])) {
@@ -1020,7 +1066,7 @@ if ($jobs_query->have_posts()) {
                     if (!empty($db_jobs[$i]['category'])) $category = $db_jobs[$i]['category'];
                 }
             ?>
-                <article class="aj-job-card" data-title="<?php echo esc_attr($title); ?>" data-idx="<?php echo $i; ?>">
+                <article class="aj-job-card" data-title="<?php echo esc_attr($title); ?>" data-idx="<?php echo $i; ?>" onclick="window.location.href='<?php echo esc_url($link); ?>';" role="link" tabindex="0" onkeydown="if(event.key==='Enter') window.location.href='<?php echo esc_url($link); ?>';">
                     <div class="aj-card-logo-box">
                         <i class="<?php echo esc_attr($brand['icon']); ?> aj-logo-vector-icon"></i>
                         <span class="aj-logo-vector-name"><?php echo esc_html($brand['name']); ?></span>
@@ -1060,7 +1106,10 @@ if ($jobs_query->have_posts()) {
         <h3 class="aj-nl-title">Subscribe To<br>Our Newsletter</h3>
         <form class="aj-nl-form" onsubmit="event.preventDefault(); alert('Cảm ơn bạn đã đăng ký nhận bản tin tuyển dụng NhomC!');">
             <div class="aj-nl-input-group">
-                <i class="fa-regular fa-envelope"></i>
+                <svg width="20" height="15" viewBox="0 0 22 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="aj-nl-envelope-svg">
+                    <rect x="0.75" y="0.75" width="20.5" height="15.5" stroke="#e56322" stroke-width="1.5" rx="0"/>
+                    <path d="M1.5 1.5L11 9L20.5 1.5" stroke="#e56322" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
                 <input type="email" class="aj-nl-input" placeholder="Input your email address" required>
             </div>
             <button type="submit" class="aj-btn-subscribe">SUBSCRIBE</button>

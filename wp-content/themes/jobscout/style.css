@@ -55,10 +55,10 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
  */
 
 :root {
-  --primary-color: #2ace5e;
-  --primary-color-rgb: 42, 206, 94;
-  --primary-color-dark: #36b25ded;
-  --primary-color-dark-rgb: 68, 183, 104;
+  --primary-color: #ea580c;
+  --primary-color-rgb: 234, 88, 12;
+  --primary-color-dark: #c2410c;
+  --primary-color-dark-rgb: 194, 65, 12;
   --font-color: #000;
   --font-color-rbg: 0, 0, 0;
   --white-color: #fff;
