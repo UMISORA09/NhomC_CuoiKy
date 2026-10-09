@@ -108,38 +108,68 @@ goto :check_db_content
 echo [+] Co so du lieu MySQL da san sang!
 
 :check_db_content
-:: 7. KIEM TRA VA NAP CSDL LAN DAU NEU CLONE VE MAY MOI
+:: 7. KIEM TRA VA NAP CSDL
+if /i "%~1"=="reload" goto :do_reload_db
+if /i "%~1"=="reset" goto :do_reload_db
+if /i "%~1"=="2" goto :do_reload_db
+
 docker exec wordpress_db mysql -u root -prootpassword -e "USE wordpress; SELECT COUNT(*) FROM wp_posts;" >nul 2>&1
-if not errorlevel 1 (
-    echo [+] CSDL JobScout da ton tai day du, du lieu duoc bao toan.
-    goto :launch_menu
+if errorlevel 1 (
+    echo.
+    echo ================================================================================
+    echo  [+] PHAT HIEN LAN DAU KHOI CHAY TREN MAY MOI!
+    echo  [+] TU DONG NAP CSDL: 7 TRANG FIGMA, 25 VIEC LAM, 5 CONG TY, 6 ADMINS
+    echo ================================================================================
+    goto :do_reload_db_exec
 )
 
+echo [+] CSDL JobScout da ton tai day du.
 echo.
 echo ================================================================================
-echo  [+] PHAT HIEN LAN DAU KHOI CHAY TREN MAY MOI!
-echo  [+] TU DONG NAP CSDL: 7 TRANG FIGMA, 25 VIEC LAM, 5 CONG TY, 6 ADMINS
+echo  [LUA CHON KHOI DONG]
+echo    [1] Vao thang Bang Dieu Khien JobScout OS (Giu nguyen CSDL)
+echo    [2] NAP LAI CSDL (Import lai toan bo CSDL goc, 6 Admins, 30+ Job Seeder)
 echo ================================================================================
-echo  [1/5] Dang nap du lieu CSDL goc [import_job_design_data.sql]...
+echo.
+choice /C 12 /N /T 5 /D 1 /M "Bam [1] de vao menu hoac [2] de nap lai CSDL (Mac dinh [1] sau 5s): "
+if errorlevel 2 goto :do_reload_db
+goto :launch_menu
+
+:do_reload_db
+echo.
+echo ================================================================================
+echo  [*] TIEN TRINH NAP LAI CO SO DU LIEU JOBSCOUT [FIT - TDC]
+echo  [*] DANG NAP: 7 TRANG FIGMA, 5 CONG TY, 6 ADMINS, SEEDER JOBS
+echo ================================================================================
+
+:do_reload_db_exec
+echo  [1/6] Dang nap du lieu CSDL goc [import_job_design_data.sql]...
 docker cp "%~dp0import_job_design_data.sql" wordpress_db:/tmp/import_job_design_data.sql >nul 2>&1
 docker exec wordpress_db mysql -u root -prootpassword --default-character-set=utf8mb4 wordpress -e "source /tmp/import_job_design_data.sql;" >nul 2>&1
 
-echo  [2/5] Dang dong bo 6 tai khoan Administrator Nhom C [create_users.sql]...
+echo  [2/6] Dang dong bo 6 tai khoan Administrator Nhom C [create_users.sql]...
 docker cp "%~dp0create_users.sql" wordpress_db:/tmp/create_users.sql >nul 2>&1
 docker exec wordpress_db mysql -u root -prootpassword --default-character-set=utf8mb4 wordpress -e "source /tmp/create_users.sql;" >nul 2>&1
 
-echo  [3/5] Dang thiet lap thuong hieu JobScout va Front Page [setup_jobscout_brand.sql]...
+echo  [3/6] Dang thiet lap thuong hieu JobScout va Front Page [setup_jobscout_brand.sql]...
 docker cp "%~dp0setup_jobscout_brand.sql" wordpress_db:/tmp/setup_jobscout_brand.sql >nul 2>&1
 docker exec wordpress_db mysql -u root -prootpassword --default-character-set=utf8mb4 wordpress -e "source /tmp/setup_jobscout_brand.sql;" >nul 2>&1
 
-echo  [4/5] Dang kich hoat Theme JobScout va 5 Plugins [activate_theme_plugins.sql]...
+echo  [4/6] Dang kich hoat Theme JobScout va 5 Plugins [activate_theme_plugins.sql]...
 docker cp "%~dp0activate_theme_plugins.sql" wordpress_db:/tmp/activate_theme_plugins.sql >nul 2>&1
 docker exec wordpress_db mysql -u root -prootpassword --default-character-set=utf8mb4 wordpress -e "source /tmp/activate_theme_plugins.sql;" >nul 2>&1
 
-echo  [5/5] Dang dong bo 5 Ho So Doanh Nghiep va lien ket 25 viec lam...
+echo  [5/6] Dang dong bo 5 Ho So Doanh Nghiep va lien ket 25 viec lam...
 docker exec wordpress_app php sync_company_profiles.php >nul 2>&1
 
-echo [+] Khoi tao CSDL lan dau hoan tat 100%!
+echo  [6/6] Dang nap them 30+ viec lam mau vao CSDL [seed_jobs.php]...
+if exist "%~dp0seed_jobs.php" (
+    docker cp "%~dp0seed_jobs.php" wordpress_app:/var/www/html/seed_jobs.php >nul 2>&1
+    docker exec wordpress_app php seed_jobs.php >nul 2>&1
+)
+
+echo.
+echo [+] Khoi tao va nap lai CSDL hoan tat 100%!
 echo.
 
 :launch_menu
