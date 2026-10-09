@@ -1127,30 +1127,7 @@ $career_bg = $img_home_dir . '/career-bg.jpg?v=' . $cache_bust;
 <?php wp_body_open(); ?>
 
 <!-- 1. HEADER & NAVIGATION -->
-<header class="hm-header">
-    <div class="hm-container">
-        <div class="hm-header-inner">
-            <a class="hm-logo-brand" href="<?php echo esc_url( $site_url ); ?>" title="Nhóm C Recruiting">
-                <div class="hm-logo-box">
-                    <span class="hm-logo-text-main">NHOM C</span>
-                </div>
-                <span class="hm-logo-sub">RECRUITING</span>
-            </a>
-            <div class="hm-header-right">
-                <nav aria-label="Main navigation">
-                    <ul class="hm-nav">
-                        <li><a href="<?php echo esc_url( $site_url ); ?>" class="active">HOME</a></li>
-                        <li><a href="<?php echo esc_url( home_url( '/jobs/' ) ); ?>">JOBS</a></li>
-                        <li><a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">NEWS</a></li>
-                        <li><a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>">ABOUT</a></li>
-                        <li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">CONTACT</a></li>
-                    </ul>
-                </nav>
-                <a class="hm-btn-submit" href="<?php echo esc_url( home_url( '/post-a-job/' ) ); ?>">SUBMIT JOB</a>
-            </div>
-        </div>
-    </div>
-</header>
+<?php get_template_part( 'template-parts/nhomc-header' ); ?>
 
 <!-- 2. HERO BANNER & SEARCH BAR -->
 <section class="hm-hero" style="background-image: url('<?php echo esc_url( $hero_bg ); ?>');">

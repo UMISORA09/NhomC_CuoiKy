@@ -920,60 +920,7 @@ if ($jobs_query->have_posts()) {
 <body <?php body_class('aj-custom-page'); ?>>
 
 <!-- 1. TOP HEADER -->
-<header class="aj-header">
-    <div class="aj-header-inner">
-        <!-- Logo thương hiệu NhomC -->
-        <a href="<?php echo esc_url($site_url); ?>" class="aj-logo-brand" title="Trang chủ JobScout - NhomC">
-            <div class="aj-logo-box">
-                <span class="aj-logo-text-main">NHOM C</span>
-            </div>
-            <span class="aj-logo-sub">RECRUITING</span>
-        </a>
-
-        <!-- Menu điều hướng Desktop: Nhích sang bên phải -->
-        <ul class="aj-nav">
-            <li class="aj-nav-item"><a href="<?php echo esc_url($site_url); ?>/">HOME</a></li>
-            <li class="aj-nav-item active"><a href="<?php echo esc_url($site_url); ?>/jobs/">JOBS</a></li>
-            <li class="aj-nav-item"><a href="<?php echo esc_url($site_url); ?>/news/">NEWS</a></li>
-            <li class="aj-nav-item"><a href="<?php echo esc_url($site_url); ?>/about-us/">ABOUT</a></li>
-            <li class="aj-nav-item"><a href="<?php echo esc_url($site_url); ?>/contact-us/">CONTACT</a></li>
-        </ul>
-
-        <!-- Action bên phải: Nút Submit Job + Nút Hamburger Mobile -->
-        <div class="aj-header-action">
-            <a href="<?php echo esc_url($site_url); ?>/post-a-job/" class="aj-btn-submit">SUBMIT JOB</a>
-            <button class="aj-menu-toggle" id="ajMobileToggle" aria-label="Mở menu di động">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-        </div>
-    </div>
-</header>
-
-<!-- MOBILE MENU DRAWER & OVERLAY -->
-<div class="aj-mobile-overlay" id="ajMobileOverlay"></div>
-<aside class="aj-mobile-drawer" id="ajMobileDrawer">
-    <div class="aj-drawer-header">
-        <div class="aj-logo-brand">
-            <div class="aj-logo-box" style="padding: 2px 14px;">
-                <span class="aj-logo-text-main" style="font-size: 15px;">NHOM C</span>
-            </div>
-            <span class="aj-logo-sub" style="font-size: 7.5px;">RECRUITING</span>
-        </div>
-        <button class="aj-drawer-close" id="ajDrawerClose" aria-label="Đóng menu">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-    </div>
-    <ul class="aj-drawer-nav">
-        <li><a href="<?php echo esc_url($site_url); ?>/">HOME</a></li>
-        <li class="active"><a href="<?php echo esc_url($site_url); ?>/jobs/">JOBS</a></li>
-        <li><a href="<?php echo esc_url($site_url); ?>/news/">NEWS</a></li>
-        <li><a href="<?php echo esc_url($site_url); ?>/about-us/">ABOUT</a></li>
-        <li><a href="<?php echo esc_url($site_url); ?>/contact-us/">CONTACT</a></li>
-    </ul>
-    <div class="aj-drawer-submit">
-        <a href="<?php echo esc_url($site_url); ?>/post-a-job/" class="aj-btn-submit" style="display: block; width: 100%;">SUBMIT JOB</a>
-    </div>
-</aside>
+<?php get_template_part( 'template-parts/nhomc-header' ); ?>
 
 <!-- 2. HERO BANNER: CAREER WITH US -->
 <section class="aj-hero-banner" role="banner">

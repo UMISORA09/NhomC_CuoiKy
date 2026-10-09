@@ -12,43 +12,13 @@ $theme_uri = get_template_directory_uri();
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
     <?php wp_head(); ?>
     <link rel="stylesheet" href="<?php echo esc_url( $theme_uri . '/css/about.css' ); ?>">
 </head>
 <body <?php body_class( 'about-design' ); ?>>
 <?php wp_body_open(); ?>
 <a class="ab-skip" href="#about-content">Skip to content</a>
-<header class="ab-header">
-    <div class="ab-header-inner">
-    <a class="ab-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>"><strong>NHOM C</strong><small>RECRUITING</small></a>
-    <nav aria-label="Main navigation">
-        <ul class="ab-nav">
-            <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>">HOME</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/jobs/' ) ); ?>">JOBS</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/news/' ) ); ?>">NEWS</a></li>
-            <li><a href="<?php echo esc_url( get_permalink() ); ?>" aria-current="page">ABOUT</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">CONTACT</a></li>
-        </ul>
-    </nav>
-    <a class="ab-submit" href="<?php echo esc_url( home_url( '/post-a-job/' ) ); ?>">SUBMIT JOB</a>
-    <details class="ab-mobile-menu">
-        <summary aria-label="Navigation menu"><span aria-hidden="true">☰</span></summary>
-        <nav aria-label="Mobile navigation">
-            <ul>
-                <li><a href="<?php echo esc_url( home_url( '/' ) ); ?>">HOME</a></li>
-                <li><a href="<?php echo esc_url( home_url( '/jobs/' ) ); ?>">JOBS</a></li>
-                <li><a href="<?php echo esc_url( home_url( '/news/' ) ); ?>">NEWS</a></li>
-                <li><a href="<?php echo esc_url( get_permalink() ); ?>" aria-current="page">ABOUT</a></li>
-                <li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">CONTACT</a></li>
-            </ul>
-            <a class="ab-submit" href="<?php echo esc_url( home_url( '/post-a-job/' ) ); ?>">SUBMIT JOB</a>
-        </nav>
-    </details>
-    </div>
-</header>
+<?php get_template_part( 'template-parts/nhomc-header' ); ?>
 <main id="about-content">
     <section class="ab-hero" aria-labelledby="about-title">
         <!-- shortcut: desktop banner includes the reference lettering; use a clean source photo when available. -->
