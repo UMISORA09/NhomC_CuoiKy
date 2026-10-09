@@ -68,8 +68,8 @@ if ($action === 'status') {
 }
 
 if ($action === 'sync_brand') {
-    $conn->query("UPDATE wp_options SET option_value = 'JobScout' WHERE option_name = 'blogname'");
-    $conn->query("UPDATE wp_options SET option_value = 'Find Your Dream Jobs' WHERE option_name = 'blogdescription'");
+    $conn->query("UPDATE wp_options SET option_value = 'NhomC' WHERE option_name = 'blogname'");
+    $conn->query("UPDATE wp_options SET option_value = 'Recruiting & Career Opportunities' WHERE option_name = 'blogdescription'");
     $conn->query("UPDATE wp_options SET option_value = 'page' WHERE option_name = 'show_on_front'");
     
     $homeRes = $conn->query("SELECT ID FROM wp_posts WHERE post_name = 'home' AND post_type = 'page' LIMIT 1");

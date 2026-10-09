@@ -1,6 +1,6 @@
--- Cap nhat Site Title va Tagline theo JobScout mockup
-UPDATE wp_options SET option_value = 'JobScout' WHERE option_name = 'blogname';
-UPDATE wp_options SET option_value = 'Find Your Dream Jobs' WHERE option_name = 'blogdescription';
+-- Cap nhat Site Title va Tagline theo NhomC mockup
+UPDATE wp_options SET option_value = 'NhomC' WHERE option_name = 'blogname';
+UPDATE wp_options SET option_value = 'Recruiting & Career Opportunities' WHERE option_name = 'blogdescription';
 UPDATE wp_options SET option_value = 'http://wordpressc:8080' WHERE option_name IN ('siteurl', 'home');
 
 -- Thiet lap Front page la trang Home va Blog page la News

@@ -125,35 +125,13 @@ function jobscout_site_branding( $responsive = false ){
         $branding_class = '';
     }
     ?>
-    <div class="site-branding<?php echo esc_attr( $branding_class ); ?>" itemscope itemtype="https://schema.org/Organization"> <!-- logo-text -->
-        <?php 
-            if( function_exists( 'has_custom_logo' ) && has_custom_logo() ){
-                echo '<div class="site-logo">';
-                the_custom_logo();
-                echo '</div>';
-            } 
-
-            echo '<div class="site-title-wrap">';
-            if( $responsive ){ ?>
-                <p class="site-title" itemprop="name"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" itemprop="url"><?php bloginfo( 'name' ); ?></a></p>
-            <?php }else{
-                if( is_front_page() ){ ?>
-                    <h1 class="site-title" itemprop="name"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" itemprop="url"><?php bloginfo( 'name' ); ?></a></h1>
-                    <?php 
-                }else{ ?>
-                    <p class="site-title" itemprop="name"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" itemprop="url"><?php bloginfo( 'name' ); ?></a></p>
-                <?php
-                }
-            }
-
-            $description = get_bloginfo( 'description', 'display' );
-            if ( $description || is_customize_preview() ){ ?>
-                <p class="site-description" itemprop="description"><?php echo $description; ?></p>
-            <?php
-
-            }
-            echo '</div><!-- .site-title-wrap -->'
-        ?>
+    <div class="site-branding<?php echo esc_attr( $branding_class ); ?>" itemscope itemtype="https://schema.org/Organization">
+        <a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" itemprop="url" class="nhomc-brand-logo">
+            <div class="nhomc-logo-badge">
+                <span class="nhomc-logo-title">NHOM C<span class="orange-dot">.</span></span>
+                <span class="nhomc-logo-sub">RECRUITING</span>
+            </div>
+        </a>
     </div>
     <?php
 }
@@ -165,8 +143,8 @@ if( ! function_exists( 'jobscout_primary_nagivation' ) ) :
 */
 function jobscout_primary_nagivation(){ 
 
-    $post_job_label  = get_theme_mod( 'post_job_label', __( 'Post Jobs', 'jobscout' ) );
-    $post_job_url    = get_theme_mod( 'post_job_url', '#' );
+    $post_job_label  = get_theme_mod( 'post_job_label', __( 'SUBMIT JOB', 'jobscout' ) );
+    $post_job_url    = get_theme_mod( 'post_job_url', home_url( '/post-a-job/' ) );
     ?>
     	<nav id="site-navigation" class="main-navigation" role="navigation" itemscope itemtype="https://schema.org/SiteNavigationElement">
         <button class="toggle-btn" data-toggle-target=".main-menu-modal" data-toggle-body-class="showing-main-menu-modal" aria-expanded="false" data-set-focus=".close-main-nav-toggle">
@@ -186,7 +164,7 @@ function jobscout_primary_nagivation(){
     	</nav><!-- #site-navigation -->
         <?php if( $post_job_label || $post_job_url ){ ?>
             <div class="btn-wrap">
-                <a class="btn" href="<?php echo esc_url( $post_job_url ) ?>"><?php echo esc_html( $post_job_label ) ?></a>
+                <a class="btn nhomc-btn-submit-job" href="<?php echo esc_url( $post_job_url ) ?>"><?php echo esc_html( $post_job_label ) ?></a>
             </div>
         <?php } 
   
