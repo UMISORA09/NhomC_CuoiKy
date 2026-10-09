@@ -109,7 +109,11 @@ function nhomc_get_company_logo( $company_name = '', $post_id = 0, $size = 'larg
  */
 function nhomc_get_job_badges( $post_id ) {
     // 1. Type
-    $types = wpjm_get_the_job_types( $post_id );
+    if ( function_exists( 'wpjm_get_the_job_types' ) ) {
+        $types = wpjm_get_the_job_types( $post_id );
+    } else {
+        $types = wp_get_post_terms( $post_id, 'job_listing_type' );
+    }
     $type_name = 'Fulltime';
     if ( ! empty( $types ) && is_array( $types ) ) {
         $first_type = reset( $types );
