@@ -24,8 +24,8 @@ if ($is_single && isset($_GET['post'])) {
 }
 
 // Tiêu đề, Ngày, Danh mục, Ảnh thumbnail
-$post_title = ($current_post && !empty($current_post->post_title)) ? $current_post->post_title : 'CHIEF OPERATING OFFICER HOTEL/ RESORT CHAIN';
-$post_date = ($current_post && !empty($current_post->post_date)) ? date('M d, Y', strtotime($current_post->post_date)) : 'Oct 20, 2022';
+$post_title = ($current_post && !empty($current_post->post_title) && $current_post->post_name !== 'news-detail') ? $current_post->post_title : 'CHIEF OPERATING OFFICER HOTEL/ RESORT CHAIN';
+$post_date = ($current_post && !empty($current_post->post_date) && $current_post->post_name !== 'news-detail') ? date('M d, Y', strtotime($current_post->post_date)) : 'Oct 20, 2022';
 
 // Danh mục
 $categories_list = [];
