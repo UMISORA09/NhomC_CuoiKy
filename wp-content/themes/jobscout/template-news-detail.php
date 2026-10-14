@@ -12,7 +12,7 @@ $site_url = home_url();
 $theme_uri = get_template_directory_uri();
 $news_img_dir = $theme_uri . '/images/news/';
 
-// Danh mục bài viết chuẩn với thông tin chi tiết riêng biệt
+// Danh mục bài viết chuẩn với thông tin chi tiết và nội dung thực tế phong phú
 $articles_catalog = [
     'project-development' => [
         'title'    => 'Project Development',
@@ -20,6 +20,9 @@ $articles_catalog = [
         'category' => 'Real Estate',
         'location' => 'Ho Chi Minh City',
         'thumb'    => $news_img_dir . 'blog-project-dev.jpg',
+        'p1'       => 'Phát triển dự án (Project Development) trong kỷ nguyên kinh tế hiện đại không chỉ đơn thuần là việc thi công xây dựng theo các bản vẽ kỹ thuật, mà là một quy trình quản trị chiến lược toàn diện từ khâu hình thành ý tưởng, khảo sát tiền khả thi, huy động nguồn vốn cho đến quản lý rủi ro và vận hành thương mại. Một dự án thành công đòi hỏi sự phối hợp nhịp nhàng giữa chủ đầu tư, đơn vị tư vấn thiết kế và các nhà thầu thi công nhằm bảo đảm tối ưu hóa chi phí và gia tăng giá trị tài sản trong dài hạn.',
+        'p2'       => 'Để hiện thực hóa mục tiêu đó, các nhà quản lý dự án hàng đầu hiện nay áp dụng mô hình quản trị tích hợp thông tin xây dựng (BIM) cùng các phương pháp luận Agile và Lean Construction. Việc kiểm soát chặt chẽ các mốc tiến độ then chốt, đánh giá tác động môi trường và tuân thủ nghiêm ngặt các quy chuẩn an toàn lao động là điều kiện tiên quyết để dự án hoàn thành đúng hạn mà vẫn đảm bảo chất lượng kỹ thuật cao nhất.',
+        'p3'       => 'Giai đoạn chuyển giao và đưa công trình vào vận hành (Handover & Commissioning) giữ vai trò quyết định đến hiệu suất sinh lời thực tế. Sự am hiểu sâu sắc về nhu cầu thị trường, phân khúc khách hàng mục tiêu và chiến lược định giá linh hoạt sẽ giúp dự án nhanh chóng đạt tỷ lệ lấp đầy tối ưu, khẳng định vị thế thương hiệu vững chắc trên thị trường.',
     ],
     'restaurant-hotel-management-and-operations' => [
         'title'    => 'Restaurant & Hotel Management And Operations',
@@ -27,6 +30,9 @@ $articles_catalog = [
         'category' => 'Hospitality',
         'location' => 'Da Nang City',
         'thumb'    => $news_img_dir . 'blog-restaurant-hotel.jpg',
+        'p1'       => 'Quản trị và vận hành chuỗi Nhà hàng & Khách sạn (Restaurant & Hotel Management And Operations) đang trải qua bước chuyển mình mạnh mẽ trước làn sóng chuyển đổi số và sự thay đổi trong hành vi tiêu dùng của khách lưu trú. Tiêu chuẩn của một cơ sở nghỉ dưỡng đẳng cấp quốc tế giờ đây không chỉ nằm ở cơ sở vật chất sang trọng, mà quan trọng hơn hết là khả năng kiến tạo những trải nghiệm mang tính cá nhân hóa sâu sắc và đáng nhớ cho từng du khách.',
+        'p2'       => 'Trọng tâm của công tác vận hành xuất sắc nằm ở nghệ thuật quản trị dịch vụ tận tâm (Omotenashi) kết hợp cùng hệ thống quy trình chuẩn hóa (SOP) nghiêm ngặt. Từ bộ phận Tiền sảnh, Buồng phòng cho đến Khối Ẩm thực F&B, từng điểm chạm trong hành trình của khách hàng đều được thiết kế tỉ mỉ nhằm đem lại sự hài lòng vượt bậc, biến mỗi vị khách thành một đại sứ thương hiệu trung thành.',
+        'p3'       => 'Bên cạnh đó, việc ứng dụng các giải pháp công nghệ hiện đại như hệ thống quản trị khách sạn PMS đám mây, công cụ dự báo doanh thu tự động (Revenue Management System) và tối ưu hóa chi phí vận hành (OPEX) giúp doanh nghiệp nâng cao chỉ số RevPAR (Doanh thu trên mỗi phòng sẵn có) và duy trì biên lợi nhuận lành mạnh trong mọi biến động.',
     ],
     'hospitality-consulting' => [
         'title'    => 'Hospitality Consulting',
@@ -34,6 +40,9 @@ $articles_catalog = [
         'category' => 'Consulting',
         'location' => 'Ha Noi Capital',
         'thumb'    => $news_img_dir . 'blog-hospitality-consulting.jpg',
+        'p1'       => 'Tư vấn chiến lược ngành Khách sạn - Nghỉ dưỡng (Hospitality Consulting) đóng vai trò là chiếc la bàn định hướng cho các chủ đầu tư và nhà phát triển bất động sản. Trước bối cảnh thị trường du lịch cạnh tranh ngày càng khốc liệt, một quyết định đầu tư đúng đắn đòi hỏi những nghiên cứu thị trường chuyên sâu, phân tích cung cầu thực tế và mô hình tài chính khả thi được thẩm định bởi các chuyên gia giàu kinh nghiệm.',
+        'p2'       => 'Dịch vụ tư vấn chuyên nghiệp bao gồm việc hoạch định ý tưởng sản phẩm, định vị thương hiệu, đàm phán hợp đồng quản lý khách sạn (HMA) cùng các tập đoàn quốc tế hàng đầu như Marriott, Accor hay IHG. Chuyên gia tư vấn sẽ đại diện cho quyền lợi của chủ tài sản để đảm bảo các điều khoản nhượng quyền và phí quản lý luôn đạt mức tối ưu nhất cho nhà đầu tư.',
+        'p3'       => 'Không dừng lại ở giai đoạn tiền khai trương, tư vấn vận hành còn đồng hành trong việc tái cấu trúc mô hình kinh doanh, kiểm toán chất lượng dịch vụ và tối ưu hóa hệ thống kênh phân phối phòng, giúp cơ sở nghỉ dưỡng nhanh chóng đạt điểm hòa vốn và gia tăng lợi nhuận bền vững.',
     ],
     'venue-and-interior-design' => [
         'title'    => 'Venue And Interior Design',
@@ -41,13 +50,19 @@ $articles_catalog = [
         'category' => 'Architecture',
         'location' => 'Ho Chi Minh City',
         'thumb'    => $news_img_dir . 'blog-interior-design.jpg',
+        'p1'       => 'Thiết kế không gian và kiến trúc nội thất (Venue & Interior Design) chính là ngôn ngữ thị giác truyền tải câu chuyện thương hiệu và khơi gợi cảm xúc cho mỗi vị khách khi đặt chân vào không gian khách sạn, nhà hàng hay trung tâm hội nghị. Một thiết kế nội thất xuất sắc không chỉ tôn vinh vẻ đẹp thẩm mỹ thuần túy mà còn phải giải quyết triệt để bài toán công năng sử dụng và dòng lưu thông.',
+        'p2'       => 'Xu hướng thiết kế Biophilic (kết nối con người với thiên nhiên) đang trở thành tiêu chuẩn vàng trong các công trình nghỉ dưỡng đương đại. Việc ứng dụng ánh sáng tự nhiên, mảng xanh bản địa, vật liệu mộc mạc như gỗ, đá tự nhiên và tre nứa không chỉ mang lại cảm giác an yên, tái tạo năng lượng mà còn đáp ứng các tiêu chuẩn công trình xanh bền vững quốc tế.',
+        'p3'       => 'Mỗi góc không gian từ sảnh đón tiếp, quầy lounge, khu vực ăn uống đến phòng ngủ riêng tư đều được tính toán kỹ lưỡng về âm học, chiếu sáng và mùi hương để tạo nên một trải nghiệm đa giác quan hoàn hảo. Không gian đẹp, giàu tính nghệ thuật cũng trở thành điểm nhấn truyền thông tự nhiên mạnh mẽ trên các nền tảng số.',
     ],
     'coo-hotel-resort-chain-update' => [
         'title'    => 'CHIEF OPERATING OFFICER HOTEL/ RESORT CHAIN',
         'date'     => 'Oct 20, 2022',
-        'category' => 'Category Name',
+        'category' => 'Executive Leadership',
         'location' => 'Ho Chi Minh City',
         'thumb'    => $news_img_dir . 'detail-thumb.jpg',
+        'p1'       => 'Vị trí Giám đốc Điều hành Vận hành (Chief Operating Officer - COO) trong các tập đoàn quản lý chuỗi khách sạn và khu nghỉ dưỡng cao cấp là mắt xích chiến lược kết nối giữa tầm nhìn của Hội đồng Quản trị và thực tiễn vận hành hàng ngày của hàng chục cơ sở lưu trú. Trọng trách của người COO là dẫn dắt toàn bộ hệ thống duy trì tính nhất quán về chuẩn mực dịch vụ 5 sao, đồng thời liên tục đổi mới để thích ứng với xu thế thị trường.',
+        'p2'       => 'Một COO xuất sắc cần sở hữu tư duy phân tích sắc bén để giám sát các chỉ số hiệu suất trọng yếu (KPIs) như công suất phòng, chỉ số GOP (Lợi nhuận gộp từ vận hành), mức độ hài lòng của khách hàng (CSAT) và tỷ lệ giữ chân nhân viên. Khả năng quản trị chuỗi cung ứng tập trung và thiết lập quy trình kiểm soát rủi ro khủng hoảng là bảo chứng cho sự vận hành trơn tru của toàn hệ thống.',
+        'p3'       => 'Hơn thế nữa, người lãnh đạo vận hành còn là người truyền cảm hứng mạnh mẽ cho hàng nghìn nhân sự, nuôi dưỡng văn hóa phục vụ chuyên nghiệp và xây dựng lộ trình thăng tiến rõ ràng cho thế hệ nhân tài kế cận. Đây chính là nền tảng cốt lõi giúp tập đoàn khẳng định vị thế dẫn đầu và phát triển trường tồn.',
     ],
 ];
 
@@ -94,6 +109,17 @@ if ($found_post && !empty($found_post->post_title) && $found_post->post_name !==
     $thumb_url = has_post_thumbnail($found_post->ID) 
         ? get_the_post_thumbnail_url($found_post->ID, 'medium') 
         : (isset($articles_catalog[$requested_slug]['thumb']) ? $articles_catalog[$requested_slug]['thumb'] : ($news_img_dir . 'detail-thumb.jpg'));
+    
+    // Lấy nội dung nếu có
+    if (!empty($found_post->post_content) && strlen(trim($found_post->post_content)) > 100 && !str_contains($found_post->post_content, 'Lorem ipsum')) {
+        $post_content_custom = $found_post->post_content;
+    } else {
+        $catalog_key = isset($articles_catalog[$requested_slug]) ? $requested_slug : 'project-development';
+        $post_content_p1 = $articles_catalog[$catalog_key]['p1'];
+        $post_content_p2 = $articles_catalog[$catalog_key]['p2'];
+        $post_content_p3 = $articles_catalog[$catalog_key]['p3'];
+        $post_content_custom = null;
+    }
 } elseif (!empty($requested_slug) && isset($articles_catalog[$requested_slug])) {
     $cat_data = $articles_catalog[$requested_slug];
     $post_title = $cat_data['title'];
@@ -101,14 +127,23 @@ if ($found_post && !empty($found_post->post_title) && $found_post->post_name !==
     $badge_cat = $cat_data['category'];
     $badge_loc = $cat_data['location'];
     $thumb_url = $cat_data['thumb'];
+    $post_content_p1 = $cat_data['p1'];
+    $post_content_p2 = $cat_data['p2'];
+    $post_content_p3 = $cat_data['p3'];
+    $post_content_custom = null;
     $current_post = null;
 } else {
-    // Mặc định chuẩn 100% bản vẽ thiết kế 6-news detail.png
-    $post_title = 'CHIEF OPERATING OFFICER HOTEL/ RESORT CHAIN';
-    $post_date = 'Oct 20, 2022';
+    // Mặc định chuẩn 100% bản vẽ thiết kế 6-news detail.png với nội dung thực tế chất lượng cao
+    $def_data = $articles_catalog['coo-hotel-resort-chain-update'];
+    $post_title = $def_data['title'];
+    $post_date = $def_data['date'];
     $badge_cat = 'Category Name';
     $badge_loc = 'Ho Chi Minh City';
     $thumb_url = $news_img_dir . 'detail-thumb.jpg';
+    $post_content_p1 = $def_data['p1'];
+    $post_content_p2 = $def_data['p2'];
+    $post_content_p3 = $def_data['p3'];
+    $post_content_custom = null;
     $current_post = null;
 }
 
@@ -116,43 +151,43 @@ if ($found_post && !empty($found_post->post_title) && $found_post->post_name !==
 $body_img_1 = $news_img_dir . 'detail-body-1.jpg';
 $body_img_2 = $news_img_dir . 'detail-body-2.jpg';
 
-// 6 bài viết phần "NEWEST BLOG ENTRIES" dưới trang chuẩn theo ảnh 6-news detail.png
+// 6 bài viết phần "NEWEST BLOG ENTRIES" dưới trang chuẩn nội dung thực tế
 $recent_news = [
     [
         'title'   => 'Project Development',
         'slug'    => 'project-development',
         'image'   => $news_img_dir . 'blog-project-dev.jpg',
-        'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        'excerpt' => 'Chiến lược quản trị vòng đời dự án từ khảo sát tiền khả thi, kiểm soát ngân sách đến nghiệm thu bàn giao vận hành chuyên nghiệp.',
     ],
     [
         'title'   => 'Restaurant & Hotel Management And Operations',
         'slug'    => 'restaurant-hotel-management-and-operations',
         'image'   => $news_img_dir . 'blog-restaurant-hotel.jpg',
-        'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut .',
+        'excerpt' => 'Nâng tầm chuẩn mực dịch vụ lưu trú và ẩm thực cao cấp thông qua văn hóa phục vụ tận tâm Omotenashi và tối ưu hóa hệ thống vận hành.',
     ],
     [
         'title'   => 'Hospitality Consulting',
         'slug'    => 'hospitality-consulting',
         'image'   => $news_img_dir . 'blog-hospitality-consulting.jpg',
-        'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        'excerpt' => 'Tư vấn hoạch định mô hình kinh doanh nghỉ dưỡng, đàm phán hợp đồng quản trị thương hiệu quốc tế và tối đa hóa hiệu suất sinh lời.',
     ],
     [
         'title'   => 'Venue And Interior Design',
         'slug'    => 'venue-and-interior-design',
         'image'   => $news_img_dir . 'blog-interior-design.jpg',
-        'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut .',
+        'excerpt' => 'Kiến tạo không gian kiến trúc và nội thất nghỉ dưỡng độc bản, kết hợp tinh tế giữa nghệ thuật thẩm mỹ bản địa và vật liệu sinh thái bền vững.',
     ],
     [
         'title'   => 'Project Development',
         'slug'    => 'project-development-2',
         'image'   => $news_img_dir . 'blog-project-dev.jpg',
-        'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        'excerpt' => 'Chiến lược quản trị vòng đời dự án từ khảo sát tiền khả thi, kiểm soát ngân sách đến nghiệm thu bàn giao vận hành chuyên nghiệp.',
     ],
     [
         'title'   => 'Restaurant & Hotel Management And Operations',
         'slug'    => 'restaurant-hotel-management-and-operations-2',
         'image'   => $news_img_dir . 'blog-restaurant-hotel.jpg',
-        'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut .',
+        'excerpt' => 'Nâng tầm chuẩn mực dịch vụ lưu trú và ẩm thực cao cấp thông qua văn hóa phục vụ tận tâm Omotenashi và tối ưu hóa hệ thống vận hành.',
     ],
 ];
 
@@ -1049,21 +1084,23 @@ foreach ($recent_news as $r_item) {
 <main class="nd-body-card-section">
     <div class="nd-body-card-container">
         <article class="nd-body-card">
-            <?php if ($current_post && !empty(trim($current_post->post_content)) && $current_post->ID != 6 && $current_post->ID != 20): ?>
-                <?php echo apply_filters('the_content', $current_post->post_content); ?>
+            <?php if (!empty($post_content_custom)): ?>
+                <?php echo apply_filters('the_content', $post_content_custom); ?>
             <?php else: ?>
-                <!-- Nội dung mẫu chuẩn 100% bản vẽ 6-news detail.png -->
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Faucibus lectus tristique massa gravida vel elementum, mi. Sit scelerisque at amet leo. In volutpat turpis dolor, at. Vivamus volutpat in nunc, porttitor dui. Ut placerat aenean accumsan a, aenean lacus eu. Aliquet urna, habitasse elit lorem id enim quam. Eu varius nulla nullam dignissim massa tempor, massa tortor. Eget auctor nulla maecenas ac tortor.<br>
-                Ornare faucibus sed vitae dolor eu eu faucibus leo enim. Tincidunt quisque sed netus nibh pharetra. Gravida venenatis, lobortis id mi. Metus, ultrices duis pellentesque aliquet amet cras blandit. Aliquet purus quam laoreet ipsum pretium. Odio quis eu nunc, diam habitant nunc massa sed. Placerat arcu quis est, magna facilisis amet. Dignissim vel adipiscing elit facilisi praesent platea. Nulla posuere feugiat turpis magna etiam. Non nec felis eu praesent cras.</p>
+                <!-- Nội dung bài viết thực tế chuyên sâu chuẩn 100% không dùng văn bản rác -->
+                <p><?php echo esc_html($post_content_p1); ?></p>
 
-                <img src="<?php echo esc_url($body_img_1); ?>" alt="Japanese street with lanterns" loading="lazy">
+                <figure style="margin: 32px 0;">
+                    <img src="<?php echo esc_url($body_img_1); ?>" alt="<?php echo esc_attr($post_title); ?> - Hình ảnh thực tế dự án" loading="lazy">
+                </figure>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Faucibus lectus tristique massa gravida vel elementum, mi. Sit scelerisque at amet leo. In volutpat turpis dolor, at. Vivamus volutpat in nunc, porttitor dui. Ut placerat aenean accumsan a, aenean lacus eu. Aliquet urna, habitasse elit lorem id enim quam. Eu varius nulla nullam dignissim massa tempor, massa tortor. Eget auctor nulla maecenas ac tortor.<br>
-                Ornare faucibus sed vitae dolor eu eu faucibus leo enim. Tincidunt quisque sed netus nibh pharetra. Gravida venenatis, lobortis id mi. Metus, ultrices duis pellentesque aliquet amet cras blandit. Aliquet purus quam laoreet ipsum pretium. Odio quis eu nunc, diam habitant nunc massa sed. Placerat arcu quis est, magna facilisis amet. Dignissim vel adipiscing elit facilisi praesent platea. Nulla posuere feugiat turpis magna etiam. Non nec felis eu praesent cras.</p>
+                <p><?php echo esc_html($post_content_p2); ?></p>
 
-                <img src="<?php echo esc_url($body_img_2); ?>" alt="Cherry blossom lanterns at night" loading="lazy">
+                <figure style="margin: 32px 0;">
+                    <img src="<?php echo esc_url($body_img_2); ?>" alt="<?php echo esc_attr($post_title); ?> - Không gian trải nghiệm" loading="lazy">
+                </figure>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Faucibus lectus tristique massa gravida vel elementum, mi. Sit scelerisque at amet leo. In volutpat turpis dolor, at. Vivamus volutpat in nunc, porttitor dui. Ut placerat aenean accumsan a, aenean lacus eu. Aliquet urna, habitasse elit lorem id enim quam. Eu varius nulla nullam dignissim massa tempor, massa tortor. Eget auctor nulla maecenas ac tortor.</p>
+                <p><?php echo esc_html($post_content_p3); ?></p>
             <?php endif; ?>
         </article>
     </div>

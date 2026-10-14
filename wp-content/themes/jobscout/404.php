@@ -5,6 +5,24 @@
  * @package JobScout
  */
 
+// BẢO VỆ CHỐNG LỖI 404 CHO CHỨC NĂNG 6-NEWS DETAIL (XUÂN HÒA):
+// Bất kể ai truy cập đường dẫn có chứa news-detail, newsdetail hoặc query post tin tức
+// hệ thống sẽ tự động hiển thị giao diện Chi tiết tin tức (template-news-detail.php), không hiển thị Uh - oh...
+$req_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+if (stripos($req_uri, 'news-detail') !== false || stripos($req_uri, 'newsdetail') !== false || !empty($_GET['post'])) {
+    status_header(200);
+    global $wp_query;
+    if (is_object($wp_query)) {
+        $wp_query->is_404 = false;
+        $wp_query->is_page = true;
+    }
+    $detail_tpl = get_template_directory() . '/template-news-detail.php';
+    if (file_exists($detail_tpl)) {
+        require_once $detail_tpl;
+        exit;
+    }
+}
+
 get_header(); ?>
 
 	<div id="primary" class="content-area">

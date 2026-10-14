@@ -704,6 +704,25 @@ foreach ( $seed_jobs as $job_data ) {
     }
 }
 
+// Đảm bảo trang News Detail luôn tồn tại chuẩn 100% không bị 404
+$news_detail_page = get_page_by_path( 'news-detail' );
+if ( ! $news_detail_page ) {
+    $nd_id = wp_insert_post( array(
+        'post_title'     => 'News Detail',
+        'post_name'      => 'news-detail',
+        'post_status'    => 'publish',
+        'post_type'      => 'page',
+        'post_content'   => '',
+        'comment_status' => 'closed',
+    ) );
+    if ( $nd_id && ! is_wp_error( $nd_id ) ) {
+        update_post_meta( $nd_id, '_wp_page_template', 'template-news-detail.php' );
+        echo "[+] Đã tự động tạo trang 'news-detail' (News Detail) vào Database!\n";
+    }
+} else {
+    update_post_meta( $news_detail_page->ID, '_wp_page_template', 'template-news-detail.php' );
+}
+
 echo "\n--------------------------------------------------------------------------------\n";
 echo "KẾT QUẢ SEEDER:\n";
 echo "- Việc làm tạo mới: {$created_count}\n";

@@ -104,3 +104,70 @@ add_action( 'wp_enqueue_scripts', function () {
     wp_enqueue_style( 'nhomc-header-font', 'https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap', array(), null );
     wp_enqueue_style( 'nhomc-header', get_template_directory_uri() . '/css/nhomc-header.css', array(), filemtime( get_template_directory() . '/css/nhomc-header.css' ) );
 } );
+
+/**
+ * -----------------------------------------------------------------------------
+ * NHÓM C - XUÂN HÒA: ĐIỀU HƯỚNG TỰ ĐỘNG CHO TRANG CHI TIẾT TIN TỨC (6-NEWS DETAIL)
+ * Đảm bảo 100% mọi thành viên, thầy cô và máy tính khác đều xem được tin tức
+ * Tuyệt đối không bao giờ bị rơi vào trang 404 (Uh - oh...)
+ * -----------------------------------------------------------------------------
+ */
+
+// 1. Tự động chuyển hướng tải file template-news-detail.php khi có yêu cầu xem bài viết
+add_filter( 'template_include', function( $template ) {
+    $req_uri = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '';
+    $uri_path = parse_url( $req_uri, PHP_URL_PATH );
+    $uri_path = trim( (string) $uri_path, '/' );
+
+    $is_news_detail = false;
+
+    if ( is_page( array( 'news-detail', 'newsdetail' ) ) ) {
+        $is_news_detail = true;
+    } elseif ( preg_match( '#(^|/)(news-detail|newsdetail)(/|$)#i', $uri_path ) ) {
+        $is_news_detail = true;
+    } elseif ( isset( $_GET['post'] ) && ! empty( $_GET['post'] ) && ( is_404() || is_page( 'news' ) || is_home() ) ) {
+        $is_news_detail = true;
+    } elseif ( is_404() && ( stripos( $req_uri, 'news-detail' ) !== false || stripos( $req_uri, 'newsdetail' ) !== false ) ) {
+        $is_news_detail = true;
+    }
+
+    if ( $is_news_detail ) {
+        global $wp_query;
+        if ( is_object( $wp_query ) ) {
+            $wp_query->is_404  = false;
+            $wp_query->is_page = true;
+        }
+        status_header( 200 );
+        $detail_template = get_template_directory() . '/template-news-detail.php';
+        if ( file_exists( $detail_template ) ) {
+            return $detail_template;
+        }
+    }
+
+    return $template;
+}, 99 );
+
+// 2. Tự động khởi tạo trang 'news-detail' trong CSDL nếu trên máy mới chưa có
+add_action( 'init', function() {
+    $detail_page = get_page_by_path( 'news-detail' );
+    if ( ! $detail_page ) {
+        $page_id = wp_insert_post( array(
+            'post_title'     => 'News Detail',
+            'post_name'      => 'news-detail',
+            'post_status'    => 'publish',
+            'post_type'      => 'page',
+            'post_content'   => '',
+            'comment_status' => 'closed',
+            'ping_status'    => 'closed',
+        ) );
+        if ( $page_id && ! is_wp_error( $page_id ) ) {
+            update_post_meta( $page_id, '_wp_page_template', 'template-news-detail.php' );
+        }
+    } else {
+        $tpl = get_post_meta( $detail_page->ID, '_wp_page_template', true );
+        if ( empty( $tpl ) || $tpl === 'default' ) {
+            update_post_meta( $detail_page->ID, '_wp_page_template', 'template-news-detail.php' );
+        }
+    }
+} );
+
