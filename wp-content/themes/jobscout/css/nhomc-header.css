@@ -5,9 +5,14 @@
 .nc-header { height: 80px; background: #fff; border-bottom: 1px solid #eaeaea; position: sticky; top: 0; z-index: 1000; box-shadow: 0 1px 4px rgba(0,0,0,.03); font-family: 'Montserrat', Arial, sans-serif; }
 .admin-bar .nc-header { top: 32px; }
 .nc-header-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 36px; }
-.nc-brand { display: inline-flex; flex-direction: column; align-items: center; flex-shrink: 0; color: #111; line-height: 1.2; }
+.nc-brand { display: inline-flex; flex-direction: column; align-items: center; flex-shrink: 0; color: #111; line-height: 1.2; font-family: 'Montserrat', Arial, sans-serif; text-decoration: none; }
 .nc-brand strong { font-size: 22px; letter-spacing: 4px; border: 2px solid #111; padding: 4px 22px; box-shadow: 2px 2px #111; }
 .nc-brand small { margin-top: 6px; font-size: 9px; letter-spacing: 2px; }
+.nc-brand strong { font-weight: 800; }
+.nc-brand.nc-footer-brand, .nc-brand.nc-footer-brand:hover { color: #111; }
+.nc-footer-brand small { font-weight: 700; }
+.nc-standard-brand { text-align: center; background: #f2f2f2; padding: 48px 24px 0; }
+.nc-brand:focus-visible { outline: 2px solid #b94b00; outline-offset: 4px; }
 .nc-header .nc-brand strong { padding: 3px 22px; font-size: 18px; font-weight: 800; line-height: 1.15; }
 .nc-header .nc-brand small { margin-top: 3px; font-size: 8.5px; font-weight: 700; letter-spacing: 3.5px; }
 .nc-header-inner > nav { margin-left: auto; }

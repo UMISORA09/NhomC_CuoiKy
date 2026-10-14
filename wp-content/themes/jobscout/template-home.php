@@ -1270,35 +1270,12 @@ $career_bg = $img_home_dir . '/career-bg.jpg?v=' . $cache_bust;
 </section>
 
 <!-- 6. SUBSCRIBE TO OUR NEWSLETTER -->
-<section class="hm-section-newsletter">
-    <div class="hm-container">
-        <div class="hm-newsletter-inner">
-            <div class="hm-newsletter-heading">
-                Subscribe To<br>Our Newsletter
-            </div>
-            <form class="hm-newsletter-form" action="#" method="post" onsubmit="event.preventDefault(); alert('Cảm ơn bạn đã đăng ký nhận bản tin tuyển dụng!');">
-                <div class="hm-newsletter-input-box">
-                    <svg class="hm-icon-mail" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#eb6723" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                        <polyline points="22,6 12,13 2,6"></polyline>
-                    </svg>
-                    <input type="email" placeholder="Input your email address" required>
-                </div>
-                <button type="submit" class="hm-newsletter-btn">SUBSCRIBE</button>
-            </form>
-        </div>
-    </div>
-</section>
+<?php get_template_part( 'template-parts/nhomc-newsletter' ); ?>
 
 <!-- 7. FOOTER -->
 <footer class="hm-footer">
     <div class="hm-container">
-        <div class="hm-footer-brand">
-            <div class="hm-logo-box">
-                <span class="hm-logo-text-main">NHOM C</span>
-            </div>
-            <span class="hm-logo-sub">RECRUITING</span>
-        </div>
+        <?php get_template_part( 'template-parts/nhomc-brand', null, array( 'footer' => true ) ); ?>
         <ul class="hm-footer-nav">
             <li><a href="<?php echo esc_url( home_url( '/jobs/' ) ); ?>">JOBS</a></li>
             <li><a href="<?php echo esc_url( home_url( '/companies/' ) ); ?>">COMPANIES</a></li>
@@ -1306,12 +1283,7 @@ $career_bg = $img_home_dir . '/career-bg.jpg?v=' . $cache_bust;
             <li><a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>">ABOUT</a></li>
             <li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">CONTACT</a></li>
         </ul>
-        <div class="hm-footer-socials">
-            <a href="#" class="hm-social-icon hm-social-fb" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" class="hm-social-icon hm-social-gg" aria-label="Google"><i class="fa-brands fa-google"></i></a>
-            <a href="#" class="hm-social-icon hm-social-line" aria-label="Line"><i class="fa-brands fa-line"></i></a>
-            <a href="#" class="hm-social-icon hm-social-tw" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
-        </div>
+        <?php get_template_part( 'template-parts/nhomc-social' ); ?>
     </div>
     <div class="hm-footer-copyright-bar">
         &copy; <?php echo date( 'Y' ); ?> Nhóm C (FIT - TDC) - JobScout. All Rights Reserved.

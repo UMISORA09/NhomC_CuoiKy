@@ -7,40 +7,13 @@
 ?>
 
 <!-- Newsletter Subscription Section -->
-<section class="nhomc-newsletter-section">
-    <div class="nhomc-container">
-        <div class="nhomc-newsletter-wrap">
-            <div class="nhomc-nl-title">
-                Subscribe To<br>Our Newsletter
-            </div>
-            <form class="nhomc-nl-form" onsubmit="event.preventDefault(); nhomcSubscribeNewsletter(this);">
-                <div class="nhomc-nl-input-group">
-                    <span class="nhomc-nl-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                    </span>
-                    <input type="email" placeholder="Input your email address" required aria-label="Email address">
-                </div>
-                <button type="submit" class="nhomc-btn-subscribe">SUBSCRIBE</button>
-            </form>
-        </div>
-    </div>
-</section>
+<?php get_template_part( 'template-parts/nhomc-newsletter' ); ?>
 
 <!-- Footer Main Area -->
 <footer class="nhomc-site-footer">
     <div class="nhomc-container">
         <!-- Brand Logo -->
-        <div class="nhomc-footer-brand">
-            <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="nhomc-brand-logo" rel="home">
-                <div class="nhomc-logo-badge">
-                    <span class="nhomc-logo-title">NHOM C<span class="orange-dot">.</span></span>
-                    <span class="nhomc-logo-sub">RECRUITING</span>
-                </div>
-            </a>
-        </div>
+        <?php get_template_part( 'template-parts/nhomc-brand', null, array( 'footer' => true ) ); ?>
 
         <!-- Footer Navigation Links -->
         <nav class="nhomc-footer-nav" aria-label="Footer Menu">
@@ -52,12 +25,7 @@
         </nav>
 
         <!-- Social Media Buttons -->
-        <div class="nhomc-social-links">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-circle fb" title="Facebook">f</a>
-            <a href="https://google.com" target="_blank" rel="noopener noreferrer" class="social-circle gplus" title="Google">G</a>
-            <a href="https://line.me" target="_blank" rel="noopener noreferrer" class="social-circle line" title="LINE">LINE</a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="social-circle tw" title="Twitter">𝕏</a>
-        </div>
+        <?php get_template_part( 'template-parts/nhomc-social' ); ?>
     </div>
 
     <!-- Sub Footer Bottom Bar -->
@@ -121,10 +89,6 @@ function nhomcShareJob() {
     } else {
         nhomcShowToast('Liên kết: ' + url);
     }
-}
-function nhomcSubscribeNewsletter(form) {
-    nhomcShowToast('Cảm ơn bạn đã đăng ký nhận bản tin tuyển dụng NhomC!');
-    form.reset();
 }
 function nhomcSubmitApplication(form) {
     nhomcCloseModal('nhomc-apply-modal');

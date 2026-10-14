@@ -704,24 +704,40 @@ foreach ( $seed_jobs as $job_data ) {
     }
 }
 
-// Đảm bảo trang News Detail luôn tồn tại chuẩn 100% không bị 404
-$news_detail_page = get_page_by_path( 'news-detail' );
-if ( ! $news_detail_page ) {
-    $nd_id = wp_insert_post( array(
-        'post_title'     => 'News Detail',
-        'post_name'      => 'news-detail',
-        'post_status'    => 'publish',
+// 5. Dam bao cac trang Nhom C (job-detail, news-detail...) ton tai trong CSDL
+$custom_pages = array(
+    'job-detail'  => array( 'title' => 'Job Detail',  'template' => 'page-job-detail.php' ),
+    'jobdetail'   => array( 'title' => 'Job Detail',  'template' => 'page-jobdetail.php' ),
+    'news-detail' => array( 'title' => 'News Detail', 'template' => 'template-news-detail.php' ),
+);
+
+foreach ( $custom_pages as $slug => $data ) {
+    $existing_page = get_posts( array(
+        'name'           => $slug,
         'post_type'      => 'page',
-        'post_content'   => '',
-        'comment_status' => 'closed',
+        'post_status'    => 'publish',
+        'posts_per_page' => 1,
     ) );
-    if ( $nd_id && ! is_wp_error( $nd_id ) ) {
-        update_post_meta( $nd_id, '_wp_page_template', 'template-news-detail.php' );
-        echo "[+] Đã tự động tạo trang 'news-detail' (News Detail) vào Database!\n";
+
+    if ( empty( $existing_page ) ) {
+        $p_id = wp_insert_post( array(
+            'post_title'     => $data['title'],
+            'post_name'      => $slug,
+            'post_status'    => 'publish',
+            'post_type'      => 'page',
+            'comment_status' => 'closed',
+            'ping_status'    => 'closed',
+        ) );
+        if ( $p_id && ! is_wp_error( $p_id ) ) {
+            update_post_meta( $p_id, '_wp_page_template', $data['template'] );
+            echo "[+] Da tao trang: {$data['title']} (/{$slug}/)\n";
+        }
+    } else {
+        $found = reset( $existing_page );
+        update_post_meta( $found->ID, '_wp_page_template', $data['template'] );
     }
-} else {
-    update_post_meta( $news_detail_page->ID, '_wp_page_template', 'template-news-detail.php' );
 }
+flush_rewrite_rules( false );
 
 echo "\n--------------------------------------------------------------------------------\n";
 echo "KẾT QUẢ SEEDER:\n";

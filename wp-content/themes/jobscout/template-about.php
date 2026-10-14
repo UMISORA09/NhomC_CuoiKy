@@ -13,7 +13,7 @@ $theme_uri = get_template_directory_uri();
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php wp_head(); ?>
-    <link rel="stylesheet" href="<?php echo esc_url( $theme_uri . '/css/about.css' ); ?>">
+    <link rel="stylesheet" href="<?php echo esc_url( add_query_arg( 'ver', filemtime( get_template_directory() . '/css/about.css' ), $theme_uri . '/css/about.css' ) ); ?>">
 </head>
 <body <?php body_class( 'about-design' ); ?>>
 <?php wp_body_open(); ?>
@@ -60,31 +60,9 @@ $theme_uri = get_template_directory_uri();
         </div>
     </section>
 </main>
-<section class="ab-newsletter" aria-labelledby="newsletter-title">
-    <div class="ab-newsletter-inner">
-        <h2 id="newsletter-title">Subscribe To<br>Our Newsletter</h2>
-        <form class="ab-newsletter-fields" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-            <input type="hidden" name="action" value="nhomc_newsletter">
-            <?php wp_nonce_field( 'nhomc_newsletter', 'newsletter_nonce', false ); ?>
-            <label class="ab-sr-only" aria-hidden="true">Leave this field empty<input type="text" name="newsletter_website" tabindex="-1" autocomplete="off"></label>
-            <label class="ab-email"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="m3 5 9 7 9-7"/></svg><span class="ab-sr-only">Email address</span><input type="email" name="email" autocomplete="email" placeholder="Input your email address" maxlength="254" required></label>
-            <button type="submit">SUBSCRIBE</button>
-            <?php
-            $messages = array(
-                'success' => 'Thank you! Your email is on our newsletter list.',
-                'invalid' => 'Please enter a valid email address.',
-                'expired' => 'Please refresh the page and try again.',
-                'error' => 'We could not save your email. Please try again later.',
-            );
-            $status = isset( $_GET['newsletter'] ) && is_string( $_GET['newsletter'] ) ? $_GET['newsletter'] : '';
-            if ( isset( $messages[ $status ] ) ) : ?>
-                <p class="ab-newsletter-message" role="status"><?php echo esc_html( $messages[ $status ] ); ?></p>
-            <?php endif; ?>
-        </form>
-    </div>
-</section>
+<?php get_template_part( 'template-parts/nhomc-newsletter' ); ?>
 <footer class="ab-footer">
-    <a class="ab-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>"><strong>NHOM C</strong><small>CAREER &amp; RECRUITING PLATFORM</small></a>
+    <?php get_template_part( 'template-parts/nhomc-brand', null, array( 'footer' => true ) ); ?>
     <nav aria-label="Footer navigation">
         <ul class="ab-nav">
             <li><a href="<?php echo esc_url( home_url( '/jobs/' ) ); ?>">JOBS</a></li>
@@ -94,12 +72,7 @@ $theme_uri = get_template_directory_uri();
             <li><a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">CONTACT</a></li>
         </ul>
     </nav>
-    <div class="ab-social" aria-label="Social media">
-        <a class="ab-facebook" href="https://facebook.com" aria-label="Facebook">f</a>
-        <a class="ab-google" href="https://google.com" aria-label="Google">G</a>
-        <a class="ab-line" href="https://line.me" aria-label="LINE">LINE</a>
-        <a class="ab-twitter" href="https://twitter.com" aria-label="Twitter"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M23 3a9 9 0 0 1-2.6.7A4.5 4.5 0 0 0 22.4 1a9 9 0 0 1-2.9 1.1A4.5 4.5 0 0 0 11.8 6a13 13 0 0 1-9.4-4.8A4.5 4.5 0 0 0 3.8 7.2a4.5 4.5 0 0 1-2-.6 4.5 4.5 0 0 0 3.6 4.5 4.5 4.5 0 0 1-2 .1 4.5 4.5 0 0 0 4.2 3.1A9 9 0 0 1 1 16.2a12.8 12.8 0 0 0 19.7-10.8A9 9 0 0 0 23 3Z"/></svg></a>
-    </div>
+    <?php get_template_part( 'template-parts/nhomc-social' ); ?>
 </footer>
 <div class="ab-copyright">Copyright &copy; <?php echo esc_html( wp_date( 'Y' ) ); ?> Nhom C - FIT TDC. All Rights Reserved.</div>
 <?php wp_footer(); ?>

@@ -103,6 +103,7 @@ add_action( 'jobscout_header', 'jobscout_nhomc_header', 20 );
 add_action( 'wp_enqueue_scripts', function () {
     wp_enqueue_style( 'nhomc-header-font', 'https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap', array(), null );
     wp_enqueue_style( 'nhomc-header', get_template_directory_uri() . '/css/nhomc-header.css', array(), filemtime( get_template_directory() . '/css/nhomc-header.css' ) );
+    wp_enqueue_style( 'nhomc-newsletter', get_template_directory_uri() . '/css/nhomc-newsletter.css', array(), filemtime( get_template_directory() . '/css/nhomc-newsletter.css' ) );
 } );
 
 /**
