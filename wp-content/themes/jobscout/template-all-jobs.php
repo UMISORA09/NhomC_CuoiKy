@@ -496,21 +496,32 @@ if ($jobs_query->have_posts()) {
         
         /* Pills tags */
         .aj-card-tags {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 6px;
-            flex-wrap: wrap;
+            background-color: #f1f3f5;
+            border-radius: 4px;
+            padding: 4px 10px;
+            gap: 8px;
             margin-bottom: 12px;
+            width: fit-content;
+            max-width: 100%;
         }
         .aj-tag-pill {
-            background-color: #f7f7f7;
-            border: 1px solid #e4e4e4;
+            background: transparent;
+            border: none;
             border-radius: 0;
-            padding: 2px 10px;
+            padding: 0;
+            color: #4b5563;
             font-size: 11px;
-            color: #555555;
-            font-weight: 500;
+            font-weight: 400;
+            line-height: 1.2;
             white-space: nowrap;
+        }
+        .aj-tag-sep {
+            color: #cbd5e1;
+            font-size: 10px;
+            line-height: 1;
+            user-select: none;
         }
 
         /* Bullet points */
@@ -892,9 +903,16 @@ if ($jobs_query->have_posts()) {
                 font-size: 11px;
                 margin-bottom: 8px;
             }
+            .aj-card-tags {
+                padding: 3px 8px;
+                gap: 6px;
+            }
             .aj-tag-pill {
-                padding: 2px 8px;
+                padding: 0;
                 font-size: 10px;
+            }
+            .aj-tag-sep {
+                font-size: 9px;
             }
             .aj-card-perks li {
                 font-size: 11.5px;
@@ -1039,7 +1057,9 @@ if ($jobs_query->have_posts()) {
                         <p class="aj-card-date">Created: <?php echo esc_html($date); ?></p>
                         <div class="aj-card-tags">
                             <span class="aj-tag-pill"><?php echo esc_html($type); ?></span>
+                            <span class="aj-tag-sep">|</span>
                             <span class="aj-tag-pill"><?php echo esc_html($category); ?></span>
+                            <span class="aj-tag-sep">|</span>
                             <span class="aj-tag-pill"><?php echo esc_html($location); ?></span>
                         </div>
                         <ul class="aj-card-perks">

@@ -708,19 +708,34 @@ $career_bg = $img_home_dir . '/career-bg.jpg?v=' . $cache_bust;
         }
 
         .hm-job-tags {
-            display: flex !important;
-            flex-wrap: wrap !important;
-            gap: 6px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            background-color: #f1f3f5 !important;
+            border-radius: 4px !important;
+            padding: 4px 10px !important;
+            gap: 8px !important;
             margin-bottom: 12px !important;
+            width: fit-content !important;
+            max-width: 100% !important;
         }
 
         .hm-job-tag {
-            background: #f0f0f0 !important;
-            color: #555555 !important;
-            padding: 2px 9px !important;
-            border-radius: 2px !important;
-            font-size: 11.5px !important;
-            font-weight: 500 !important;
+            background: transparent !important;
+            border: none !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+            color: #4b5563 !important;
+            font-size: 11px !important;
+            font-weight: 400 !important;
+            line-height: 1.2 !important;
+            white-space: nowrap !important;
+        }
+
+        .hm-tag-sep {
+            color: #cbd5e1 !important;
+            font-size: 10px !important;
+            line-height: 1 !important;
+            user-select: none !important;
         }
 
         .hm-job-bullets {
@@ -1187,7 +1202,9 @@ $career_bg = $img_home_dir . '/career-bg.jpg?v=' . $cache_bust;
                         <div class="hm-job-date"><?php echo esc_html( $job['date'] ); ?></div>
                         <div class="hm-job-tags">
                             <span class="hm-job-tag"><?php echo esc_html( $job['type'] ); ?></span>
+                            <span class="hm-tag-sep">|</span>
                             <span class="hm-job-tag"><?php echo esc_html( $job['category'] ); ?></span>
+                            <span class="hm-tag-sep">|</span>
                             <span class="hm-job-tag"><?php echo esc_html( $job['location'] ); ?></span>
                         </div>
                         <ul class="hm-job-bullets">
