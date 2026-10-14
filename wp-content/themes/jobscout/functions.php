@@ -91,6 +91,7 @@ endif;
  * Nhom C Custom Helper Functions.
  */
 require get_template_directory() . '/inc/nhomc-helpers.php';
+require get_template_directory() . '/inc/nhomc-newsletter.php';
 
 /** Use the same header on standard WordPress pages and the custom page designs. */
 function jobscout_nhomc_header() {

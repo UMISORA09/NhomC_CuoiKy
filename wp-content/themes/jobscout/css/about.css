@@ -39,6 +39,10 @@
 .ab-email input { min-width: 0; width: 100%; height: 52px; border: 0; border-radius: 0; background: #fff; padding: 14px 0; font: inherit; font-size: 16px; color: #777; opacity: 1; }
 .ab-email input::placeholder { color: #aaa; opacity: 1; }
 .ab-newsletter button { height: 52px; border: 1px solid #fff; border-radius: 0; background: transparent; color: #fff; padding: 12px 20px; font: inherit; font-size: 16px; font-weight: 600; opacity: 1; }
+.ab-newsletter button { cursor: pointer; }
+.ab-newsletter button:hover { background: #fff; color: #f47516; }
+.ab-newsletter-fields { margin: 0; }
+.ab-newsletter-message { grid-column: 1 / -1; font-size: 14px; }
 .ab-footer { padding: 88px 24px; background: #f2f2f2; text-align: center; }
 .ab-footer .ab-nav { margin-top: 24px; }
 .ab-social { display: flex; justify-content: center; gap: 20px; margin-top: 28px; }
