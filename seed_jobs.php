@@ -704,6 +704,38 @@ foreach ( $seed_jobs as $job_data ) {
     }
 }
 
+// 5. Dam bao cac trang Nhom C (job-detail, news-detail...) ton tai trong CSDL
+$custom_pages = array(
+    'job-detail'  => array( 'title' => 'Job Detail',  'template' => 'page-job-detail.php' ),
+    'jobdetail'   => array( 'title' => 'Job Detail',  'template' => 'page-jobdetail.php' ),
+    'news-detail' => array( 'title' => 'News Detail', 'template' => 'page-news-detail.php' ),
+);
+
+foreach ( $custom_pages as $slug => $data ) {
+    $existing_page = get_posts( array(
+        'name'           => $slug,
+        'post_type'      => 'page',
+        'post_status'    => 'publish',
+        'posts_per_page' => 1,
+    ) );
+
+    if ( empty( $existing_page ) ) {
+        $p_id = wp_insert_post( array(
+            'post_title'     => $data['title'],
+            'post_name'      => $slug,
+            'post_status'    => 'publish',
+            'post_type'      => 'page',
+            'comment_status' => 'closed',
+            'ping_status'    => 'closed',
+        ) );
+        if ( $p_id && ! is_wp_error( $p_id ) ) {
+            update_post_meta( $p_id, '_wp_page_template', $data['template'] );
+            echo "[+] Da tao trang: {$data['title']} (/{$slug}/)\n";
+        }
+    }
+}
+flush_rewrite_rules( false );
+
 echo "\n--------------------------------------------------------------------------------\n";
 echo "KẾT QUẢ SEEDER:\n";
 echo "- Việc làm tạo mới: {$created_count}\n";

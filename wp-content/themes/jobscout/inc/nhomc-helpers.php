@@ -175,3 +175,58 @@ function nhomc_get_job_bullets( $post_id, $post_content = '' ) {
 
     return array_slice( $bullets, 0, 3 );
 }
+
+/**
+ * Tu dong kiem tra va tao cac trang Nhom C can thiet trong CSDL (Job Detail, News Detail...)
+ * Tranh loi 404 khi pull code sang may khac hoac reset Database.
+ */
+function nhomc_ensure_custom_pages() {
+    $required_pages = array(
+        'job-detail' => array(
+            'title'    => 'Job Detail',
+            'template' => 'page-job-detail.php',
+        ),
+        'jobdetail' => array(
+            'title'    => 'Job Detail',
+            'template' => 'page-jobdetail.php',
+        ),
+        'news-detail' => array(
+            'title'    => 'News Detail',
+            'template' => 'page-news-detail.php',
+        ),
+    );
+
+    $needs_rewrite_flush = false;
+
+    foreach ( $required_pages as $slug => $data ) {
+        $existing = get_posts( array(
+            'name'           => $slug,
+            'post_type'      => 'page',
+            'post_status'    => 'publish',
+            'posts_per_page' => 1,
+        ) );
+
+        if ( empty( $existing ) ) {
+            $page_id = wp_insert_post( array(
+                'post_title'     => $data['title'],
+                'post_name'      => $slug,
+                'post_status'    => 'publish',
+                'post_type'      => 'page',
+                'comment_status' => 'closed',
+                'ping_status'    => 'closed',
+            ) );
+
+            if ( $page_id && ! is_wp_error( $page_id ) ) {
+                if ( ! empty( $data['template'] ) ) {
+                    update_post_meta( $page_id, '_wp_page_template', $data['template'] );
+                }
+                $needs_rewrite_flush = true;
+            }
+        }
+    }
+
+    if ( $needs_rewrite_flush ) {
+        flush_rewrite_rules( false );
+    }
+}
+add_action( 'init', 'nhomc_ensure_custom_pages' );
