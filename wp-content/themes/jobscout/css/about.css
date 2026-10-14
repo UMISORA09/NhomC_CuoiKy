@@ -38,6 +38,7 @@
 .ab-email svg { flex-shrink: 0; }
 .ab-email input { min-width: 0; width: 100%; height: 52px; border: 0; border-radius: 0; background: #fff; padding: 14px 0; font: inherit; font-size: 16px; color: #777; opacity: 1; }
 .ab-email input::placeholder { color: #aaa; opacity: 1; }
+.about-design .ab-email input:focus-visible { outline: none; box-shadow: inset 0 -2px #b94b00; }
 .ab-newsletter button { height: 52px; border: 1px solid #fff; border-radius: 0; background: transparent; color: #fff; padding: 12px 20px; font: inherit; font-size: 16px; font-weight: 600; opacity: 1; }
 .ab-newsletter button { cursor: pointer; }
 .ab-newsletter button:hover { background: #fff; color: #f47516; }
