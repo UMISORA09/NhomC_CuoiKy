@@ -1080,32 +1080,13 @@ if ($jobs_query->have_posts()) {
 </main>
 
 <!-- 6. NEWSLETTER BANNER -->
-<section class="aj-newsletter">
-    <div class="aj-nl-inner">
-        <h3 class="aj-nl-title">Subscribe To<br>Our Newsletter</h3>
-        <form class="aj-nl-form" onsubmit="event.preventDefault(); alert('Cảm ơn bạn đã đăng ký nhận bản tin tuyển dụng NhomC!');">
-            <div class="aj-nl-input-group">
-                <svg width="20" height="15" viewBox="0 0 22 17" fill="none" xmlns="http://www.w3.org/2000/svg" class="aj-nl-envelope-svg">
-                    <rect x="0.75" y="0.75" width="20.5" height="15.5" stroke="#e56322" stroke-width="1.5" rx="0"/>
-                    <path d="M1.5 1.5L11 9L20.5 1.5" stroke="#e56322" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <input type="email" class="aj-nl-input" placeholder="Input your email address" required>
-            </div>
-            <button type="submit" class="aj-btn-subscribe">SUBSCRIBE</button>
-        </form>
-    </div>
-</section>
+<?php get_template_part( 'template-parts/nhomc-newsletter' ); ?>
 
 <!-- 7. FOOTER -->
 <footer class="aj-footer">
     <div class="aj-footer-inner">
         <!-- Logo NhomC Chân trang -->
-        <div class="aj-footer-brand">
-            <div class="aj-footer-brand-box">
-                <span class="aj-footer-brand-title">NHOM C</span>
-            </div>
-            <span class="aj-footer-brand-sub">CAREER &amp; RECRUITING PLATFORM</span>
-        </div>
+        <?php get_template_part( 'template-parts/nhomc-brand', null, array( 'footer' => true ) ); ?>
 
         <!-- Menu Footer -->
         <ul class="aj-footer-nav">
@@ -1117,12 +1098,7 @@ if ($jobs_query->have_posts()) {
         </ul>
 
         <!-- 4 Icon Mạng Xã Hội Tròn -->
-        <div class="aj-social-icons">
-            <a href="https://facebook.com" target="_blank" class="aj-social-btn aj-social-facebook" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="https://google.com" target="_blank" class="aj-social-btn aj-social-google" title="Google"><i class="fa-brands fa-google"></i></a>
-            <a href="https://line.me" target="_blank" class="aj-social-btn aj-social-line" title="LINE"><i class="fa-brands fa-line"></i></a>
-            <a href="https://twitter.com" target="_blank" class="aj-social-btn aj-social-twitter" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
-        </div>
+        <?php get_template_part( 'template-parts/nhomc-social' ); ?>
     </div>
 </footer>
 

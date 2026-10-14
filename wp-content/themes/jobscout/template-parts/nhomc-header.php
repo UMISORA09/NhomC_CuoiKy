@@ -14,7 +14,7 @@ $items = array(
 ?>
 <header class="nc-header">
     <div class="nc-header-inner">
-        <a class="nc-brand" href="<?php echo esc_url( home_url( '/' ) ); ?>"><strong>NHOM C</strong><small>RECRUITING</small></a>
+        <?php get_template_part( 'template-parts/nhomc-brand' ); ?>
         <nav aria-label="Main navigation">
             <ul class="nc-nav">
                 <?php foreach ( $items as $item ) : ?>

@@ -45,7 +45,10 @@ function nhomc_newsletter_subscribe() {
             }
         }
     }
-    wp_safe_redirect( add_query_arg( 'newsletter', $status, home_url( '/about-us/' ) ) . '#newsletter-title', 303 );
+    $return_url = isset( $_POST['newsletter_return'] ) && is_string( $_POST['newsletter_return'] )
+        ? wp_validate_redirect( esc_url_raw( wp_unslash( $_POST['newsletter_return'] ) ), home_url( '/about-us/' ) )
+        : home_url( '/about-us/' );
+    wp_safe_redirect( add_query_arg( 'newsletter', $status, $return_url ) . '#newsletter-title', 303 );
     exit;
 }
 add_action( 'admin_post_nhomc_newsletter', 'nhomc_newsletter_subscribe' );

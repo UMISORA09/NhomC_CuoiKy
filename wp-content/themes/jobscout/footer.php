@@ -15,6 +15,9 @@
      * @hooked jobscout_content_end - 20
     */
     do_action( 'jobscout_before_footer' );
+    get_template_part( 'template-parts/nhomc-newsletter' ); ?>
+    <div class="nc-standard-brand"><?php get_template_part( 'template-parts/nhomc-brand', null, array( 'footer' => true ) ); ?></div>
+    <?php
     
     /**
      * Footer
@@ -24,7 +27,9 @@
      * @hooked jobscout_footer_bottom - 40
      * @hooked jobscout_footer_end    - 50
     */
-    do_action( 'jobscout_footer' );
+    do_action( 'jobscout_footer' ); ?>
+    <div class="nc-standard-social"><?php get_template_part( 'template-parts/nhomc-social' ); ?></div>
+    <?php
     
     /**
      * After Footer
