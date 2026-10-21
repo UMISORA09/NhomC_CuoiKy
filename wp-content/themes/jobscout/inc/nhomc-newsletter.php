@@ -2,7 +2,7 @@
 /**
  * Module Quản lý Newsletter & Subscribers - Nhóm C (FIT - TDC)
  * Tích hợp trang quản trị chuyên nghiệp trong WP-Admin, xuất file CSV,
- * và tự động liên kết với Contact Form 7.
+ * tự động liên kết với Contact Form 7, và TỰ ĐỘNG GỬI EMAIL KHI CÓ BÀI MỚI.
  *
  * @package JobScout
  */
@@ -21,7 +21,7 @@ add_action( 'init', function () {
             'not_found'          => 'Không có subscriber nào',
         ),
         'public'          => false,
-        'show_ui'         => false, // Dùng trang quản trị tùy biến đẹp hơn bên dưới
+        'show_ui'         => false,
         'supports'        => array( 'title' ),
         'capabilities'    => array_fill_keys( array(
             'edit_post', 'read_post', 'delete_post', 'edit_posts', 'edit_others_posts',
@@ -35,7 +35,6 @@ add_action( 'init', function () {
 
 // 2. Đăng ký Menu Quản trị trong WP-Admin (Menu chính và Submenu dưới Contact Form 7)
 add_action( 'admin_menu', function () {
-    // Menu chính riêng biệt nổi bật trên thanh bên
     add_menu_page(
         'Quản lý Subscribers (Newsletter)',
         'Subscribers',
@@ -46,7 +45,6 @@ add_action( 'admin_menu', function () {
         27
     );
 
-    // Submenu bổ sung nằm trong mục Contact Form 7 (nếu Contact Form 7 đã cài đặt)
     add_submenu_page(
         'wpcf7',
         'Subscribers Newsletter',
@@ -142,13 +140,228 @@ add_action( 'wpcf7_mail_sent', function( $contact_form ) {
     }
 } );
 
-// 5. Xử lý các thao tác quản trị (Export CSV, Xóa, Thêm thủ công)
+// 5. Cấu hình định dạng Email gửi đi mang thương hiệu Nhóm C
+add_filter( 'wp_mail_from_name', function( $name ) {
+    return 'JobScout - Nhóm C (FIT - TDC)';
+} );
+
+// 6. Xây dựng giao diện Email HTML thông báo bài viết / việc làm mới (Figma Pixel-Perfect)
+function nhomc_build_newsletter_email_html( $post ) {
+    $post_id   = $post->ID;
+    $title     = get_the_title( $post_id );
+    $link      = get_permalink( $post_id );
+    $post_type = $post->post_type;
+    $is_job    = ( $post_type === 'job_listing' );
+
+    $type_label = $is_job ? 'CƠ HỘI VIỆC LÀM MỚI TỪ NHÀ TUYỂN DỤNG' : 'BÀI VIẾT MỚI TỪ BẢN TIN NHÓM C';
+    $btn_text   = $is_job ? 'ỨNG TUYỂN &amp; XEM VIỆC LÀM NGAY' : 'ĐỌC BÀI VIẾT ĐẦY ĐỦ';
+
+    // Tóm tắt nội dung
+    $excerpt = has_excerpt( $post_id ) ? get_the_excerpt( $post_id ) : wp_strip_all_tags( $post->post_content );
+    $excerpt = wp_trim_words( $excerpt, 40, '...' );
+
+    // Ảnh đại diện
+    $thumb_url = get_the_post_thumbnail_url( $post_id, 'large' );
+    if ( empty( $thumb_url ) && ! $is_job ) {
+        $thumb_url = get_template_directory_uri() . '/images/about/hero.jpg';
+    }
+
+    $site_name = get_bloginfo( 'name' );
+    $site_url  = home_url( '/' );
+    $year      = date( 'Y' );
+
+    ob_start();
+    ?>
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title><?php echo esc_html( $title ); ?></title>
+    </head>
+    <body style="margin: 0; padding: 0; background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #334155;">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f1f5f9; padding: 35px 15px;">
+            <tr>
+                <td align="center">
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width: 600px; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.07);">
+                        <!-- Header Logo Nhom C -->
+                        <tr>
+                            <td align="center" style="padding: 28px 20px 22px; background-color: #ffffff;">
+                                <div style="display: inline-block; border: 2.5px solid #111111; padding: 5px 24px; font-weight: 800; font-size: 20px; letter-spacing: 4px; color: #111111; box-shadow: 2px 2px #111111;">
+                                    NHOM C
+                                </div>
+                                <div style="font-size: 8.5px; font-weight: 700; letter-spacing: 2.5px; color: #64748b; margin-top: 6px;">
+                                    CAREER &amp; RECRUITING PLATFORM
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Banner Thông Báo Cam -->
+                        <tr>
+                            <td align="center" style="background-color: #ea751e; padding: 14px 20px;">
+                                <span style="color: #ffffff; font-weight: 700; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase;">
+                                    <?php echo esc_html( $type_label ); ?>
+                                </span>
+                            </td>
+                        </tr>
+
+                        <?php if ( ! empty( $thumb_url ) ) : ?>
+                        <!-- Ảnh Thumbnail -->
+                        <tr>
+                            <td style="padding: 0;">
+                                <a href="<?php echo esc_url( $link ); ?>" style="text-decoration: none; display: block;">
+                                    <img src="<?php echo esc_url( $thumb_url ); ?>" alt="<?php echo esc_attr( $title ); ?>" style="width: 100%; max-height: 280px; object-fit: cover; display: block;" />
+                                </a>
+                            </td>
+                        </tr>
+                        <?php endif; ?>
+
+                        <!-- Nội Dung Chính -->
+                        <tr>
+                            <td style="padding: 32px 30px;">
+                                <div style="font-size: 13px; color: #ea751e; font-weight: 700; margin-bottom: 8px;">
+                                    Ngày đăng: <?php echo esc_html( get_the_date( 'd/m/Y', $post_id ) ); ?>
+                                </div>
+
+                                <h2 style="margin: 0 0 16px 0; font-size: 22px; line-height: 1.4; color: #0f172a; font-weight: 800;">
+                                    <a href="<?php echo esc_url( $link ); ?>" style="color: #0f172a; text-decoration: none;">
+                                        <?php echo esc_html( $title ); ?>
+                                    </a>
+                                </h2>
+
+                                <p style="margin: 0 0 26px 0; font-size: 15px; line-height: 1.6; color: #475569;">
+                                    <?php echo esc_html( $excerpt ); ?>
+                                </p>
+
+                                <div align="center" style="margin: 30px 0 10px 0;">
+                                    <a href="<?php echo esc_url( $link ); ?>" style="display: inline-block; background-color: #ea751e; color: #ffffff; font-size: 14px; font-weight: 700; letter-spacing: 0.8px; padding: 14px 30px; text-decoration: none; border-radius: 6px; box-shadow: 0 4px 12px rgba(234, 117, 30, 0.35); text-transform: uppercase;">
+                                        <?php echo esc_html( $btn_text ); ?> &rarr;
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Footer Email Bản Quyền -->
+                        <tr>
+                            <td align="center" style="background-color: #111111; padding: 24px 20px; color: #94a3b8; font-size: 12px; line-height: 1.6;">
+                                <p style="margin: 0 0 8px 0; color: #cbd5e1; font-weight: 600;">
+                                    &copy; <?php echo esc_html( $year ); ?> Nhom C (FIT - TDC) - JobScout. All Rights Reserved.
+                                </p>
+                                <p style="margin: 0; font-size: 11px; color: #64748b;">
+                                    Bạn nhận được email thông báo này vì đã đăng ký nhận tin tại <a href="<?php echo esc_url( $site_url ); ?>" style="color: #ea751e; text-decoration: none;"><?php echo esc_html( $site_name ); ?></a>.
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+    </html>
+    <?php
+    return ob_get_clean();
+}
+
+// 7. Hàm gửi email thông báo tới Subscriber (Hỗ trợ gửi hàng loạt hoặc gửi test)
+function nhomc_send_post_notification_to_subscribers( $post_id, $target_email = null ) {
+    $post = get_post( $post_id );
+    if ( ! $post || $post->post_status !== 'publish' ) {
+        return array( 'status' => 'error', 'message' => 'Bài viết không tồn tại hoặc chưa xuất bản.' );
+    }
+
+    $is_job = ( $post->post_type === 'job_listing' );
+    $subject_prefix = $is_job ? '[JobScout Việc Làm Mới]' : '[JobScout Tin Tức Mới]';
+    $subject = $subject_prefix . ' ' . wp_strip_all_tags( $post->post_title );
+    $html_body = nhomc_build_newsletter_email_html( $post );
+
+    $headers = array(
+        'Content-Type: text/html; charset=UTF-8',
+    );
+
+    // Trường hợp 1: Gửi thử nghiệm (Test Email)
+    if ( ! empty( $target_email ) && is_email( $target_email ) ) {
+        $sent = wp_mail( $target_email, '[TEST] ' . $subject, $html_body, $headers );
+        return array(
+            'status'  => $sent ? 'success' : 'error',
+            'is_test' => true,
+            'count'   => $sent ? 1 : 0,
+            'target'  => $target_email,
+        );
+    }
+
+    // Trường hợp 2: Gửi cho toàn bộ Subscribers trong hệ thống
+    $subscribers = get_posts( array(
+        'post_type'      => 'nhomc_subscriber',
+        'post_status'    => array( 'private', 'publish' ),
+        'posts_per_page' => -1,
+    ) );
+
+    if ( empty( $subscribers ) ) {
+        return array( 'status' => 'empty', 'message' => 'Chưa có subscriber nào trong hệ thống.' );
+    }
+
+    $sent_count = 0;
+    foreach ( $subscribers as $sub ) {
+        $email = $sub->post_title;
+        if ( is_email( $email ) ) {
+            if ( wp_mail( $email, $subject, $html_body, $headers ) ) {
+                $sent_count++;
+            }
+        }
+    }
+
+    // Đánh dấu bài viết đã gửi thông báo
+    update_post_meta( $post_id, '_nhomc_subscribers_notified', current_time( 'mysql' ) );
+
+    // Ghi nhật ký lần phát gần nhất
+    update_option( 'nhomc_last_newsletter_broadcast', array(
+        'post_id'    => $post_id,
+        'post_title' => $post->post_title,
+        'time'       => current_time( 'mysql' ),
+        'count'      => $sent_count,
+        'total'      => count( $subscribers ),
+    ) );
+
+    return array(
+        'status' => 'success',
+        'count'  => $sent_count,
+        'total'  => count( $subscribers ),
+    );
+}
+
+// 8. TỰ ĐỘNG GỬI EMAIL KHI XUẤT BẢN BÀI VIẾT HOẶC VIỆC LÀM MỚI
+add_action( 'transition_post_status', function( $new_status, $old_status, $post ) {
+    // Chỉ kích hoạt khi chuyển từ trạng thái khác (draft, pending, new, auto-draft) sang 'publish'
+    if ( $new_status !== 'publish' || $old_status === 'publish' ) {
+        return;
+    }
+
+    // Chỉ áp dụng cho Tin Tức (post) và Việc Làm (job_listing)
+    if ( ! in_array( $post->post_type, array( 'post', 'job_listing' ), true ) ) {
+        return;
+    }
+
+    // Kiểm tra cấu hình bật/tắt (Mặc định: 'yes')
+    if ( get_option( 'nhomc_auto_notify_subscribers', 'yes' ) !== 'yes' ) {
+        return;
+    }
+
+    // Kiểm tra cờ tránh gửi 2 lần cho cùng một bài
+    if ( get_post_meta( $post->ID, '_nhomc_subscribers_notified', true ) ) {
+        return;
+    }
+
+    // Kích hoạt gửi email thông báo
+    nhomc_send_post_notification_to_subscribers( $post->ID );
+}, 10, 3 );
+
+// 9. Xử lý các thao tác quản trị (Export CSV, Xóa, Thêm, Gửi Email Thủ Công, Lưu Cấu Hình)
 add_action( 'admin_init', function () {
     if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'nhomc-subscribers' ) {
         return;
     }
 
-    // 5.1. Xuất file CSV
+    // 9.1. Xuất file CSV
     if ( isset( $_GET['action'] ) && $_GET['action'] === 'export_csv' ) {
         check_admin_referer( 'nhomc_export_subscribers_nonce' );
 
@@ -168,7 +381,6 @@ add_action( 'admin_init', function () {
         header( 'Expires: 0' );
 
         $output = fopen( 'php://output', 'w' );
-        // UTF-8 BOM cho Excel tiếng Việt
         fprintf( $output, chr(0xEF) . chr(0xBB) . chr(0xBF) );
 
         fputcsv( $output, array( 'STT', 'Địa chỉ Email', 'Ngày đăng ký', 'Nguồn đăng ký', 'Trạng thái' ) );
@@ -193,7 +405,7 @@ add_action( 'admin_init', function () {
         exit;
     }
 
-    // 5.2. Xóa Subscriber
+    // 9.2. Xóa Subscriber
     if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['sub_id'] ) ) {
         $sub_id = intval( $_GET['sub_id'] );
         check_admin_referer( 'nhomc_delete_sub_' . $sub_id );
@@ -205,7 +417,7 @@ add_action( 'admin_init', function () {
         }
     }
 
-    // 5.3. Thêm Subscriber thủ công
+    // 9.3. Thêm Subscriber thủ công
     if ( isset( $_POST['nhomc_action'] ) && $_POST['nhomc_action'] === 'add_subscriber' ) {
         check_admin_referer( 'nhomc_add_subscriber_nonce' );
 
@@ -237,9 +449,57 @@ add_action( 'admin_init', function () {
             exit;
         }
     }
+
+    // 9.4. Lưu cấu hình Tự động gửi Email khi có bài mới
+    if ( isset( $_POST['nhomc_action'] ) && $_POST['nhomc_action'] === 'save_settings' ) {
+        check_admin_referer( 'nhomc_save_settings_nonce' );
+
+        $auto_notify = isset( $_POST['auto_notify'] ) ? 'yes' : 'no';
+        update_option( 'nhomc_auto_notify_subscribers', $auto_notify );
+
+        wp_safe_redirect( add_query_arg( array( 'page' => 'nhomc-subscribers', 'status' => 'settings_saved' ), admin_url( 'admin.php' ) ) );
+        exit;
+    }
+
+    // 9.5. Gửi Email Thử Nghiệm (Test Email)
+    if ( isset( $_POST['nhomc_action'] ) && $_POST['nhomc_action'] === 'send_test_email' ) {
+        check_admin_referer( 'nhomc_send_email_nonce' );
+
+        $post_id    = isset( $_POST['selected_post_id'] ) ? intval( $_POST['selected_post_id'] ) : 0;
+        $test_email = isset( $_POST['test_email'] ) ? sanitize_email( trim( $_POST['test_email'] ) ) : '';
+
+        if ( ! $post_id || ! is_email( $test_email ) ) {
+            wp_safe_redirect( add_query_arg( array( 'page' => 'nhomc-subscribers', 'status' => 'mail_error' ), admin_url( 'admin.php' ) ) );
+            exit;
+        }
+
+        $result = nhomc_send_post_notification_to_subscribers( $post_id, $test_email );
+        $status = ( $result['status'] === 'success' ) ? 'test_sent' : 'mail_error';
+
+        wp_safe_redirect( add_query_arg( array( 'page' => 'nhomc-subscribers', 'status' => $status, 'target' => urlencode( $test_email ) ), admin_url( 'admin.php' ) ) );
+        exit;
+    }
+
+    // 9.6. Gửi Email Thủ Công tới tất cả Subscribers
+    if ( isset( $_POST['nhomc_action'] ) && $_POST['nhomc_action'] === 'broadcast_email' ) {
+        check_admin_referer( 'nhomc_send_email_nonce' );
+
+        $post_id = isset( $_POST['selected_post_id'] ) ? intval( $_POST['selected_post_id'] ) : 0;
+
+        if ( ! $post_id ) {
+            wp_safe_redirect( add_query_arg( array( 'page' => 'nhomc-subscribers', 'status' => 'mail_error' ), admin_url( 'admin.php' ) ) );
+            exit;
+        }
+
+        $result = nhomc_send_post_notification_to_subscribers( $post_id );
+        $count = $result['count'] ?? 0;
+
+        wp_safe_redirect( add_query_arg( array( 'page' => 'nhomc-subscribers', 'status' => 'broadcast_sent', 'count' => $count ), admin_url( 'admin.php' ) ) );
+        exit;
+    }
 } );
 
-// 6. Giao diện Trang Quản trị Subscribers (HTML + CSS sang trọng, trực quan)
+// 10. Giao diện Trang Quản trị Subscribers Hoàn Chỉnh
 function nhomc_render_subscribers_admin_page() {
     if ( ! current_user_can( 'manage_options' ) ) {
         wp_die( 'Bạn không có quyền truy cập trang quản trị này.' );
@@ -258,14 +518,25 @@ function nhomc_render_subscribers_admin_page() {
         'post_type'      => 'nhomc_subscriber',
         'post_status'    => array( 'private', 'publish' ),
         'posts_per_page' => -1,
-        'date_query'     => array(
-            array(
-                'after' => '7 days ago',
-            ),
-        ),
+        'date_query'     => array( array( 'after' => '7 days ago' ) ),
         'fields'         => 'ids',
     ) );
     $count_recent = count( $recent_posts );
+
+    // Cài đặt tự động gửi
+    $auto_notify_enabled = get_option( 'nhomc_auto_notify_subscribers', 'yes' ) === 'yes';
+
+    // Nhật ký lần gửi email gần nhất
+    $last_broadcast = get_option( 'nhomc_last_newsletter_broadcast', array() );
+
+    // Lấy danh sách 15 bài viết / việc làm mới nhất để chọn gửi
+    $latest_posts = get_posts( array(
+        'post_type'      => array( 'post', 'job_listing' ),
+        'post_status'    => 'publish',
+        'posts_per_page' => 15,
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ) );
 
     // Truy vấn danh sách subscriber hiển thị theo trang
     $args = array(
@@ -289,7 +560,7 @@ function nhomc_render_subscribers_admin_page() {
     $status_msg = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : '';
     ?>
     <div class="wrap nhomc-subscribers-wrap">
-        <h1 class="wp-heading-inline">Danh Sách Email Đăng Ký (Newsletter Subscribers)</h1>
+        <h1 class="wp-heading-inline">Hệ Thống Quản Lý Subscribers &amp; Tự Động Gửi Email (Nhóm C)</h1>
         
         <hr class="wp-header-end">
 
@@ -302,6 +573,14 @@ function nhomc_render_subscribers_admin_page() {
             <div class="notice notice-warning is-dismissible"><p><strong>Trùng lặp:</strong> Email này đã tồn tại trong danh sách subscribers.</p></div>
         <?php elseif ( $status_msg === 'invalid' ) : ?>
             <div class="notice notice-error is-dismissible"><p><strong>Lỗi:</strong> Địa chỉ email không hợp lệ. Vui lòng kiểm tra lại.</p></div>
+        <?php elseif ( $status_msg === 'settings_saved' ) : ?>
+            <div class="notice notice-success is-dismissible"><p><strong>Đã lưu:</strong> Cài đặt thông báo email tự động đã được cập nhật thành công.</p></div>
+        <?php elseif ( $status_msg === 'test_sent' ) : ?>
+            <div class="notice notice-success is-dismissible"><p><strong>Gửi thử nghiệm thành công:</strong> Email thông báo mẫu đã được gửi tới <code><?php echo esc_html( $_GET['target'] ?? '' ); ?></code>.</p></div>
+        <?php elseif ( $status_msg === 'broadcast_sent' ) : ?>
+            <div class="notice notice-success is-dismissible"><p><strong>Phát email thành công:</strong> Đã gửi email thông báo tới <strong><?php echo intval( $_GET['count'] ?? 0 ); ?></strong> subscribers!</p></div>
+        <?php elseif ( $status_msg === 'mail_error' ) : ?>
+            <div class="notice notice-error is-dismissible"><p><strong>Lưu ý về gửi mail:</strong> Thao tác gửi mail được kích hoạt. Nếu chạy trên Docker local chưa cài SMTP, hãy cấu hình plugin SMTP (như WP Mail SMTP) để mail gửi ra ngoài internet.</p></div>
         <?php endif; ?>
 
         <!-- Thẻ Thống kê Tổng quan (KPI Cards) -->
@@ -327,13 +606,79 @@ function nhomc_render_subscribers_admin_page() {
             </div>
 
             <div class="nc-stat-card">
-                <div class="nc-stat-icon" style="background: #ebf5ff; color: #3b82f6;">
-                    <span class="dashicons dashicons-plugins-checked"></span>
+                <div class="nc-stat-icon" style="background: <?php echo $auto_notify_enabled ? '#ecfdf5' : '#fef2f2'; ?>; color: <?php echo $auto_notify_enabled ? '#059669' : '#dc2626'; ?>;">
+                    <span class="dashicons dashicons-megaphone"></span>
                 </div>
                 <div class="nc-stat-info">
-                    <span class="nc-stat-number">Hoạt Động</span>
-                    <span class="nc-stat-label">Tích Hợp: Footer &amp; Contact Form 7</span>
+                    <span class="nc-stat-number"><?php echo $auto_notify_enabled ? 'ĐANG BẬT' : 'ĐANG TẮT'; ?></span>
+                    <span class="nc-stat-label">Tự Động Gửi Khi Có Bài Mới</span>
                 </div>
+            </div>
+        </div>
+
+        <!-- Khối Quản Lý Gửi Email Thông Báo Bài Mới (Broadcast & Test) -->
+        <div class="nc-broadcast-box">
+            <div class="nc-broadcast-header">
+                <h3>
+                    <span class="dashicons dashicons-email-alt2" style="color: #ea751e; margin-right: 6px;"></span>
+                    Trung Tâm Gửi Email Thông Báo Bài Viết / Việc Làm Mới
+                </h3>
+                <form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=nhomc-subscribers' ) ); ?>" class="nc-toggle-form">
+                    <?php wp_nonce_field( 'nhomc_save_settings_nonce' ); ?>
+                    <input type="hidden" name="nhomc_action" value="save_settings">
+                    <label class="nc-toggle-label">
+                        <input type="checkbox" name="auto_notify" value="yes" <?php checked( $auto_notify_enabled, true ); ?> onchange="this.form.submit()">
+                        <span><strong>Tự động gửi email</strong> ngay khi xuất bản bài viết hoặc việc làm mới</span>
+                    </label>
+                </form>
+            </div>
+
+            <div class="nc-broadcast-body">
+                <form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=nhomc-subscribers' ) ); ?>" class="nc-send-form">
+                    <?php wp_nonce_field( 'nhomc_send_email_nonce' ); ?>
+
+                    <div class="nc-form-row">
+                        <label for="selected_post_id"><strong>Chọn bài viết hoặc việc làm để gửi:</strong></label>
+                        <select name="selected_post_id" id="selected_post_id" style="min-width: 380px; max-width: 100%;">
+                            <?php if ( ! empty( $latest_posts ) ) : ?>
+                                <?php foreach ( $latest_posts as $lp ) : 
+                                    $is_job = ( $lp->post_type === 'job_listing' );
+                                    $prefix = $is_job ? '[VIỆC LÀM]' : '[TIN TỨC]';
+                                    ?>
+                                    <option value="<?php echo esc_attr( $lp->ID ); ?>">
+                                        <?php echo esc_html( $prefix . ' ' . $lp->post_title ); ?> (<?php echo get_the_date( 'd/m/Y', $lp->ID ); ?>)
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <option value="">Chưa có bài viết hoặc việc làm nào được xuất bản</option>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+
+                    <div class="nc-form-row nc-actions-row">
+                        <!-- Nhánh 1: Gửi thử nghiệm -->
+                        <div class="nc-test-action">
+                            <input type="email" name="test_email" placeholder="Email nhận thử nghiệm..." value="<?php echo esc_attr( wp_get_current_user()->user_email ); ?>" style="width: 240px;">
+                            <button type="submit" name="nhomc_action" value="send_test_email" class="button button-secondary">
+                                <span class="dashicons dashicons-admin-tools" style="vertical-align: middle;"></span> Gửi Thử Nghiệm
+                            </button>
+                        </div>
+
+                        <!-- Nhánh 2: Gửi cho toàn bộ Subscribers -->
+                        <div class="nc-broadcast-action">
+                            <button type="submit" name="nhomc_action" value="broadcast_email" class="button button-primary nc-btn-broadcast" onclick="return confirm('Bạn có chắc chắn muốn gửi email thông báo bài viết này tới TẤT CẢ <?php echo $count_total; ?> subscribers không?');">
+                                <span class="dashicons dashicons-megaphone" style="vertical-align: middle;"></span> GỬI CHO TẤT CẢ SUBSCRIBERS (<?php echo $count_total; ?>)
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <?php if ( ! empty( $last_broadcast['time'] ) ) : ?>
+                    <div class="nc-last-log">
+                        <span class="dashicons dashicons-clock" style="font-size: 16px; width: 16px; height: 16px; vertical-align: text-bottom; margin-right: 4px;"></span>
+                        <strong>Lần phát gần nhất:</strong> Bài <em>"<?php echo esc_html( $last_broadcast['post_title'] ?? '' ); ?>"</em> vào lúc <strong><?php echo esc_html( $last_broadcast['time'] ); ?></strong> (Đã gửi tới <?php echo intval( $last_broadcast['count'] ?? 0 ); ?> / <?php echo intval( $last_broadcast['total'] ?? 0 ); ?> subscribers).
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -473,6 +818,20 @@ function nhomc_render_subscribers_admin_page() {
         .nc-stat-info { display: flex; flex-direction: column; }
         .nc-stat-number { font-size: 24px; font-weight: 800; color: #0f172a; line-height: 1.2; }
         .nc-stat-label { font-size: 12.5px; color: #64748b; font-weight: 600; margin-top: 3px; }
+
+        /* Broadcast box */
+        .nc-broadcast-box { background: #ffffff; border: 1.5px solid #ea751e; border-radius: 8px; padding: 20px 24px; margin-bottom: 22px; box-shadow: 0 2px 8px rgba(234, 117, 30, 0.08); }
+        .nc-broadcast-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid #f1f5f9; padding-bottom: 14px; margin-bottom: 16px; }
+        .nc-broadcast-header h3 { margin: 0; font-size: 16px; font-weight: 700; color: #0f172a; display: flex; align-items: center; }
+        .nc-toggle-label { display: flex; align-items: center; gap: 8px; font-size: 13.5px; cursor: pointer; color: #334155; }
+        .nc-send-form { display: flex; flex-direction: column; gap: 14px; }
+        .nc-form-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .nc-actions-row { justify-content: space-between; margin-top: 6px; padding-top: 12px; border-top: 1px dashed #e2e8f0; }
+        .nc-test-action { display: flex; align-items: center; gap: 8px; }
+        .nc-btn-broadcast { background: #ea751e !important; border-color: #d46312 !important; color: #ffffff !important; font-weight: 700 !important; padding: 4px 18px !important; }
+        .nc-btn-broadcast:hover { background: #d46312 !important; }
+        .nc-last-log { margin-top: 14px; padding: 8px 12px; background: #f8fafc; border-radius: 6px; font-size: 12.5px; color: #475569; border-left: 3px solid #10b981; }
+
         .nc-action-bar { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
         .nc-quick-add-form { display: flex; align-items: center; gap: 8px; }
         .nc-bar-right { display: flex; align-items: center; gap: 12px; }
