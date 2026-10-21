@@ -140,7 +140,21 @@ add_action( 'wpcf7_mail_sent', function( $contact_form ) {
     }
 } );
 
-// 5. Cấu hình định dạng Email gửi đi mang thương hiệu Nhóm C
+// 5. Cấu hình gửi mail qua máy chủ Gmail SMTP (Tài khoản Google chính chủ)
+add_action( 'phpmailer_init', function( $phpmailer ) {
+    $phpmailer->isSMTP();
+    $phpmailer->Host       = 'smtp.gmail.com';
+    $phpmailer->SMTPAuth   = true;
+    $phpmailer->Port       = 587;
+    $phpmailer->SMTPSecure = 'tls';
+    $phpmailer->Username   = 'dienmaysieupro@gmail.com';
+    $phpmailer->Password   = 'ndvdifabmdniqchx';
+    $phpmailer->From       = 'dienmaysieupro@gmail.com';
+    $phpmailer->FromName   = 'JobScout - Nhóm C (FIT - TDC)';
+} );
+add_filter( 'wp_mail_from', function( $email ) {
+    return 'dienmaysieupro@gmail.com';
+} );
 add_filter( 'wp_mail_from_name', function( $name ) {
     return 'JobScout - Nhóm C (FIT - TDC)';
 } );
