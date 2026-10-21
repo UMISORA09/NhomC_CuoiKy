@@ -497,6 +497,16 @@ add_action( 'admin_init', function () {
         wp_safe_redirect( add_query_arg( array( 'page' => 'nhomc-subscribers', 'status' => 'broadcast_sent', 'count' => $count ), admin_url( 'admin.php' ) ) );
         exit;
     }
+
+    // 9.7. Xem trước giao diện Email HTML (Preview)
+    if ( isset( $_GET['action'] ) && $_GET['action'] === 'preview_email' && isset( $_GET['post_id'] ) ) {
+        $preview_post_id = intval( $_GET['post_id'] );
+        $post = get_post( $preview_post_id );
+        if ( $post ) {
+            echo nhomc_build_newsletter_email_html( $post );
+            exit;
+        }
+    }
 } );
 
 // 10. Giao diện Trang Quản trị Subscribers Hoàn Chỉnh
@@ -656,11 +666,14 @@ function nhomc_render_subscribers_admin_page() {
                     </div>
 
                     <div class="nc-form-row nc-actions-row">
-                        <!-- Nhánh 1: Gửi thử nghiệm -->
+                        <!-- Nhánh 1: Gửi thử nghiệm & Xem trước -->
                         <div class="nc-test-action">
-                            <input type="email" name="test_email" placeholder="Email nhận thử nghiệm..." value="<?php echo esc_attr( wp_get_current_user()->user_email ); ?>" style="width: 240px;">
+                            <input type="email" name="test_email" placeholder="Email nhận thử nghiệm..." value="<?php echo esc_attr( wp_get_current_user()->user_email ); ?>" style="width: 220px;">
                             <button type="submit" name="nhomc_action" value="send_test_email" class="button button-secondary">
                                 <span class="dashicons dashicons-admin-tools" style="vertical-align: middle;"></span> Gửi Thử Nghiệm
+                            </button>
+                            <button type="button" class="button button-secondary" onclick="ncPreviewEmail()" title="Mở tab mới xem trước giao diện bức thư mẫu gửi cho ứng viên">
+                                <span class="dashicons dashicons-visibility" style="vertical-align: middle;"></span> Xem Trước Thư Mẫu
                             </button>
                         </div>
 
@@ -672,6 +685,18 @@ function nhomc_render_subscribers_admin_page() {
                         </div>
                     </div>
                 </form>
+
+                <script>
+                function ncPreviewEmail() {
+                    var sel = document.getElementById('selected_post_id');
+                    if (!sel || !sel.value) {
+                        alert('Vui lòng chọn một bài viết hoặc việc làm để xem trước!');
+                        return;
+                    }
+                    var previewUrl = '<?php echo esc_url( admin_url( 'admin.php?page=nhomc-subscribers&action=preview_email' ) ); ?>&post_id=' + sel.value;
+                    window.open(previewUrl, '_blank');
+                }
+                </script>
 
                 <?php if ( ! empty( $last_broadcast['time'] ) ) : ?>
                     <div class="nc-last-log">
