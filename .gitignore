@@ -25,6 +25,7 @@ backups/
 # Environment & Logs
 .env
 *.log
+fullpage_project_development_detail.png
 
 # Operating System
 .DS_Store
