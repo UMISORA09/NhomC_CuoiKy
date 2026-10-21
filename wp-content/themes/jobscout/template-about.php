@@ -60,21 +60,8 @@ $theme_uri = get_template_directory_uri();
         </div>
     </section>
 </main>
-<?php get_template_part( 'template-parts/nhomc-newsletter' ); ?>
-<footer class="ab-footer">
-    <?php get_template_part( 'template-parts/nhomc-brand', null, array( 'footer' => true ) ); ?>
-    <nav aria-label="Footer navigation">
-        <ul class="ab-nav">
-            <li><a href="<?php echo esc_url( home_url( '/jobs/' ) ); ?>">JOBS</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/companies/' ) ); ?>">COMPANIES</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">BLOG</a></li>
-            <li><a href="<?php echo esc_url( get_permalink() ); ?>" aria-current="page">ABOUT</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">CONTACT</a></li>
-        </ul>
-    </nav>
-    <?php get_template_part( 'template-parts/nhomc-social' ); ?>
-</footer>
-<div class="ab-copyright">Copyright &copy; <?php echo esc_html( wp_date( 'Y' ) ); ?> Nhom C - FIT TDC. All Rights Reserved.</div>
+<!-- UNIFIED NHOM C FOOTER -->
+<?php get_template_part( 'template-parts/nhomc-footer' ); ?>
 <?php wp_footer(); ?>
 </body>
 </html>

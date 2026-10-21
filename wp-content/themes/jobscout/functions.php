@@ -100,10 +100,17 @@ function jobscout_nhomc_header() {
 remove_action( 'jobscout_before_header', 'jobscout_responsive_header', 15 );
 remove_action( 'jobscout_header', 'jobscout_header', 20 );
 add_action( 'jobscout_header', 'jobscout_nhomc_header', 20 );
+
+remove_action( 'jobscout_footer', 'jobscout_footer_start', 20 );
+remove_action( 'jobscout_footer', 'jobscout_footer_top', 30 );
+remove_action( 'jobscout_footer', 'jobscout_footer_bottom', 40 );
+remove_action( 'jobscout_footer', 'jobscout_footer_end', 50 );
+
 add_action( 'wp_enqueue_scripts', function () {
     wp_enqueue_style( 'nhomc-header-font', 'https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap', array(), null );
     wp_enqueue_style( 'nhomc-header', get_template_directory_uri() . '/css/nhomc-header.css', array(), filemtime( get_template_directory() . '/css/nhomc-header.css' ) );
     wp_enqueue_style( 'nhomc-newsletter', get_template_directory_uri() . '/css/nhomc-newsletter.css', array(), filemtime( get_template_directory() . '/css/nhomc-newsletter.css' ) );
+    wp_enqueue_style( 'nhomc-footer', get_template_directory_uri() . '/css/nhomc-footer.css', array(), filemtime( get_template_directory() . '/css/nhomc-footer.css' ) );
 } );
 
 /**

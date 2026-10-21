@@ -1269,26 +1269,8 @@ $career_bg = $img_home_dir . '/career-bg.jpg?v=' . $cache_bust;
     </div>
 </section>
 
-<!-- 6. SUBSCRIBE TO OUR NEWSLETTER -->
-<?php get_template_part( 'template-parts/nhomc-newsletter' ); ?>
-
-<!-- 7. FOOTER -->
-<footer class="hm-footer">
-    <div class="hm-container">
-        <?php get_template_part( 'template-parts/nhomc-brand', null, array( 'footer' => true ) ); ?>
-        <ul class="hm-footer-nav">
-            <li><a href="<?php echo esc_url( home_url( '/jobs/' ) ); ?>">JOBS</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/companies/' ) ); ?>">COMPANIES</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">BLOG</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>">ABOUT</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">CONTACT</a></li>
-        </ul>
-        <?php get_template_part( 'template-parts/nhomc-social' ); ?>
-    </div>
-    <div class="hm-footer-copyright-bar">
-        &copy; <?php echo date( 'Y' ); ?> Nhóm C (FIT - TDC) - JobScout. All Rights Reserved.
-    </div>
-</footer>
+<!-- 6 & 7. UNIFIED NHOM C FOOTER -->
+<?php get_template_part( 'template-parts/nhomc-footer' ); ?>
 
 <?php wp_footer(); ?>
 </body>

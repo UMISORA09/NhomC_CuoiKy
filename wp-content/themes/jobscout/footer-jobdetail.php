@@ -6,35 +6,8 @@
  */
 ?>
 
-<!-- Newsletter Subscription Section -->
-<?php get_template_part( 'template-parts/nhomc-newsletter' ); ?>
-
-<!-- Footer Main Area -->
-<footer class="nhomc-site-footer">
-    <div class="nhomc-container">
-        <!-- Brand Logo -->
-        <?php get_template_part( 'template-parts/nhomc-brand', null, array( 'footer' => true ) ); ?>
-
-        <!-- Footer Navigation Links -->
-        <nav class="nhomc-footer-nav" aria-label="Footer Menu">
-            <a href="<?php echo esc_url( home_url( '/all-jobs/' ) ); ?>">JOBS</a>
-            <a href="<?php echo esc_url( home_url( '/all-jobs/' ) ); ?>">COMPANIES</a>
-            <a href="<?php echo esc_url( home_url( '/news/' ) ); ?>">BLOG</a>
-            <a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>">ABOUT</a>
-            <a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">CONTACT</a>
-        </nav>
-
-        <!-- Social Media Buttons -->
-        <?php get_template_part( 'template-parts/nhomc-social' ); ?>
-    </div>
-
-    <!-- Sub Footer Bottom Bar -->
-    <div class="nhomc-sub-footer">
-        <div class="nhomc-container">
-            <p>© 2026 Nhom C - FIT TDC. All Rights Reserved. Hệ Thống Tuyển Dụng JobScout</p>
-        </div>
-    </div>
-</footer>
+<!-- Unified Nhom C Footer (Pixel-perfect) -->
+<?php get_template_part( 'template-parts/nhomc-footer' ); ?>
 
 <!-- Application Modal -->
 <div id="nhomc-apply-modal" class="nhomc-modal-overlay">

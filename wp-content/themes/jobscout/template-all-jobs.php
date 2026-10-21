@@ -1079,33 +1079,8 @@ if ($jobs_query->have_posts()) {
     </div>
 </main>
 
-<!-- 6. NEWSLETTER BANNER -->
-<?php get_template_part( 'template-parts/nhomc-newsletter' ); ?>
-
-<!-- 7. FOOTER -->
-<footer class="aj-footer">
-    <div class="aj-footer-inner">
-        <!-- Logo NhomC Chân trang -->
-        <?php get_template_part( 'template-parts/nhomc-brand', null, array( 'footer' => true ) ); ?>
-
-        <!-- Menu Footer -->
-        <ul class="aj-footer-nav">
-            <li><a href="<?php echo esc_url($site_url); ?>/jobs/">JOBS</a></li>
-            <li><a href="<?php echo esc_url($site_url); ?>/company/plan-do-see-global-pds/">COMPANIES</a></li>
-            <li><a href="<?php echo esc_url($site_url); ?>/blog/">BLOG</a></li>
-            <li><a href="<?php echo esc_url($site_url); ?>/about-us/">ABOUT</a></li>
-            <li><a href="<?php echo esc_url($site_url); ?>/contact-us/">CONTACT</a></li>
-        </ul>
-
-        <!-- 4 Icon Mạng Xã Hội Tròn -->
-        <?php get_template_part( 'template-parts/nhomc-social' ); ?>
-    </div>
-</footer>
-
-<!-- 8. COPYRIGHT BOTTOM BAR -->
-<div class="aj-copyright-bar">
-    &copy; 2026 Nhom C - FIT TDC. All Rights Reserved. JobScout CMS Platform.
-</div>
+<!-- 6, 7 & 8. UNIFIED NHOM C FOOTER -->
+<?php get_template_part( 'template-parts/nhomc-footer' ); ?>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

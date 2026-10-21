@@ -1138,35 +1138,9 @@ foreach ($recent_news as $r_item) {
     </div>
 </section>
 
-<!-- 6. SUBSCRIBE TO OUR NEWSLETTER -->
-<?php get_template_part( 'template-parts/nhomc-newsletter' ); ?>
+<!-- 6, 7 & 8. UNIFIED NHOM C FOOTER -->
+<?php get_template_part( 'template-parts/nhomc-footer' ); ?>
 
-<!-- 7. FOOTER NHOM C -->
-<footer class="nd-footer">
-    <div class="nd-footer-inner">
-        
-        <!-- Logo NhomC Chân trang -->
-        <?php get_template_part( 'template-parts/nhomc-brand', null, array( 'footer' => true ) ); ?>
-
-        <!-- Navigation Links Footer -->
-        <ul class="nd-footer-nav">
-            <li><a href="<?php echo esc_url($site_url); ?>/jobs/">JOBS</a></li>
-            <li><a href="<?php echo esc_url($site_url); ?>/companies/">COMPANIES</a></li>
-            <li><a href="<?php echo esc_url($site_url); ?>/news/">BLOG</a></li>
-            <li><a href="<?php echo esc_url($site_url); ?>/about-us/">ABOUT</a></li>
-            <li><a href="<?php echo esc_url($site_url); ?>/contact-us/">CONTACT</a></li>
-        </ul>
-
-        <!-- 4 Icon Mạng Xã Hội Tròn -->
-        <?php get_template_part( 'template-parts/nhomc-social' ); ?>
-
-    </div>
-</footer>
-
-<!-- 8. BOTTOM COPYRIGHT BAR -->
-<div class="nd-copyright-bar">
-    Copyright &copy; 2026 Nhom C - FIT TDC. All Rights Reserved.
-</div>
 
 <!-- Toast thông báo -->
 <div class="nd-toast" id="ndToast">Đã sao chép liên kết bài viết!</div>

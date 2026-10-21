@@ -731,35 +731,9 @@ $banner_img = $theme_uri . '/images/contact/contact-hero-banner.jpg';
     </div>
 </section>
 
-<!-- 5. SECTION 3: SUBSCRIBE TO OUR NEWSLETTER -->
-<?php get_template_part( 'template-parts/nhomc-newsletter' ); ?>
+<!-- 5, 6 & 7. UNIFIED NHOM C FOOTER -->
+<?php get_template_part( 'template-parts/nhomc-footer' ); ?>
 
-<!-- 6. SECTION 4: FOOTER NHOM C -->
-<footer class="cu-footer">
-    <div class="cu-footer-inner">
-        
-        <!-- Logo NhomC Chân trang -->
-        <?php get_template_part( 'template-parts/nhomc-brand', null, array( 'footer' => true ) ); ?>
-
-        <!-- Navigation Links Footer -->
-        <ul class="cu-footer-nav">
-            <li><a href="<?php echo esc_url($site_url); ?>/jobs/">JOBS</a></li>
-            <li><a href="<?php echo esc_url($site_url); ?>/companies/">COMPANIES</a></li>
-            <li><a href="<?php echo esc_url($site_url); ?>/blog/">BLOG</a></li>
-            <li><a href="<?php echo esc_url($site_url); ?>/about-us/">ABOUT</a></li>
-            <li><a href="<?php echo esc_url($site_url); ?>/contact/">CONTACT</a></li>
-        </ul>
-
-        <!-- 4 Icon Mạng Xã Hội Tròn -->
-        <?php get_template_part( 'template-parts/nhomc-social' ); ?>
-
-    </div>
-</footer>
-
-<!-- 7. BOTTOM COPYRIGHT BAR -->
-<div class="cu-copyright-bar">
-    Copyright &copy; 2026 Nhom C - FIT TDC. All Rights Reserved.
-</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
