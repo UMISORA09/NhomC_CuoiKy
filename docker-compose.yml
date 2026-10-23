@@ -16,7 +16,7 @@ services:
       - wp_network
 
   wordpress:
-    image: wordpress:php8.2-apache
+    image: wordpress:php8.3-apache
     container_name: wordpress_app
     restart: always
     depends_on:
