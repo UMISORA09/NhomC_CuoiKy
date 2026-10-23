@@ -1,0 +1,50 @@
+@use "~@wordpress/base-styles/variables" as variables;
+@use "~@wordpress/base-styles/colors" as colors;
+
+@use "./components/editor-preview/style" as editorPreview;
+@use "./components/item-help/style" as itemHelp;
+
+.chbe-admin-editor-config {
+	flex-direction: row-reverse;
+
+	.components-select-control {
+		min-width: 200px;
+	}
+
+	.components-range-control {
+		width: 100%;
+		max-width: 300px;
+	}
+
+	.components-toggle-control {
+		max-width: 300px;
+	}
+
+	.chbe-admin-editor-config__settings {
+		flex: 1;
+	}
+
+	.chbe-admin-editor-config__basic-settings {
+		padding: variables.$grid-unit-30;
+		background: colors.$white;
+		border-radius: variables.$radius-large;
+	}
+
+	.chbe-admin-editor-config__advanced-settings.is-searching {
+
+		.chbe-admin-editor-config__panel:not(:has(.chbe-admin-editor-config__setting-item)) {
+			display: none;
+		}
+	}
+
+	.chbe-admin-editor-config__preview {
+		position: sticky;
+		top: variables.$grid-unit-50;
+		width: 50%;
+
+		@media screen and (max-width: 782px) {
+			position: static;
+			width: 100%;
+		}
+	}
+}

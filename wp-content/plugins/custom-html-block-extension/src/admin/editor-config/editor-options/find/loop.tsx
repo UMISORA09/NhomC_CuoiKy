@@ -1,0 +1,59 @@
+/**
+ * WordPress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+import { useContext } from '@wordpress/element';
+import { ToggleControl } from '@wordpress/components';
+import { Stack } from '@wordpress/ui';
+
+/**
+ * Internal dependencies
+ */
+import { AdminContext } from '../../../index';
+import { useSearchVisibility } from '../../index';
+import ItemHelp from '../../components/item-help';
+
+export default function FindLoop() {
+	const { editorOptions, setEditorOptions } = useContext( AdminContext );
+
+	const title = __( 'Loop', 'custom-html-block-extension' );
+	const isVisible = useSearchVisibility( title );
+
+	if ( ! isVisible ) {
+		return null;
+	}
+
+	const onChange = ( value: boolean ) => {
+		setEditorOptions( {
+			...editorOptions,
+			find: {
+				...editorOptions.find,
+				loop: value,
+			},
+		} );
+	};
+
+	return (
+		<Stack
+			className="chbe-admin-editor-config__setting-item"
+			justify="start"
+			align="start"
+			wrap="wrap"
+			gap="sm"
+		>
+			<ToggleControl label={ title } checked={ editorOptions.find.loop } onChange={ onChange } />
+			<ItemHelp
+				onChange={ onChange }
+				title={ title }
+				description={ __(
+					'Automatically restart the search from the beginning (or end) when no more matches are found.',
+					'custom-html-block-extension'
+				) }
+				isToggle
+				defaultToggle
+				image="editor-options/find/loop.gif"
+				value={ editorOptions.find.loop }
+			/>
+		</Stack>
+	);
+}

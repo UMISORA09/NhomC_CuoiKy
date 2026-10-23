@@ -1,0 +1,72 @@
+// WordPress base styles
+@use "~@wordpress/base-styles/mixins" as mixins;
+@use "~@wordpress/base-styles/variables" as variables;
+@use "~@wordpress/base-styles/colors" as colors;
+
+// Components
+@use "./components/snackbars/style" as snackbars;
+@use "./components/header/style" as header;
+@use "./components/keyboard-shortcuts-modal/style" as keyboardShortcutsModal;
+@use "./components/welcome-guide-modal/style" as welcomeGuideModal;
+
+// Monaco Editor common styles
+@use "../components/monaco-editor/style" as monacoEditor;
+
+@use "./editor-config/style" as editorConfig;
+
+@include mixins.wordpress-admin-schemes();
+
+// WordPress admin
+.settings_page_custom-html-block-extension #wpcontent {
+	padding-left: 0;
+}
+
+#custom-html-block-extension-admin {
+
+	// Container class
+	.chbe-admin-container {
+		position: relative;
+		max-width: 1200px;
+		padding: 0 variables.$grid-unit-20 + variables.$grid-unit-05;
+		margin: 0 auto;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	// Non-interactive (inert) settings
+	[inert] {
+		opacity: 0.3;
+	}
+}
+
+.chbe-admin {
+	position: relative;
+
+	&.is-waiting {
+		opacity: 0.3;
+	}
+
+	.chbe-admin__loading {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		z-index: 1;
+		margin-left: 89px;
+
+		.components-spinner {
+			margin: 0;
+			transform: scale(1.5);
+		}
+	}
+
+	.chbe-admin__tab-list {
+		justify-content: center;
+		background: colors.$white;
+		box-shadow: 0 1px 0 rgba(213, 213, 213, 0.5);
+		width: 100%;
+
+		button {
+			flex: initial;
+		}
+	}
+}
