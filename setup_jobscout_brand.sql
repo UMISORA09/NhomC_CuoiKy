@@ -26,3 +26,11 @@ AND NOT EXISTS (
     SELECT 1 FROM wp_postmeta WHERE post_id = wp_posts.ID AND meta_key = '_wp_page_template'
 );
 
+-- Cau hinh trang Submit Job (VinhEm/submitjob) - Nhom C
+UPDATE wp_options SET option_value = '0' WHERE option_name = 'job_manager_user_requires_account';
+UPDATE wp_options SET option_value = '1' WHERE option_name = 'job_manager_enable_categories';
+UPDATE wp_options SET option_value = '1' WHERE option_name = 'job_manager_enable_salary';
+UPDATE wp_options SET option_value = '0' WHERE option_name = 'job_manager_submission_requires_approval';
+UPDATE wp_posts SET post_name = 'post-a-job' WHERE ID = 982;
+
+

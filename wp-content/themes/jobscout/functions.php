@@ -152,6 +152,27 @@ add_filter( 'template_include', function( $template ) {
         }
     }
 
+    // Điều hướng trang Đăng việc (Submit Job / Post a Job) sang template-submit-job.php chuẩn Nhóm C
+    $is_submit_job = false;
+    if ( is_page( array( 'post-a-job', 'post-a-job-2', 'submitjob', 'submit-job' ) ) ) {
+        $is_submit_job = true;
+    } elseif ( preg_match( '#(^|/)(post-a-job|post-a-job-2|submitjob|submit-job)(/|$)#i', $uri_path ) ) {
+        $is_submit_job = true;
+    }
+
+    if ( $is_submit_job ) {
+        global $wp_query;
+        if ( is_object( $wp_query ) ) {
+            $wp_query->is_404  = false;
+            $wp_query->is_page = true;
+        }
+        status_header( 200 );
+        $submit_template = get_template_directory() . '/template-submit-job.php';
+        if ( file_exists( $submit_template ) ) {
+            return $submit_template;
+        }
+    }
+
     return $template;
 }, 99 );
 
