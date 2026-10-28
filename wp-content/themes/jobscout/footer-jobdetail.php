@@ -15,19 +15,77 @@
         <button class="nhomc-modal-close" onclick="nhomcCloseModal('nhomc-apply-modal')">&times;</button>
         <h3 class="nhomc-modal-title">Ứng Tuyển Vị Trí: <?php echo esc_html( get_the_title() ); ?></h3>
         <form class="nhomc-modal-form" onsubmit="event.preventDefault(); nhomcSubmitApplication(this);">
-            <label>Họ và Tên (*)</label>
-            <input type="text" placeholder="Nguyễn Văn A" required>
+            <input type="hidden" name="job_id" value="<?php echo esc_attr( get_the_ID() ); ?>">
+            <input type="hidden" name="apply_nonce" value="<?php echo esc_attr( wp_create_nonce( 'nhomc_apply_action' ) ); ?>">
+
+            <div class="nhomc-form-group">
+                <label>Họ và Tên <span class="nhomc-required">*</span></label>
+                <input type="text" name="applicant_name" placeholder="Nguyễn Văn A" required minlength="2" maxlength="70" autocomplete="name">
+                <div class="nhomc-field-hint">Từ 2 đến 70 ký tự (chỉ dùng chữ cái)</div>
+            </div>
             
-            <label>Email Liên Hệ (*)</label>
-            <input type="email" placeholder="ungvien@example.com" required>
+            <div class="nhomc-form-group">
+                <label>Email Liên Hệ <span class="nhomc-required">*</span></label>
+                <input type="email" name="applicant_email" placeholder="ungvien@example.com" required maxlength="100" autocomplete="email">
+            </div>
 
-            <label>Số Điện Thoại (*)</label>
-            <input type="tel" placeholder="0912 345 678" required>
+            <div class="nhomc-form-group">
+                <label>Số Điện Thoại <span class="nhomc-required">*</span></label>
+                <input type="tel" name="applicant_phone" placeholder="0912 345 678" required minlength="9" maxlength="15" autocomplete="tel">
+                <div class="nhomc-field-hint">Định dạng 9 - 11 chữ số (ví dụ: 0912345678)</div>
+            </div>
 
-            <label>Giới Thiệu Bản Thân / Link CV (*)</label>
-            <textarea rows="3" placeholder="Đính kèm link CV Google Drive hoặc giới thiệu kỹ năng nổi bật..." required></textarea>
+            <div class="nhomc-form-group">
+                <label>Đính Kèm CV / Hồ Sơ Ứng Tuyển (PDF, tối đa 5MB) <span class="nhomc-required">*</span></label>
+                <div class="nhomc-file-upload-wrapper">
+                    <input type="file" id="nhomc-cv-file" name="applicant_cv" accept=".pdf,application/pdf" style="display: none;" onchange="nhomcHandleFileSelect(this);">
+                    
+                    <div id="nhomc-upload-dropzone" class="nhomc-upload-dropzone" onclick="document.getElementById('nhomc-cv-file').click();">
+                        <div class="nhomc-upload-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
+                        <div class="nhomc-upload-text">
+                            <strong>Chọn tệp PDF</strong> hoặc kéo thả vào đây
+                        </div>
+                        <div class="nhomc-upload-hint">Chỉ nhận file .pdf (Tối đa 5MB)</div>
+                    </div>
 
-            <button type="submit">XÁC NHẬN NỘP HỒ SƠ</button>
+                    <div id="nhomc-file-preview-card" class="nhomc-file-preview-card" style="display: none;">
+                        <div class="nhomc-file-preview-info">
+                            <div class="nhomc-file-pdf-icon">
+                                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                                    <rect width="24" height="24" rx="4" fill="#fee2e2"/>
+                                    <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5z" stroke="#dc2626" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <polyline points="14 3 14 8 19 8" stroke="#dc2626" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <text x="6.5" y="16.5" fill="#dc2626" font-size="6" font-weight="800" font-family="sans-serif">PDF</text>
+                                </svg>
+                            </div>
+                            <div class="nhomc-file-details">
+                                <span id="nhomc-file-name" class="nhomc-file-name">cv-ung-vien.pdf</span>
+                                <span id="nhomc-file-size" class="nhomc-file-size">1.5 MB</span>
+                            </div>
+                        </div>
+                        <button type="button" class="nhomc-file-remove-btn" onclick="nhomcRemoveFile()" title="Xóa file đã chọn">&times;</button>
+                    </div>
+
+                    <div id="nhomc-file-error" class="nhomc-file-error-msg" style="display: none;"></div>
+                </div>
+            </div>
+
+            <div class="nhomc-form-group">
+                <label>Giới Thiệu Bản Thân / Lời Nhắn (Không bắt buộc)</label>
+                <textarea name="applicant_notes" id="nhomc-notes-input" rows="2" maxlength="500" placeholder="Ghi chú thêm hoặc tóm tắt kinh nghiệm nổi bật... (Tối đa 500 ký tự)" oninput="nhomcUpdateNotesCount(this)"></textarea>
+                <div class="nhomc-char-counter-row">
+                    <span class="nhomc-field-hint">Ngắn gọn, súc tích</span>
+                    <span class="nhomc-char-counter"><span id="nhomc-char-count">0</span>/500 ký tự</span>
+                </div>
+            </div>
+
+            <button type="submit" id="nhomc-btn-submit-app">XÁC NHẬN NỘP HỒ SƠ</button>
         </form>
     </div>
 </div>
@@ -51,22 +109,313 @@ function nhomcShowToast(msg) {
     toast.style.display = 'block';
     setTimeout(function() {
         toast.style.display = 'none';
-    }, 3000);
+    }, 3500);
 }
-function nhomcShareJob() {
+function nhomcShareJob(btn) {
     var url = window.location.href;
-    if (navigator.clipboard) {
+    var shareBtn = btn || document.querySelector('.nhomc-btn-share');
+
+    function onCopySuccess() {
+        if (shareBtn) {
+            var originalText = shareBtn.getAttribute('data-original-text') || shareBtn.innerText;
+            if (!shareBtn.getAttribute('data-original-text')) {
+                shareBtn.setAttribute('data-original-text', originalText);
+            }
+            shareBtn.innerText = 'COPIED! ✓';
+            shareBtn.classList.add('copied');
+            setTimeout(function() {
+                shareBtn.innerText = originalText;
+                shareBtn.classList.remove('copied');
+            }, 2000);
+        }
+        nhomcShowToast('Đã sao chép liên kết việc làm vào bộ nhớ tạm!');
+    }
+
+    // Ưu tiên navigator.clipboard nếu khả dụng
+    if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(url).then(function() {
-            nhomcShowToast('Đã sao chép liên kết việc làm vào bộ nhớ tạm!');
+            onCopySuccess();
+        }).catch(function() {
+            nhomcFallbackCopyText(url, onCopySuccess);
         });
     } else {
-        nhomcShowToast('Liên kết: ' + url);
+        nhomcFallbackCopyText(url, onCopySuccess);
     }
 }
+
+function nhomcFallbackCopyText(text, callback) {
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.top = "-9999px";
+    textArea.style.left = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+        var successful = document.execCommand('copy');
+        if (successful) {
+            callback();
+        } else {
+            prompt('Sao chép liên kết:', text);
+        }
+    } catch (err) {
+        prompt('Sao chép liên kết:', text);
+    }
+    document.body.removeChild(textArea);
+}
+
+function nhomcHandleFileSelect(input) {
+    var errorBox = document.getElementById('nhomc-file-error');
+    var previewCard = document.getElementById('nhomc-file-preview-card');
+    var dropzone = document.getElementById('nhomc-upload-dropzone');
+    var fileNameElem = document.getElementById('nhomc-file-name');
+    var fileSizeElem = document.getElementById('nhomc-file-size');
+
+    if (!errorBox || !previewCard || !dropzone) return;
+
+    errorBox.style.display = 'none';
+    errorBox.innerText = '';
+
+    if (!input.files || input.files.length === 0) {
+        previewCard.style.display = 'none';
+        dropzone.style.display = 'flex';
+        return;
+    }
+
+    var file = input.files[0];
+    var maxSizeBytes = 5 * 1024 * 1024; // Giới hạn 5MB
+
+    // Kiểm tra định dạng file PDF
+    var isPdf = file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf';
+    if (!isPdf) {
+        errorBox.innerText = 'Lỗi: Tệp không hợp lệ! Vui lòng chỉ chọn file định dạng PDF (.pdf).';
+        errorBox.style.display = 'block';
+        input.value = '';
+        previewCard.style.display = 'none';
+        dropzone.style.display = 'flex';
+        return;
+    }
+
+    // Kiểm tra dung lượng file <= 5MB
+    if (file.size > maxSizeBytes) {
+        var sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+        errorBox.innerText = 'Lỗi: Dung lượng file (' + sizeMB + ' MB) vượt quá giới hạn tối đa 5MB!';
+        errorBox.style.display = 'block';
+        input.value = '';
+        previewCard.style.display = 'none';
+        dropzone.style.display = 'flex';
+        return;
+    }
+
+    // File hợp lệ
+    fileNameElem.innerText = file.name;
+    var sizeText = file.size >= 1024 * 1024 
+        ? (file.size / (1024 * 1024)).toFixed(2) + ' MB'
+        : (file.size / 1024).toFixed(1) + ' KB';
+    fileSizeElem.innerText = sizeText;
+
+    dropzone.style.display = 'none';
+    previewCard.style.display = 'flex';
+}
+
+function nhomcRemoveFile() {
+    var input = document.getElementById('nhomc-cv-file');
+    var previewCard = document.getElementById('nhomc-file-preview-card');
+    var dropzone = document.getElementById('nhomc-upload-dropzone');
+    var errorBox = document.getElementById('nhomc-file-error');
+
+    if (input) input.value = '';
+    if (previewCard) previewCard.style.display = 'none';
+    if (dropzone) dropzone.style.display = 'flex';
+    if (errorBox) {
+        errorBox.innerText = '';
+        errorBox.style.display = 'none';
+    }
+}
+
+// Drag & drop support
+document.addEventListener('DOMContentLoaded', function() {
+    var dropzone = document.getElementById('nhomc-upload-dropzone');
+    if (!dropzone) return;
+
+    ['dragenter', 'dragover'].forEach(function(evt) {
+        dropzone.addEventListener(evt, function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropzone.classList.add('dragover');
+        });
+    });
+
+    ['dragleave', 'drop'].forEach(function(evt) {
+        dropzone.addEventListener(evt, function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropzone.classList.remove('dragover');
+        });
+    });
+
+    dropzone.addEventListener('drop', function(e) {
+        var dt = e.dataTransfer;
+        if (dt && dt.files && dt.files.length > 0) {
+            var fileInput = document.getElementById('nhomc-cv-file');
+            fileInput.files = dt.files;
+            nhomcHandleFileSelect(fileInput);
+        }
+    });
+});
+
+function nhomcUpdateNotesCount(elem) {
+    var countSpan = document.getElementById('nhomc-char-count');
+    if (!countSpan || !elem) return;
+    var len = elem.value ? elem.value.length : 0;
+    countSpan.innerText = len;
+    if (len >= 500) {
+        countSpan.style.color = '#ef4444';
+        countSpan.style.fontWeight = 'bold';
+    } else {
+        countSpan.style.color = '';
+        countSpan.style.fontWeight = '';
+    }
+}
+
 function nhomcSubmitApplication(form) {
-    nhomcCloseModal('nhomc-apply-modal');
-    nhomcShowToast('Nộp hồ sơ ứng tuyển thành công! Nhà tuyển dụng sẽ sớm liên hệ.');
-    form.reset();
+    var fileInput = document.getElementById('nhomc-cv-file');
+    var errorBox  = document.getElementById('nhomc-file-error');
+    var submitBtn = document.getElementById('nhomc-btn-submit-app');
+
+    if (errorBox) {
+        errorBox.style.display = 'none';
+        errorBox.innerText = '';
+    }
+
+    // 1. RÀNG BUỘC HỌ VÀ TÊN: Từ 2 đến 70 ký tự, chỉ chứa chữ cái
+    var name = (form.applicant_name ? form.applicant_name.value : '').trim();
+    if (name.length < 2 || name.length > 70) {
+        if (errorBox) {
+            errorBox.innerText = 'Lỗi: Họ và tên phải từ 2 đến 70 ký tự (bạn đã nhập ' + name.length + ' ký tự)!';
+            errorBox.style.display = 'block';
+        }
+        if (form.applicant_name) form.applicant_name.focus();
+        return;
+    }
+    // Regex hỗ trợ chữ cái tiếng Việt và khoảng trắng
+    var nameRegex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\.\-]+$/;
+    if (!nameRegex.test(name)) {
+        if (errorBox) {
+            errorBox.innerText = 'Lỗi: Họ và tên không được chứa số hoặc ký tự đặc biệt lạ!';
+            errorBox.style.display = 'block';
+        }
+        if (form.applicant_name) form.applicant_name.focus();
+        return;
+    }
+
+    // 2. RÀNG BUỘC EMAIL: Tối đa 100 ký tự và đúng cấu trúc email
+    var email = (form.applicant_email ? form.applicant_email.value : '').trim();
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email) || email.length > 100) {
+        if (errorBox) {
+            errorBox.innerText = 'Lỗi: Email không hợp lệ hoặc quá dài (tối đa 100 ký tự)!';
+            errorBox.style.display = 'block';
+        }
+        if (form.applicant_email) form.applicant_email.focus();
+        return;
+    }
+
+    // 3. RÀNG BUỘC SỐ ĐIỆN THOẠI: 9-11 chữ số
+    var phone = (form.applicant_phone ? form.applicant_phone.value : '').trim();
+    var cleanPhone = phone.replace(/[\s\-\.]/g, '');
+    var phoneRegex = /^(0|\+84)[0-9]{8,10}$/;
+    if (!cleanPhone || !phoneRegex.test(cleanPhone)) {
+        if (errorBox) {
+            errorBox.innerText = 'Lỗi: Số điện thoại không hợp lệ (Vui lòng nhập định dạng 9 - 11 chữ số, ví dụ: 0912345678)!';
+            errorBox.style.display = 'block';
+        }
+        if (form.applicant_phone) form.applicant_phone.focus();
+        return;
+    }
+
+    // 4. RÀNG BUỘC LỜI NHẮN: Tối đa 500 ký tự
+    var notes = (form.applicant_notes ? form.applicant_notes.value : '').trim();
+    if (notes.length > 500) {
+        if (errorBox) {
+            errorBox.innerText = 'Lỗi: Lời nhắn vượt quá giới hạn 500 ký tự (bạn đã nhập ' + notes.length + ' ký tự)!';
+            errorBox.style.display = 'block';
+        }
+        if (form.applicant_notes) form.applicant_notes.focus();
+        return;
+    }
+
+    // 5. RÀNG BUỘC TỆP CV: Bắt buộc chọn file PDF <= 5MB
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+        if (errorBox) {
+            errorBox.innerText = 'Vui lòng đính kèm file CV của bạn (định dạng PDF, tối đa 5MB)!';
+            errorBox.style.display = 'block';
+        }
+        return;
+    }
+
+    var file = fileInput.files[0];
+    if (file.size > 5 * 1024 * 1024) {
+        if (errorBox) {
+            errorBox.innerText = 'Dung lượng file vượt quá giới hạn 5MB!';
+            errorBox.style.display = 'block';
+        }
+        return;
+    }
+
+    var formData = new FormData(form);
+    formData.append('action', 'nhomc_submit_application');
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.setAttribute('data-orig-text', submitBtn.innerText);
+        submitBtn.innerText = 'ĐANG TẢI LÊN & NỘP HỒ SƠ...';
+    }
+
+    var ajaxUrl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
+
+    fetch(ajaxUrl, {
+        method: 'POST',
+        body: formData
+    })
+    .then(function(res) {
+        return res.json();
+    })
+    .then(function(data) {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = submitBtn.getAttribute('data-orig-text') || 'XÁC NHẬN NỘP HỒ SƠ';
+        }
+
+        if (data && data.success) {
+            nhomcCloseModal('nhomc-apply-modal');
+            var successMsg = (data.data && data.data.message) ? data.data.message : 'Nộp hồ sơ thành công!';
+            nhomcShowToast(successMsg);
+            form.reset();
+            nhomcRemoveFile();
+            var countSpan = document.getElementById('nhomc-char-count');
+            if (countSpan) countSpan.innerText = '0';
+        } else {
+            var msg = (data && data.data && data.data.message) ? data.data.message : 'Có lỗi xảy ra, vui lòng thử lại!';
+            if (errorBox) {
+                errorBox.innerText = msg;
+                errorBox.style.display = 'block';
+            } else {
+                alert(msg);
+            }
+        }
+    })
+    .catch(function(err) {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = submitBtn.getAttribute('data-orig-text') || 'XÁC NHẬN NỘP HỒ SƠ';
+        }
+        if (errorBox) {
+            errorBox.innerText = 'Lỗi kết nối máy chủ. Vui lòng thử lại sau!';
+            errorBox.style.display = 'block';
+        }
+    });
 }
 </script>
 

@@ -94,7 +94,7 @@ $company_gallery = array(
 
             <!-- Action Buttons -->
             <div class="nhomc-job-hero-right">
-                <button type="button" class="nhomc-btn-share" onclick="nhomcShareJob()">SHARE</button>
+                <button type="button" class="nhomc-btn-share" onclick="nhomcShareJob(this)">SHARE</button>
                 <button type="button" class="nhomc-btn-apply" onclick="nhomcOpenApplyModal()">APPLY JOB</button>
             </div>
         </div>
