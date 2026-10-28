@@ -938,12 +938,14 @@ body.nhomc-job-page {
   color: #111827;
 }
 
+/* Form modal ứng tuyển */
 .nhomc-modal-form {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
+/* Khối nhóm trường dữ liệu (Label + Input + Hint) */
 .nhomc-form-group {
   display: flex;
   flex-direction: column;
@@ -957,12 +959,14 @@ body.nhomc-job-page {
   margin-bottom: 2px;
 }
 
+/* Chú thích hướng dẫn dưới ô input (ví dụ: giới hạn ký tự) */
 .nhomc-field-hint {
   font-size: 11px;
   color: #6b7280;
   margin-top: 2px;
 }
 
+/* Dòng hiển thị bộ đếm số lượng ký tự */
 .nhomc-char-counter-row {
   display: flex;
   align-items: center;
@@ -970,12 +974,14 @@ body.nhomc-job-page {
   margin-top: 2px;
 }
 
+/* Số ký tự đếm được (x/500 ký tự) */
 .nhomc-char-counter {
   font-size: 11.5px;
   color: #64748b;
   font-weight: 600;
 }
 
+/* Dấu sao màu đỏ cho các trường bắt buộc (*) */
 .nhomc-required {
   color: #ef4444;
   font-weight: 700;
@@ -991,13 +997,16 @@ body.nhomc-job-page {
   box-sizing: border-box;
 }
 
-/* Upload CV file styles */
+/* ==========================================================================
+   KHUNG TẢI LÊN FILE CV ĐỊNH DẠNG PDF (TỐI ĐA 5MB)
+   ========================================================================== */
 .nhomc-file-upload-wrapper {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
+/* Khung kéo thả file viền đứt nét */
 .nhomc-upload-dropzone {
   border: 2px dashed #d1d5db;
   border-radius: 6px;
@@ -1012,6 +1021,7 @@ body.nhomc-job-page {
   text-align: center;
 }
 
+/* Hiệu ứng khi rê chuột hoặc kéo file vào khung */
 .nhomc-upload-dropzone:hover,
 .nhomc-upload-dropzone.dragover {
   border-color: #f97316;
