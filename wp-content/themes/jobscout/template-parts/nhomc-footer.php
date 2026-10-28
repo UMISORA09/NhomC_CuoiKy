@@ -12,7 +12,11 @@ $news_path = $blog_page && (int) $blog_page->ID !== (int) get_option( 'page_for_
 ?>
 
 <!-- 1. NEWSLETTER SUBSCRIPTION SECTION -->
-<?php get_template_part( 'template-parts/nhomc-newsletter' ); ?>
+<?php if ( is_active_sidebar( 'nhomc-newsletter' ) ) {
+    dynamic_sidebar( 'nhomc-newsletter' );
+} else {
+    get_template_part( 'template-parts/nhomc-newsletter' );
+} ?>
 
 <!-- 2. MAIN FOOTER -->
 <footer class="nc-unified-footer" role="contentinfo">
@@ -24,11 +28,15 @@ $news_path = $blog_page && (int) $blog_page->ID !== (int) get_option( 'page_for_
 
         <!-- Footer Navigation Links -->
         <nav class="nc-footer-nav" aria-label="<?php esc_attr_e( 'Footer Navigation', 'jobscout' ); ?>">
+            <?php if ( is_active_sidebar( 'nhomc-footer-menu' ) ) : ?>
+                <?php dynamic_sidebar( 'nhomc-footer-menu' ); ?>
+            <?php else : ?>
             <a href="<?php echo esc_url( home_url( '/jobs/' ) ); ?>">JOBS</a>
             <a href="<?php echo esc_url( home_url( '/company/plan-do-see-global-pds/' ) ); ?>">COMPANIES</a>
             <a href="<?php echo esc_url( home_url( $news_path ) ); ?>">BLOG</a>
             <a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>">ABOUT</a>
             <a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">CONTACT</a>
+            <?php endif; ?>
         </nav>
 
         <!-- Social Media Buttons -->

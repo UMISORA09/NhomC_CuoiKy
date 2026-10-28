@@ -1,6 +1,7 @@
 /* ==========================================================================
    NHOM C UNIFIED FOOTER STYLES (Figma Pixel-Perfect)
    ========================================================================== */
+.nc-footer-nav .custom-html-widget { display: contents; }
 .nc-unified-footer {
     background-color: #ffffff !important;
     width: 100% !important;

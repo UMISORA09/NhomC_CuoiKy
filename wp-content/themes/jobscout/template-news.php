@@ -13,64 +13,17 @@ $theme_uri = get_template_directory_uri();
 $banner_img = $theme_uri . '/images/news/news-hero-banner.jpg';
 $news_img_dir = $theme_uri . '/images/news/';
 
-// 8 tin tức chuẩn như trong thiết kế 3-news.png
-$default_news = [
-    [
-        'title'   => 'Project Development',
-        'slug'    => 'project-development',
-        'image'   => $news_img_dir . 'blog-project-dev.jpg',
-        'excerpt' => 'Chiến lược quản trị vòng đời dự án từ khảo sát tiền khả thi, kiểm soát ngân sách đến nghiệm thu bàn giao vận hành chuyên nghiệp.',
-    ],
-    [
-        'title'   => 'Restaurant & Hotel Management And Operations',
-        'slug'    => 'restaurant-hotel-management-and-operations',
-        'image'   => $news_img_dir . 'blog-restaurant-hotel.jpg',
-        'excerpt' => 'Nâng tầm chuẩn mực dịch vụ lưu trú và ẩm thực cao cấp thông qua văn hóa phục vụ tận tâm Omotenashi và tối ưu hóa hệ thống vận hành.',
-    ],
-    [
-        'title'   => 'Hospitality Consulting',
-        'slug'    => 'hospitality-consulting',
-        'image'   => $news_img_dir . 'blog-hospitality-consulting.jpg',
-        'excerpt' => 'Tư vấn hoạch định mô hình kinh doanh nghỉ dưỡng, đàm phán hợp đồng quản trị thương hiệu quốc tế và tối đa hóa hiệu suất sinh lời.',
-    ],
-    [
-        'title'   => 'Venue And Interior Design',
-        'slug'    => 'venue-and-interior-design',
-        'image'   => $news_img_dir . 'blog-interior-design.jpg',
-        'excerpt' => 'Kiến tạo không gian kiến trúc và nội thất nghỉ dưỡng độc bản, kết hợp tinh tế giữa nghệ thuật thẩm mỹ bản địa và vật liệu sinh thái bền vững.',
-    ],
-    [
-        'title'   => 'Project Development',
-        'slug'    => 'project-development-2',
-        'image'   => $news_img_dir . 'blog-project-dev.jpg',
-        'excerpt' => 'Chiến lược quản trị vòng đời dự án từ khảo sát tiền khả thi, kiểm soát ngân sách đến nghiệm thu bàn giao vận hành chuyên nghiệp.',
-    ],
-    [
-        'title'   => 'Restaurant & Hotel Management And Operations',
-        'slug'    => 'restaurant-hotel-management-and-operations-2',
-        'image'   => $news_img_dir . 'blog-restaurant-hotel.jpg',
-        'excerpt' => 'Nâng tầm chuẩn mực dịch vụ lưu trú và ẩm thực cao cấp thông qua văn hóa phục vụ tận tâm Omotenashi và tối ưu hóa hệ thống vận hành.',
-    ],
-    [
-        'title'   => 'Hospitality Consulting',
-        'slug'    => 'hospitality-consulting-2',
-        'image'   => $news_img_dir . 'blog-hospitality-consulting.jpg',
-        'excerpt' => 'Tư vấn hoạch định mô hình kinh doanh nghỉ dưỡng, đàm phán hợp đồng quản trị thương hiệu quốc tế và tối đa hóa hiệu suất sinh lời.',
-    ],
-    [
-        'title'   => 'Venue And Interior Design',
-        'slug'    => 'venue-and-interior-design-2',
-        'image'   => $news_img_dir . 'blog-interior-design.jpg',
-        'excerpt' => 'Kiến tạo không gian kiến trúc và nội thất nghỉ dưỡng độc bản, kết hợp tinh tế giữa nghệ thuật thẩm mỹ bản địa và vật liệu sinh thái bền vững.',
-    ],
-];
-
-// Đường dẫn chuyển đến trang chi tiết tin tức chuẩn thiết kế 6-news detail.png
-$news_items = [];
-foreach ($default_news as $idx => $item) {
-    // Mỗi bài viết trỏ đến trang chi tiết riêng với tiêu đề và nội dung tương ứng
-    $item['link'] = esc_url($site_url . '/news-detail/?post=' . urlencode($item['slug']));
-    $news_items[] = $item;
+// Use published WordPress posts so widget content follows edits in the admin.
+$blog_images = array( 'blog-project-dev.jpg', 'blog-restaurant-hotel.jpg', 'blog-hospitality-consulting.jpg', 'blog-interior-design.jpg' );
+$news_items = array();
+$news_posts = get_posts( array( 'post_type' => 'post', 'post_status' => 'publish', 'posts_per_page' => 8, 'orderby' => 'date', 'order' => 'DESC' ) );
+foreach ( $news_posts as $index => $news_post ) {
+    $news_items[] = array(
+        'title' => $news_post->post_title,
+        'image' => get_the_post_thumbnail_url( $news_post, 'medium_large' ) ?: $news_img_dir . $blog_images[ $index % count( $blog_images ) ],
+        'excerpt' => wp_trim_words( get_the_excerpt( $news_post ), 28, '...' ),
+        'link' => get_permalink( $news_post ),
+    );
 }
 ?>
 <!DOCTYPE html>
@@ -757,43 +710,7 @@ foreach ($default_news as $idx => $item) {
 <!-- 1. HEADER / NAVBAR -->
 <?php get_template_part( 'template-parts/nhomc-header' ); ?>
 
-<!-- 2. HERO BANNER: PDS NEWS (Hình ảnh gốc chứa sẵn tiêu đề PDS NEWS sắc nét) -->
-<section class="news-hero">
-    <h1 class="news-sr-only">PDS NEWS</h1>
-</section>
-
-<!-- 3. MAIN SECTION: NEWEST BLOG ENTRIES -->
-<main class="news-main-section">
-    <div class="news-main-inner">
-        <h2 class="news-main-heading">NEWEST BLOG ENTRIES</h2>
-
-        <div class="news-grid">
-            <?php foreach ($news_items as $post_item): ?>
-            <article class="news-card">
-                <div class="news-card-img-wrap">
-                    <a href="<?php echo esc_url($post_item['link']); ?>">
-                        <img src="<?php echo esc_url($post_item['image']); ?>" alt="<?php echo esc_attr($post_item['title']); ?>" class="news-card-img" loading="lazy">
-                    </a>
-                </div>
-                <div class="news-card-content">
-                    <h3 class="news-card-title">
-                        <a href="<?php echo esc_url($post_item['link']); ?>">
-                            <?php echo esc_html($post_item['title']); ?>
-                        </a>
-                    </h3>
-                    <p class="news-card-excerpt">
-                        <?php echo esc_html($post_item['excerpt']); ?>
-                    </p>
-                    <a href="<?php echo esc_url($post_item['link']); ?>" class="news-card-readmore">
-                        Read More
-                    </a>
-                </div>
-            </article>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</main>
-
+<?php nhomc_render_page_widgets( 'nhomc-blog', compact( 'news_items' ) ); ?>
 <!-- 4, 5 & 6. UNIFIED NHOM C FOOTER -->
 <?php get_template_part( 'template-parts/nhomc-footer' ); ?>
 
