@@ -1,47 +1,82 @@
 <?php
 /**
- * Template Name: All Jobs Design
- * Template Post Type: page
+ * ==============================================================================
+ * TẬP TIN: template-all-jobs.php
+ * DỰ ÁN: CỔNG TUYỂN DỤNG JOBSCOUT - FIT TDC (ĐỒ ÁN CUỐI KỲ NHÓM C)
+ * NHÁNH: VinhEm/4-alljob
+ * TÁC GIẢ: VinhEm (trumvinh85@gmail.com)
+ * ==============================================================================
+ * MÔ TẢ TỔNG QUAN:
+ * Template hiển thị toàn bộ danh sách việc làm (All Jobs) chuẩn phong cách thiết kế
+ * JobScout của Nhóm C. Giao diện được thiết kế độc lập, tối ưu Responsive hoàn hảo
+ * trên đa thiết bị (Mobile, Tablet, Desktop) và các mức độ Zoom trình duyệt.
  *
- * Giao diện trang ALL JOBS chuẩn đồ án JobScout - Nhóm C (FIT - TDC)
- * Đã tối ưu Responsive đa thiết bị (Mobile, Tablet, Desktop, Zoom in/out) không bao giờ bị vỡ giao diện.
+ * CÁC THÀNH PHẦN CHÍNH TRONG TEMPLATE:
+ * 1. Khối PHP Backend: Truy vấn WP_Query lấy dữ liệu các bài đăng việc làm (post type: job_listing)
+ * 2. Khối Header / Navbar: Thanh điều hướng phía trên tích hợp Mobile Drawer Menu
+ * 3. Khối Banner Career: Hình ảnh đại diện chuyên nghiệp và lời giới thiệu tuyển dụng
+ * 4. Khối Search & Filter: Bộ lọc phân loại công việc và dropdown sắp xếp theo thứ tự
+ * 5. Khối Danh sách Công việc (Jobs Grid): Lưới hiển thị các thẻ công việc (Job Cards)
+ * 6. Khối Đối tác Doanh nghiệp (Company Logos): Danh sách logo các công ty tuyển dụng
+ * 7. Khối Tải thêm (Load More): Nút bấm tải thêm công việc linh hoạt bằng JavaScript
+ * 8. Khối Newsletter & Footer: Đăng ký nhận tin tức việc làm qua email và chân trang
+ * ==============================================================================
  */
 
+// Lấy URL trang chủ của website để tạo các liên kết nội bộ
 $site_url = home_url();
+
+// Lấy đường dẫn URI chứa các hình ảnh phục vụ riêng cho trang All Jobs
 $theme_img_uri = get_template_directory_uri() . '/images/alljobs';
 
-// Lấy danh sách jobs từ CSDL nếu có
+/**
+ * ------------------------------------------------------------------------------
+ * BƯỚC 1: TRUY VẤN DỮ LIỆU CÔNG VIỆC TỪ CƠ SỞ DỮ LIỆU WORDPRESS (WP_Query)
+ * ------------------------------------------------------------------------------
+ * Sử dụng WP_Query để truy xuất toàn bộ các bài đăng thuộc Post Type 'job_listing'
+ * đã được xuất bản (publish). Sắp xếp theo ngày đăng mới nhất lên đầu (DESC).
+ */
 $args = array(
-    'post_type'      => 'job_listing',
-    'post_status'    => 'publish',
-    'posts_per_page' => -1,
-    'orderby'        => 'date',
-    'order'          => 'DESC'
+    'post_type'      => 'job_listing',   // Kiểu nội dung tuyển dụng của WP Job Manager
+    'post_status'    => 'publish',       // Chỉ lấy các tin đã được duyệt và đăng công khai
+    'posts_per_page' => -1,              // Lấy tất cả bài viết để phân trang linh hoạt ở phía frontend
+    'orderby'        => 'date',          // Sắp xếp theo ngày tạo bài
+    'order'          => 'DESC'           // Thứ tự giảm dần (mới nhất hiển thị trước)
 );
 $jobs_query = new WP_Query($args);
 $db_jobs = array();
+
+// Duyệt qua từng bản ghi dữ liệu trả về và trích xuất các trường thông tin chi tiết
 if ($jobs_query->have_posts()) {
     while ($jobs_query->have_posts()) {
         $jobs_query->the_post();
-        $jid = get_the_ID();
+        $jid = get_the_ID(); // Lấy ID của bài đăng việc làm
+        
+        // 1. Trích xuất meta data: Địa điểm làm việc và Tên công ty tuyển dụng
         $loc = get_post_meta($jid, '_job_location', true);
         $cname_meta = get_post_meta($jid, '_company_name', true);
+        
+        // 2. Trích xuất taxonomy: Hình thức làm việc (Fulltime, Part-time, Freelance,...)
         $terms = wp_get_post_terms($jid, 'job_listing_type');
         $tname = (!is_wp_error($terms) && !empty($terms)) ? $terms[0]->name : 'Fulltime';
+        
+        // 3. Trích xuất taxonomy: Danh mục ngành nghề (IT, Marketing, Hospitality,...)
         $cat_terms = wp_get_post_terms($jid, 'job_listing_category');
         $cname = (!is_wp_error($cat_terms) && !empty($cat_terms)) ? $cat_terms[0]->name : 'Category Name';
         
+        // Đóng gói thông tin công việc vào mảng $db_jobs chuẩn hóa
         $db_jobs[] = array(
             'id'       => $jid,
-            'title'    => strtoupper(get_the_title()),
-            'company'  => $cname_meta ? $cname_meta : 'THE SODOH',
-            'date'     => get_the_date('M d, Y'),
-            'type'     => $tname,
-            'category' => $cname,
-            'location' => $loc ? $loc : 'Ho Chi Minh City',
-            'link'     => home_url('/job-detail/?job_id=' . $jid)
+            'title'    => strtoupper(get_the_title()),                          // Tiêu đề công việc in hoa
+            'company'  => $cname_meta ? $cname_meta : 'THE SODOH',             // Tên doanh nghiệp tuyển dụng
+            'date'     => get_the_date('M d, Y'),                              // Định dạng ngày đăng bài (VD: Oct 29, 2026)
+            'type'     => $tname,                                              // Phân loại hợp đồng lao động
+            'category' => $cname,                                              // Ngành nghề ứng tuyển
+            'location' => $loc ? $loc : 'Ho Chi Minh City',                    // Thành phố / Khu vực làm việc
+            'link'     => home_url('/job-detail/?job_id=' . $jid)              // Đường dẫn đến trang chi tiết công việc
         );
     }
+    // Khôi phục lại trạng thái biến truy vấn toàn cục $post của WordPress
     wp_reset_postdata();
 }
 ?>
@@ -1108,19 +1143,28 @@ if ($jobs_query->have_posts()) {
 </div>
 
 <script>
+/**
+ * ==============================================================================
+ * JAVASCRIPT XỬ LÝ TƯƠNG TÁC GIAO DIỆN TRANG ALL JOBS
+ * ==============================================================================
+ */
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. Mobile Menu Drawer logic
-    const mobileToggle = document.getElementById('ajMobileToggle');
-    const drawerClose = document.getElementById('ajDrawerClose');
-    const mobileDrawer = document.getElementById('ajMobileDrawer');
-    const mobileOverlay = document.getElementById('ajMobileOverlay');
+    /**
+     * 1. XỬ LÝ MENU MOBILE DRAWER (Thanh điều hướng trượt trên điện thoại)
+     */
+    const mobileToggle = document.getElementById('ajMobileToggle'); // Nút hamburger mở menu
+    const drawerClose = document.getElementById('ajDrawerClose');   // Nút X đóng menu
+    const mobileDrawer = document.getElementById('ajMobileDrawer'); // Khung nội dung menu trượt
+    const mobileOverlay = document.getElementById('ajMobileOverlay'); // Lớp màn mờ nền đen
 
+    // Hàm mở menu mobile drawer và khóa cuộn trang
     function openDrawer() {
         if (mobileDrawer) mobileDrawer.classList.add('is-open');
         if (mobileOverlay) mobileOverlay.classList.add('is-active');
         document.body.style.overflow = 'hidden';
     }
 
+    // Hàm đóng menu mobile drawer và khôi phục thanh cuộn
     function closeDrawer() {
         if (mobileDrawer) mobileDrawer.classList.remove('is-open');
         if (mobileOverlay) mobileOverlay.classList.remove('is-active');
@@ -1131,24 +1175,34 @@ document.addEventListener('DOMContentLoaded', function() {
     if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
     if (mobileOverlay) mobileOverlay.addEventListener('click', closeDrawer);
 
-    // 2. Sắp xếp jobs theo dropdown
+    /**
+     * 2. XỬ LÝ SẮP XẾP DANH SÁCH VIỆC LÀM (Sorting)
+     * Hỗ trợ: Theo bảng chữ cái (A-Z), Cũ nhất (Oldest), hoặc Mặc định (Default)
+     */
     const sortSelect = document.getElementById('jobSortSelect');
     const jobsGrid = document.getElementById('jobsGrid');
     if (sortSelect && jobsGrid) {
         sortSelect.addEventListener('change', function() {
             const cards = Array.from(jobsGrid.querySelectorAll('.aj-job-card'));
             if (this.value === 'alpha') {
+                // Sắp xếp theo thứ tự tiêu đề A-Z
                 cards.sort((a, b) => a.getAttribute('data-title').localeCompare(b.getAttribute('data-title')));
             } else if (this.value === 'oldest') {
+                // Đảo ngược danh sách hiển thị việc làm cũ hơn trước
                 cards.reverse();
             } else {
+                // Khôi phục thứ tự mặc định ban đầu theo chỉ mục data-idx
                 cards.sort((a, b) => parseInt(a.getAttribute('data-idx')) - parseInt(b.getAttribute('data-idx')));
             }
+            // Gắn lại các phần tử đã sắp xếp vào DOM
             cards.forEach(card => jobsGrid.appendChild(card));
         });
     }
 
-    // 3. Hiệu ứng nút Load More mở thêm jobs thật từ Seeder
+    /**
+     * 3. XỬ LÝ NÚT TẢI THÊM CÔNG VIỆC (LOAD MORE JOBS)
+     * Mỗi lần nhấp chuột sẽ hiển thị thêm 6 công việc tiếp theo từ danh sách ẩn
+     */
     const btnLoadMore = document.getElementById('btnLoadMore');
     if (btnLoadMore) {
         btnLoadMore.addEventListener('click', function() {
@@ -1156,9 +1210,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (hiddenCards.length > 0) {
                 this.textContent = 'LOADING...';
                 setTimeout(() => {
+                    // Lấy ra 6 thẻ công việc ẩn kế tiếp để hiển thị
                     const batch = hiddenCards.slice(0, 6);
                     batch.forEach(card => card.classList.remove('aj-card-hidden'));
                     
+                    // Kiểm tra xem còn công việc ẩn nào không
                     const remaining = document.querySelectorAll('.aj-job-card.aj-card-hidden').length;
                     if (remaining === 0) {
                         btnLoadMore.textContent = 'NO MORE JOBS';
@@ -1170,10 +1226,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }, 300);
             } else {
-                this.textContent = 'NO MORE JOBS';
-                this.style.opacity = '0.6';
-                this.style.cursor = 'default';
-                this.disabled = true;
+                btnLoadMore.textContent = 'NO MORE JOBS';
+                btnLoadMore.style.opacity = '0.6';
+                btnLoadMore.style.cursor = 'default';
+                btnLoadMore.disabled = true;
             }
         });
     }
