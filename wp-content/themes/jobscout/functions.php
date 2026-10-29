@@ -153,7 +153,15 @@ add_filter( 'template_include', function( $template ) {
         }
     }
 
-    // Điều hướng trang Đăng việc (Submit Job / Post a Job) sang template-submit-job.php chuẩn Nhóm C
+    /**
+     * --------------------------------------------------------------------------
+     * BỘ ĐIỀU HƯỚNG THÔNG MINH CHO TRANG ĐĂNG TIN TUYỂN DỤNG (POST A JOB)
+     * Tác giả: VinhEm (Nhánh VinhEm/submitjob)
+     * Mục đích: Bắt tất cả các slug liên quan đến đăng tin tuyển dụng như
+     *           '/post-a-job', '/post-a-job-2', '/submitjob', '/submit-job'
+     *           loại bỏ lỗi 404, trả về mã HTTP 200 và gán template-submit-job.php
+     * --------------------------------------------------------------------------
+     */
     $is_submit_job = false;
     if ( is_page( array( 'post-a-job', 'post-a-job-2', 'submitjob', 'submit-job' ) ) ) {
         $is_submit_job = true;

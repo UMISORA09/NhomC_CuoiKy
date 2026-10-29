@@ -1,18 +1,35 @@
 <?php
 /**
- * Template Name: Submit Job (NhomC Design)
- * Template Post Type: page
+ * ==============================================================================
+ * TẬP TIN: template-submit-job.php
+ * DỰ ÁN: CỔNG TUYỂN DỤNG JOBSCOUT - FIT TDC (ĐỒ ÁN CUỐI KỲ NHÓM C)
+ * NHÁNH: VinhEm/submitjob
+ * TÁC GIẢ: VinhEm (trumvinh85@gmail.com)
+ * ==============================================================================
+ * MÔ TẢ TỔNG QUAN:
+ * Template trang ĐĂNG TIN TUYỂN DỤNG (Post a Job / Submit Job) được thiết kế hiện đại,
+ * đồng bộ nhận diện thương hiệu Nhóm C (Tone màu Dark Slate & Cam #ff6600).
  *
- * Giao diện trang Đăng Tin Tuyển Dụng (Post a Job / Submit Job) chuẩn đồ án JobScout - Nhóm C (FIT - TDC)
- * Đã tối ưu Responsive đa thiết bị, đồng bộ 100% trường dữ liệu với trang Jobs.
+ * CƠ CHẾ HOẠT ĐỘNG:
+ * 1. Nhúng Header chuẩn của theme (get_header('jobdetail'))
+ * 2. Khối Hero Banner: Breadcrumb điều hướng phân cấp (Home > Jobs > Post a Job)
+ * 3. Khối Form đăng tin:
+ *    - Tự động gọi shortcode core của plugin WP Job Manager: [submit_job_form]
+ *    - Nếu bài viết trong admin đã chứa shortcode thì xuất nội dung the_content()
+ *    - Nếu nội dung trống, template tự động fallback thực thi do_shortcode('[submit_job_form]')
+ * 4. Tùy biến toàn bộ CSS của form WPJM: Input, Dropdown, Textarea, Checkbox,
+ *    Upload file logo/tài liệu, Nút Submit và các thông báo báo lỗi/thành công.
+ * ==============================================================================
  */
 
+// Nạp thanh điều hướng và thẻ meta đầu trang từ header-jobdetail.php
 get_header( 'jobdetail' );
 ?>
 
-<!-- Banner Đầu Trang -->
+<!-- 1. KHỐI HERO BANNER: TIÊU ĐỀ TRANG VÀ BREADCRUMB ĐIỀU HƯỚNG -->
 <section class="nhomc-submitjob-hero">
     <div class="nhomc-submitjob-hero-inner">
+        <!-- Đường dẫn phân cấp Breadcrumb -->
         <div class="nhomc-submitjob-breadcrumb">
             <a href="<?php echo esc_url( home_url( '/' ) ); ?>">HOME</a>
             <span class="sep">/</span>
@@ -25,11 +42,16 @@ get_header( 'jobdetail' );
     </div>
 </section>
 
-<!-- Khung Form Đăng Tuyển Chuẩn Nhóm C -->
+<!-- 2. KHỐI NỘI DUNG CHÍNH: KHUNG CHỨA FORM ĐĂNG TUYỂN DỤNG -->
 <main class="nhomc-submitjob-main">
     <div class="nhomc-submitjob-container">
         <div class="nhomc-submitjob-card">
             <?php
+            /**
+             * Kiểm tra và nạp form đăng tin tuyển dụng:
+             * Sử dụng cơ chế kiểm tra nội dung bài viết và fallback an toàn bằng shortcode [submit_job_form]
+             * để đảm bảo form luôn luôn xuất hiện ngay cả khi cơ sở dữ liệu chưa được gán shortcode.
+             */
             if ( have_posts() ) {
                 while ( have_posts() ) {
                     the_post();
