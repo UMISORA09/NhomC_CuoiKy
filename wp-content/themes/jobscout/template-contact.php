@@ -1,15 +1,34 @@
 <?php
 /**
- * Template Name: Contact Us Design
- * Template Post Type: page
+ * ==============================================================================
+ * TẬP TIN: template-contact.php
+ * DỰ ÁN: CỔNG TUYỂN DỤNG JOBSCOUT - FIT TDC (ĐỒ ÁN CUỐI KỲ NHÓM C)
+ * NHÁNH: VinhEm/7-contactus
+ * TÁC GIẢ: VinhEm (trumvinh85@gmail.com)
+ * ==============================================================================
+ * MÔ TẢ TỔNG QUAN:
+ * Template giao diện trang LIÊN HỆ (CONTACT US) được thiết kế chuẩn chỉnh theo
+ * bản vẽ thiết kế mẫu 7-contact us.png của đồ án JobScout Nhóm C.
  *
- * Giao diện trang CONTACT US chuẩn đồ án JobScout - Nhóm C (FIT - TDC)
- * Thiết kế chính xác theo bản vẽ thiết kế 7-contact us.png
- * Đầy đủ Responsive đa thiết bị, giữ trọn vẹn bố cục và phong cách nhận diện NhomC.
+ * CÁC KHỐI CHỨC NĂNG CHÍNH:
+ * 1. Khối Header / Thanh điều hướng: Tích hợp nút Submit Job và Mobile Menu Drawer
+ * 2. Khối Hero Banner: Hình ảnh đại diện khổ lớn với tiêu đề Contact Us
+ * 3. Khối Địa chỉ Trụ sở (Headquarters Address): Thông tin văn phòng chính tại TP.HCM
+ * 4. Khối Phân luồng hỗ trợ:
+ *    - For Employers: Dành cho nhà tuyển dụng liên hệ hợp tác và đăng tin
+ *    - For Jobseekers: Dành cho ứng viên tìm kiếm việc làm cần giải đáp thắc mắc
+ * 5. Khối Văn phòng chi nhánh: Hà Nội, Đà Nẵng, Tokyo và các thị trường trọng điểm
+ * 6. Khối Footer Thương hiệu: Nhận diện Nhom C, liên kết mạng xã hội và bản quyền
+ * ==============================================================================
  */
 
+// Lấy URL trang chủ website
 $site_url = home_url();
+
+// Lấy đường dẫn thư mục theme hiện hành
 $theme_uri = get_template_directory_uri();
+
+// Đường dẫn hình ảnh banner chính của trang Liên hệ
 $banner_img = $theme_uri . '/images/contact/contact-hero-banner.jpg';
 ?>
 <!DOCTYPE html>
@@ -843,18 +862,25 @@ $banner_img = $theme_uri . '/images/contact/contact-hero-banner.jpg';
 </div>
 
 <script>
+/**
+ * ==============================================================================
+ * JAVASCRIPT XỬ LÝ THANH ĐIỀU HƯỚNG TRÊN THIẾT BỊ DI ĐỘNG (MOBILE DRAWER)
+ * ==============================================================================
+ */
 document.addEventListener('DOMContentLoaded', function() {
-    const mobileToggle = document.getElementById('cuMobileToggle');
-    const drawerClose = document.getElementById('cuDrawerClose');
-    const mobileDrawer = document.getElementById('cuMobileDrawer');
-    const mobileOverlay = document.getElementById('cuMobileOverlay');
+    const mobileToggle = document.getElementById('cuMobileToggle');   // Nút mở menu (biểu tượng 3 gạch)
+    const drawerClose = document.getElementById('cuDrawerClose');     // Nút đóng menu (biểu tượng X)
+    const mobileDrawer = document.getElementById('cuMobileDrawer');   // Khung menu trượt từ cạnh
+    const mobileOverlay = document.getElementById('cuMobileOverlay'); // Lớp overlay làm mờ nền phía sau
 
+    // Hàm mở menu trượt và chặn cuộn trang
     function openDrawer() {
         if (mobileDrawer) mobileDrawer.classList.add('is-open');
         if (mobileOverlay) mobileOverlay.classList.add('is-active');
         document.body.style.overflow = 'hidden';
     }
 
+    // Hàm đóng menu trượt và phục hồi khả năng cuộn trang
     function closeDrawer() {
         if (mobileDrawer) mobileDrawer.classList.remove('is-open');
         if (mobileOverlay) mobileOverlay.classList.remove('is-active');
