@@ -1,47 +1,79 @@
 <?php
 /**
- * Template Name: All Jobs Design
- * Template Post Type: page
- *
- * Giao diện trang ALL JOBS chuẩn đồ án JobScout - Nhóm C (FIT - TDC)
- * Đã tối ưu Responsive đa thiết bị (Mobile, Tablet, Desktop, Zoom in/out) không bao giờ bị vỡ giao diện.
+ * ==============================================================================
+ * TẬP TIN: template-all-jobs.php
+ * DỰ ÁN: CỔNG TUYỂN DỤNG JOBSCOUT - FIT TDC (ĐỒ ÁN CUỐI KỲ NHÓM C)
+ * NHÁNH: VinhEm/4-alljob
+ * TÁC GIẢ: VinhEm (trumvinh85@gmail.com)
+ * ==============================================================================
+ * MÔ TẢ:
+ * Template hiển thị toàn bộ danh sách việc làm (All Jobs) chuẩn đồ án Nhóm C.
+ * Hỗ trợ Responsive đa thiết bị, đồng bộ cơ chế Widget hiện đại và JavaScript
+ * tương tác bộ lọc, sắp xếp, tải thêm việc làm linh hoạt.
+ * ==============================================================================
  */
 
+// Lấy đường dẫn URL trang chủ của website (ví dụ: http://localhost:8080)
 $site_url = home_url();
+
+// Lấy đường dẫn URI tĩnh dẫn đến thư mục hình ảnh của trang All Jobs trong theme
 $theme_img_uri = get_template_directory_uri() . '/images/alljobs';
 
-// Lấy danh sách jobs từ CSDL nếu có
+/**
+ * ------------------------------------------------------------------------------
+ * TRUY VẤN DỮ LIỆU VIỆC LÀM TỪ CƠ SỞ DỮ LIỆU WORDPRESS BẰNG WP_QUERY
+ * ------------------------------------------------------------------------------
+ */
+// Khởi tạo mảng tham số truy vấn dữ liệu các bài đăng việc làm
 $args = array(
-    'post_type'      => 'job_listing',
-    'post_status'    => 'publish',
-    'posts_per_page' => -1,
-    'orderby'        => 'date',
-    'order'          => 'DESC'
+    'post_type'      => 'job_listing',   // Kiểu dữ liệu bài viết: 'job_listing' của plugin WP Job Manager
+    'post_status'    => 'publish',       // Trạng thái bài đăng: Chỉ lấy các bài viết đã được duyệt xuất bản
+    'posts_per_page' => -1,              // Số lượng bài lấy ra: -1 nghĩa là lấy tất cả bài viết để xử lý phía client
+    'orderby'        => 'date',          // Tiêu chí sắp xếp: Theo ngày đăng bài viết
+    'order'          => 'DESC'           // Thứ tự sắp xếp: DESC (giảm dần - bài đăng mới nhất xếp lên đầu)
 );
+
+// Khởi tạo đối tượng truy vấn WP_Query với các tham số đã định nghĩa
 $jobs_query = new WP_Query($args);
+
+// Khởi tạo mảng rỗng để chứa dữ liệu việc làm đã được chuẩn hóa
 $db_jobs = array();
+
+// Kiểm tra xem trong cơ sở dữ liệu có bài đăng việc làm nào thỏa điều kiện hay không
 if ($jobs_query->have_posts()) {
+    // Vòng lặp duyệt qua từng bài đăng việc làm
     while ($jobs_query->have_posts()) {
-        $jobs_query->the_post();
-        $jid = get_the_ID();
+        $jobs_query->the_post(); // Thiết lập dữ liệu toàn cục của bài viết hiện tại vào biến $post
+        
+        $jid = get_the_ID(); // Lấy ID duy nhất của bài đăng việc làm trong bảng wp_posts
+        
+        // Truy xuất trường tùy biến (post meta): Địa điểm làm việc (ví dụ: 'Ho Chi Minh City')
         $loc = get_post_meta($jid, '_job_location', true);
+        
+        // Truy xuất trường tùy biến (post meta): Tên công ty/doanh nghiệp tuyển dụng
         $cname_meta = get_post_meta($jid, '_company_name', true);
+        
+        // Truy xuất taxonomy (phân loại): Hình thức làm việc ('job_listing_type': Full-time, Part-time, Remote,...)
         $terms = wp_get_post_terms($jid, 'job_listing_type');
         $tname = (!is_wp_error($terms) && !empty($terms)) ? $terms[0]->name : 'Fulltime';
+        
+        // Truy xuất taxonomy (phân loại): Ngành nghề / Danh mục việc làm ('job_listing_category')
         $cat_terms = wp_get_post_terms($jid, 'job_listing_category');
         $cname = (!is_wp_error($cat_terms) && !empty($cat_terms)) ? $cat_terms[0]->name : 'Category Name';
         
+        // Đóng gói toàn bộ thông tin chuẩn hóa của công việc vào mảng $db_jobs
         $db_jobs[] = array(
-            'id'       => $jid,
-            'title'    => strtoupper(get_the_title()),
-            'company'  => $cname_meta ? $cname_meta : 'THE SODOH',
-            'date'     => get_the_date('M d, Y'),
-            'type'     => $tname,
-            'category' => $cname,
-            'location' => $loc ? $loc : 'Ho Chi Minh City',
-            'link'     => home_url('/job-detail/?job_id=' . $jid)
+            'id'       => $jid,                                                 // ID định danh của công việc
+            'title'    => strtoupper(get_the_title()),                          // Tiêu đề việc làm (chuyển sang chữ IN HOA)
+            'company'  => $cname_meta ? $cname_meta : 'THE SODOH',             // Tên công ty (fallback mặc định 'THE SODOH')
+            'date'     => get_the_date('M d, Y'),                              // Định dạng ngày đăng bài: Tháng Ngày, Năm (ví dụ: Oct 29, 2026)
+            'type'     => $tname,                                              // Phân loại hình thức làm việc
+            'category' => $cname,                                              // Tên phân loại ngành nghề
+            'location' => $loc ? $loc : 'Ho Chi Minh City',                    // Địa chỉ nơi làm việc (fallback 'Ho Chi Minh City')
+            'link'     => home_url('/job-detail/?job_id=' . $jid)              // Đường dẫn chi tiết công việc trỏ đến trang /job-detail
         );
     }
+    // Khôi phục lại trạng thái đối tượng bài viết toàn cục $post của WordPress
     wp_reset_postdata();
 }
 ?>
@@ -942,76 +974,168 @@ if ($jobs_query->have_posts()) {
 </head>
 <body <?php body_class('aj-custom-page'); ?>>
 
-<!-- 1. TOP HEADER -->
+<!-- ===========================================================================
+     1. PHẦN ĐẦU TRANG (HEADER / NAVBAR DÙNG CHUNG CỦA NHÓM C)
+     Nhúng template header chuẩn thương hiệu Nhóm C (chứa logo, menu, nút Submit Job)
+     =========================================================================== -->
 <?php get_template_part( 'template-parts/nhomc-header' ); ?>
 
+<!-- ===========================================================================
+     2. PHẦN THÂN TRANG (DYNAMIC WIDGETS RENDERING)
+     Sử dụng hàm nhomc_render_page_widgets để gọi hệ thống Widget của Nhóm C cho vùng 'nhomc-jobs'.
+     Truyền mảng dữ liệu $db_jobs đã truy vấn từ CSDL vào để các widget con (jobs-hero, jobs-list)
+     hiển thị danh sách thẻ công việc thực tế.
+     =========================================================================== -->
 <?php nhomc_render_page_widgets( 'nhomc-jobs', compact( 'db_jobs' ) ); ?>
-<!-- 6, 7 & 8. UNIFIED NHOM C FOOTER -->
+
+<!-- ===========================================================================
+     3. PHẦN CHÂN TRANG (UNIFIED FOOTER DÙNG CHUNG CỦA NHÓM C)
+     Nhúng toàn bộ khối Newsletter đăng ký email, liên kết Footer và thanh bản quyền Copyright
+     =========================================================================== -->
 <?php get_template_part( 'template-parts/nhomc-footer' ); ?>
 
+<!-- ===========================================================================
+     4. MÃ NGUỒN JAVASCRIPT XỬ LÝ TƯƠNG TÁC GIAO DIỆN PHÍA CLIENT
+     Bao gồm 3 chức năng chính:
+     1. Menu Drawer trượt trên thiết bị di động (Mobile).
+     2. Sắp xếp thứ tự hiển thị danh sách công việc theo bộ lọc (A-Z, Cũ nhất, Mặc định).
+     3. Nút bấm tải thêm công việc (Load More Jobs) với hiệu ứng bất đồng bộ mượt mà.
+     =========================================================================== -->
 <script>
+// Lắng nghe sự kiện DOMContentLoaded để đảm bảo toàn bộ cây DOM HTML đã sẵn sàng trước khi thực thi
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. Mobile Menu Drawer logic
+    
+    /**
+     * -------------------------------------------------------------------------
+     * CHỨC NĂNG 1: XỬ LÝ MENU MOBILE DRAWER (Thanh điều hướng trượt trên Mobile)
+     * -------------------------------------------------------------------------
+     */
+    // Khai báo biến lưu phần tử nút Hamburger mở menu (biểu tượng 3 gạch ngang)
     const mobileToggle = document.getElementById('ajMobileToggle');
+    
+    // Khai báo biến lưu phần tử nút Đóng menu (biểu tượng dấu X)
     const drawerClose = document.getElementById('ajDrawerClose');
+    
+    // Khai báo biến lưu khung menu trượt từ cạnh màn hình (Drawer Navigation)
     const mobileDrawer = document.getElementById('ajMobileDrawer');
+    
+    // Khai báo biến lưu lớp màn mờ phủ nền đen phía sau menu khi mở ra (Overlay)
     const mobileOverlay = document.getElementById('ajMobileOverlay');
 
+    // Hàm thực hiện mở Menu Drawer trên thiết bị di động
     function openDrawer() {
-        if (mobileDrawer) mobileDrawer.classList.add('is-open');
-        if (mobileOverlay) mobileOverlay.classList.add('is-active');
-        document.body.style.overflow = 'hidden';
+        if (mobileDrawer) mobileDrawer.classList.add('is-open');        // Thêm class 'is-open' để kích hoạt animation trượt menu
+        if (mobileOverlay) mobileOverlay.classList.add('is-active');    // Thêm class 'is-active' để làm tối nền trang
+        document.body.style.overflow = 'hidden';                        // Khóa thanh cuộn trang chính để tránh cuộn nền khi xem menu
     }
 
+    // Hàm thực hiện đóng Menu Drawer
     function closeDrawer() {
-        if (mobileDrawer) mobileDrawer.classList.remove('is-open');
-        if (mobileOverlay) mobileOverlay.classList.remove('is-active');
-        document.body.style.overflow = '';
+        if (mobileDrawer) mobileDrawer.classList.remove('is-open');     // Gỡ bỏ class 'is-open' để thu gọn menu vào mép màn hình
+        if (mobileOverlay) mobileOverlay.classList.remove('is-active'); // Gỡ bỏ class 'is-active' để ẩn lớp màn mờ nền
+        document.body.style.overflow = '';                              // Khôi phục lại trạng thái cuộn bình thường của trang web
     }
 
+    // Gán sự kiện click: Khi người dùng nhấp vào nút Hamburger -> Mở menu
     if (mobileToggle) mobileToggle.addEventListener('click', openDrawer);
+    
+    // Gán sự kiện click: Khi người dùng nhấp vào nút X -> Đóng menu
     if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
+    
+    // Gán sự kiện click: Khi người dùng nhấp ra ngoài vùng màn mờ nền -> Tự động đóng menu
     if (mobileOverlay) mobileOverlay.addEventListener('click', closeDrawer);
 
-    // 2. Sắp xếp jobs theo dropdown
+    /**
+     * -------------------------------------------------------------------------
+     * CHỨC NĂNG 2: XỬ LÝ SẮP XẾP DANH SÁCH VIỆC LÀM (JOB SORTING LOGIC)
+     * -------------------------------------------------------------------------
+     */
+    // Khai báo biến lưu thẻ <select> chứa các tùy chọn sắp xếp việc làm
     const sortSelect = document.getElementById('jobSortSelect');
+    
+    // Khai báo biến lưu container chứa danh sách các thẻ công việc (Jobs Grid)
     const jobsGrid = document.getElementById('jobsGrid');
+    
+    // Kiểm tra nếu cả hai phần tử trên đều tồn tại trong trang thì mới gán sự kiện
     if (sortSelect && jobsGrid) {
+        // Lắng nghe sự kiện người dùng thay đổi giá trị lựa chọn (change event) trong dropdown
         sortSelect.addEventListener('change', function() {
+            // Lấy tất cả các thẻ công việc (.aj-job-card) và chuyển đổi từ NodeList sang mảng thuần Array
             const cards = Array.from(jobsGrid.querySelectorAll('.aj-job-card'));
+            
+            // Trường hợp 1: Sắp xếp theo thứ tự bảng chữ cái A - Z
             if (this.value === 'alpha') {
-                cards.sort((a, b) => a.getAttribute('data-title').localeCompare(b.getAttribute('data-title')));
-            } else if (this.value === 'oldest') {
+                cards.sort((a, b) => {
+                    // Lấy tiêu đề công việc từ thuộc tính data-title và so sánh chuỗi bằng hàm localeCompare
+                    const titleA = a.getAttribute('data-title') || '';
+                    const titleB = b.getAttribute('data-title') || '';
+                    return titleA.localeCompare(titleB);
+                });
+            } 
+            // Trường hợp 2: Sắp xếp theo việc làm cũ nhất (Oldest)
+            else if (this.value === 'oldest') {
+                // Đảo ngược thứ tự hiện tại của mảng các thẻ công việc
                 cards.reverse();
-            } else {
-                cards.sort((a, b) => parseInt(a.getAttribute('data-idx')) - parseInt(b.getAttribute('data-idx')));
+            } 
+            // Trường hợp 3: Mặc định (Theo chỉ mục ban đầu data-idx lúc tạo ra từ cơ sở dữ liệu)
+            else {
+                cards.sort((a, b) => {
+                    const idxA = parseInt(a.getAttribute('data-idx')) || 0;
+                    const idxB = parseInt(b.getAttribute('data-idx')) || 0;
+                    return idxA - idxB;
+                });
             }
+            
+            // Duyệt qua mảng thẻ việc làm đã được sắp xếp và đưa lại vào jobsGrid để cập nhật giao diện
             cards.forEach(card => jobsGrid.appendChild(card));
         });
     }
 
-    // 3. Hiệu ứng nút Load More mở thêm jobs thật từ Seeder
+    /**
+     * -------------------------------------------------------------------------
+     * CHỨC NĂNG 3: XỬ LÝ NÚT TẢI THÊM VIỆC LÀM (LOAD MORE JOBS)
+     * -------------------------------------------------------------------------
+     */
+    // Khai báo biến lưu phần tử nút bấm 'LOAD MORE JOBS'
     const btnLoadMore = document.getElementById('btnLoadMore');
+    
+    // Kiểm tra nếu nút Load More tồn tại trên trang
     if (btnLoadMore) {
+        // Gán sự kiện click cho nút bấm Load More
         btnLoadMore.addEventListener('click', function() {
+            // Thu thập tất cả các thẻ công việc hiện đang bị ẩn (chứa class .aj-card-hidden)
             const hiddenCards = Array.from(document.querySelectorAll('.aj-job-card.aj-card-hidden'));
+            
+            // Nếu vẫn còn ít nhất 1 công việc bị ẩn
             if (hiddenCards.length > 0) {
+                // Thay đổi nội dung nút thành 'LOADING...' để tạo trải nghiệm người dùng đang tải dữ liệu
                 this.textContent = 'LOADING...';
+                
+                // Sử dụng setTimeout tạo độ trễ giả lập 300ms tạo hiệu ứng tải mượt mà
                 setTimeout(() => {
+                    // Cắt lấy 6 thẻ công việc ẩn đầu tiên trong danh sách (batch 6 jobs)
                     const batch = hiddenCards.slice(0, 6);
+                    
+                    // Duyệt qua từng thẻ trong nhóm 6 công việc và gỡ bỏ class .aj-card-hidden để hiển thị
                     batch.forEach(card => card.classList.remove('aj-card-hidden'));
                     
+                    // Đếm lại số lượng công việc còn bị ẩn sau khi vừa hiển thị nhóm mới
                     const remaining = document.querySelectorAll('.aj-job-card.aj-card-hidden').length;
+                    
+                    // Nếu đã hiển thị hết toàn bộ công việc (không còn thẻ ẩn nào)
                     if (remaining === 0) {
-                        btnLoadMore.textContent = 'NO MORE JOBS';
-                        btnLoadMore.style.opacity = '0.6';
-                        btnLoadMore.style.cursor = 'default';
-                        btnLoadMore.disabled = true;
+                        btnLoadMore.textContent = 'NO MORE JOBS';        // Đổi chữ trên nút thành thông báo hết việc
+                        btnLoadMore.style.opacity = '0.6';              // Giảm độ đậm của nút (làm mờ 60%)
+                        btnLoadMore.style.cursor = 'default';           // Chuyển con trỏ chuột về mặc định
+                        btnLoadMore.disabled = true;                    // Vô hiệu hóa nút bấm ngăn chặn click tiếp
                     } else {
+                        // Nếu vẫn còn việc làm ẩn phía sau, khôi phục lại chữ 'LOAD MORE JOBS'
                         btnLoadMore.textContent = 'LOAD MORE JOBS';
                     }
                 }, 300);
-            } else {
+            } 
+            // Nếu ngay từ đầu danh sách đã không còn việc làm ẩn nào
+            else {
                 this.textContent = 'NO MORE JOBS';
                 this.style.opacity = '0.6';
                 this.style.cursor = 'default';
@@ -1022,6 +1146,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<?php wp_footer(); ?>
+<?php 
+// Hàm nhúng các script phụ trợ, stylesheet và thanh công cụ admin của WordPress trước khi đóng thẻ </body>
+wp_footer(); 
+?>
 </body>
 </html>
