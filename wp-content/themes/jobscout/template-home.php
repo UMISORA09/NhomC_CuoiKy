@@ -1,102 +1,160 @@
 <?php
 /**
+ * ==============================================================================
+ * TẬP TIN: template-home.php
+ * DỰ ÁN: CỔNG TUYỂN DỤNG JOBSCOUT - FIT TDC (ĐỒ ÁN CUỐI KỲ NHÓM C)
+ * NHÁNH: Hien/1-home
+ * TÁC GIẢ: Nguyễn Thanh Hiền (thenghien2006@gmail.com)
+ * VAI TRÒ: Phụ trách Tính năng 1 - Giao diện Trang Chủ (Home Page)
+ * BẢN VẼ THIẾT KẾ: job-design/1-home.png
+ * THƯƠNG HIỆU: NHÓM C RECRUITING (Đã xử lý bản quyền & Vector sắc nét)
+ * ==============================================================================
+ * MÔ TẢ CHI TIẾT:
+ * Template hiển thị toàn bộ giao diện Trang Chủ chuẩn đồ án của Nhóm C.
+ * Chức năng và luồng xử lý:
+ * 1. Khởi tạo đường dẫn động đến thư mục theme và thư mục tài nguyên hình ảnh.
+ * 2. Định nghĩa danh sách 6 thương hiệu đối tác chuẩn bản vẽ (Icon FontAwesome vector).
+ * 3. Sử dụng WP_Query truy vấn 6 việc làm mới nhất từ plugin WP Job Manager.
+ * 4. Cơ chế Fallback dự phòng: Tự động bổ sung đủ 6 công việc nếu CSDL chưa có dữ liệu.
+ * 5. Truy vấn 4 bài viết blog tin tức mới nhất kèm hình ảnh đại diện vuông chuẩn gốc.
+ * 6. Kết nối các Widget thành phần (Banner Hero, Top Jobs, Career With Us, Newest Blogs).
+ * 7. Tích hợp Header và Footer dùng chung đồng bộ với các thành viên khác trong nhóm.
+ * ==============================================================================
  * Template Name: Home Design
  * Template Post Type: page
- *
- * Giao diện Trang Chủ (Home Page) chuẩn đồ án JobScout - Nhóm C (FIT - TDC)
- * Phụ trách: Nguyễn Thanh Hiền (UI/UX & Quản lý bài viết)
- * Thiết kế bám sát 100% bản vẽ: job-design/1-home.png
- * Thương hiệu: NHÓM C RECRUITING (Đã xử lý bản quyền)
- * Đã tối ưu CSS chuyên sâu chống xung đột và chống bị đè giao diện.
- *
- * @package JobScout
  */
 
+// Ngăn chặn truy cập trực tiếp file từ thanh địa chỉ trình duyệt vì lý do an toàn bảo mật
 defined( 'ABSPATH' ) || exit;
 
+// Lấy đường dẫn URL tuyệt đối đến thư mục theme đang hoạt động (ví dụ: http://localhost:8080/wp-content/themes/jobscout)
 $theme_uri     = get_template_directory_uri();
+
+// Lấy đường dẫn URL trang chủ của website (ví dụ: http://localhost:8080)
 $site_url      = home_url();
+
+// Đường dẫn đến thư mục chứa hình ảnh riêng của trang chủ
 $img_home_dir  = $theme_uri . '/images/home';
 
-// 6 Thương hiệu chuẩn theo bản vẽ thiết kế 1-home.png và all-jobs (Vector sắc nét 100%)
+/**
+ * ------------------------------------------------------------------------------
+ * DANH SÁCH 6 THƯƠNG HIỆU ĐỐI TÁC CHUẨN THEO BẢN VẼ 1-home.png
+ * ------------------------------------------------------------------------------
+ * Mỗi thương hiệu gồm:
+ * - 'icon': Tên class biểu tượng FontAwesome vector
+ * - 'name': Tên chính của thương hiệu (viết hoa)
+ * - 'sub' : Tên phụ định danh chi nhánh / lĩnh vực
+ */
 $preset_brands = array(
     array(
-        'icon' => 'fa-solid fa-hotel',
-        'name' => 'THE SODOH',
-        'sub'  => 'KYOTO'
+        'icon' => 'fa-solid fa-hotel',              // Biểu tượng khách sạn sang trọng
+        'name' => 'THE SODOH',                      // Thương hiệu The Sodoh
+        'sub'  => 'KYOTO'                           // Chi nhánh Kyoto
     ),
     array(
-        'icon' => 'fa-solid fa-tree',
-        'name' => 'FORTUNE',
-        'sub'  => 'GARDEN'
+        'icon' => 'fa-solid fa-tree',               // Biểu tượng cây xanh thiên nhiên
+        'name' => 'FORTUNE',                        // Thương hiệu Fortune
+        'sub'  => 'GARDEN'                          // Garden
     ),
     array(
-        'icon' => 'fa-solid fa-champagne-glasses',
-        'name' => 'BANQUET',
-        'sub'  => 'EVENTS'
+        'icon' => 'fa-solid fa-champagne-glasses',  // Biểu tượng ly sâm panh tiệc cưới/sự kiện
+        'name' => 'BANQUET',                        // Thương hiệu Banquet
+        'sub'  => 'EVENTS'                          // Events
     ),
     array(
-        'icon' => 'fa-solid fa-bell-concierge',
-        'name' => 'SEVEN',
-        'sub'  => 'HOUSE'
+        'icon' => 'fa-solid fa-bell-concierge',     // Biểu tượng chuông phục vụ khách sạn
+        'name' => 'SEVEN',                          // Thương hiệu Seven
+        'sub'  => 'HOUSE'                           // House
     ),
     array(
-        'icon' => 'fa-solid fa-utensils',
-        'name' => 'PHO THIN',
-        'sub'  => 'TOKYO'
+        'icon' => 'fa-solid fa-utensils',           // Biểu tượng dao nĩa nhà hàng ẩm thực
+        'name' => 'PHO THIN',                       // Thương hiệu Phở Thìn
+        'sub'  => 'TOKYO'                           // Chi nhánh Tokyo
     ),
     array(
-        'icon' => 'fa-solid fa-compass',
-        'name' => 'STAND',
-        'sub'  => 'GLOBAL'
+        'icon' => 'fa-solid fa-compass',            // Biểu tượng la bàn định hướng
+        'name' => 'STAND',                          // Thương hiệu Stand
+        'sub'  => 'GLOBAL'                          // Global
     )
 );
 
-// 1. QUERY TOP JOBS (Lấy 6 việc làm từ CSDL WP Job Manager)
+/**
+ * ------------------------------------------------------------------------------
+ * 1. TRUY VẤN DỮ LIỆU TOP JOBS (LẤY 6 VIỆC LÀM MỚI NHẤT TỪ CSDL WORDPRESS)
+ * ------------------------------------------------------------------------------
+ */
+// Thiết lập các tham số truy vấn bằng đối tượng WP_Query của WordPress
 $args_jobs = array(
-    'post_type'      => 'job_listing',
-    'post_status'    => 'publish',
-    'posts_per_page' => 6,
-    'orderby'        => 'date',
-    'order'          => 'DESC'
+    'post_type'      => 'job_listing', // Kiểu bài viết việc làm của plugin WP Job Manager
+    'post_status'    => 'publish',     // Chỉ lấy bài viết đã được kiểm duyệt và công khai
+    'posts_per_page' => 6,             // Số lượng giới hạn đúng 6 bài để hiển thị trên Trang Chủ
+    'orderby'        => 'date',        // Tiêu chí sắp xếp: Theo ngày tạo bài viết
+    'order'          => 'DESC'         // Thứ tự: Giảm dần (bài mới nhất xếp lên trước)
 );
+
+// Khởi tạo đối tượng truy vấn dữ liệu từ bảng wp_posts
 $jobs_query = new WP_Query( $args_jobs );
+
+// Mảng rỗng lưu danh sách các công việc đã được xử lý chuẩn hóa dữ liệu
 $home_jobs = array();
 
+// Biến đếm chỉ mục để gán luân phiên 6 logo thương hiệu cho các công việc
 $idx = 0;
+
+// Kiểm tra nếu trong CSDL có bài đăng việc làm phù hợp
 if ( $jobs_query->have_posts() ) {
+    // Vòng lặp duyệt qua từng công việc lấy được từ CSDL
     while ( $jobs_query->have_posts() ) {
-        $jobs_query->the_post();
-        $jid       = get_the_ID();
+        $jobs_query->the_post(); // Gán dữ liệu bài viết hiện tại vào biến toàn cục $post
+        
+        $jid       = get_the_ID(); // Lấy ID bài viết duy nhất
+        
+        // Lấy meta trường tùy biến: Địa điểm làm việc (ví dụ: 'Ho Chi Minh City')
         $loc       = get_post_meta( $jid, '_job_location', true );
+        
+        // Lấy phân loại taxonomy: Hình thức làm việc ('job_listing_type': Fulltime, Part-time,...)
         $types     = wp_get_post_terms( $jid, 'job_listing_type' );
         $type_name = ( ! is_wp_error( $types ) && ! empty( $types ) ) ? $types[0]->name : 'Fulltime';
+        
+        // Lấy phân loại taxonomy: Danh mục ngành nghề ('job_listing_category')
         $cats      = wp_get_post_terms( $jid, 'job_listing_category' );
         $cat_name  = ( ! is_wp_error( $cats ) && ! empty( $cats ) ) ? $cats[0]->name : 'Category Name';
+        
+        // Lấy meta trường tùy biến: Tên công ty tuyển dụng
         $company   = get_post_meta( $jid, '_company_name', true );
+        
+        // Gán logo thương hiệu luân phiên từ mảng preset_brands đã định nghĩa ở trên
         $brand     = $preset_brands[$idx % count($preset_brands)];
 
+        // Đóng gói đầy đủ thông tin chuẩn hóa của từng công việc vào mảng home_jobs
         $home_jobs[] = array(
-            'title'    => get_the_title(),
-            'date'     => 'Created: ' . get_the_date( 'M d, Y' ),
-            'type'     => $type_name,
-            'category' => $cat_name,
-            'location' => $loc ? $loc : 'Ho Chi Minh City',
-            'company'  => $company ? $company : 'Nhóm C Recruiting',
-            'brand'    => $brand,
-            'link'     => esc_url( home_url( '/job-detail/?job_id=' . $jid ) ),
-            'bullets'  => array(
+            'title'    => get_the_title(),                                              // Tiêu đề việc làm
+            'date'     => 'Created: ' . get_the_date( 'M d, Y' ),                      // Ngày đăng định dạng Tháng Ngày, Năm
+            'type'     => $type_name,                                                   // Hình thức làm việc (Fulltime)
+            'category' => $cat_name,                                                    // Tên danh mục nghề nghiệp
+            'location' => $loc ? $loc : 'Ho Chi Minh City',                             // Địa điểm (mặc định TP.HCM)
+            'company'  => $company ? $company : 'Nhóm C Recruiting',                   // Tên công ty tuyển dụng
+            'brand'    => $brand,                                                       // Logo thương hiệu đối tác
+            'link'     => esc_url( home_url( '/job-detail/?job_id=' . $jid ) ),         // Đường link xem chi tiết công việc
+            'bullets'  => array(                                                        // Danh sách 3 đãi ngộ / mô tả nổi bật
                 'Be responsible for the effective operational management of the property',
                 'Excellent salary bonuses & recognition activities',
                 'Foreign language allowance (up to 500USD/month)'
             )
         );
-        $idx++;
+        $idx++; // Tăng biến đếm chỉ mục
     }
+    // Khôi phục lại trạng thái dữ liệu bài viết gốc của WordPress sau vòng lặp
     wp_reset_postdata();
 }
 
-// Fallback nếu CSDL chưa đủ 6 jobs: Hiển thị đúng 6 việc làm trong bản vẽ 1-home.png
+/**
+ * ------------------------------------------------------------------------------
+ * CƠ CHẾ DỰ PHÒNG (FALLBACK): ĐẢM BẢO LUÔN CÓ ĐỦ 6 CÔNG VIỆC TRÊN TRANG CHỦ
+ * ------------------------------------------------------------------------------
+ * Trường hợp website mới cài đặt hoặc CSDL chưa có đủ 6 việc làm,
+ * hệ thống sẽ tự động ghép thêm các công việc mẫu chuẩn bản vẽ 1-home.png
+ */
 if ( count( $home_jobs ) < 6 ) {
     $fallback_jobs = array(
         array(
@@ -182,84 +240,115 @@ if ( count( $home_jobs ) < 6 ) {
                 'Excellent salary bonuses & recognition activities',
                 'Foreign language allowance (up to 500USD/month)'
             )
-        ),
+        )
     );
+    // Sử dụng hàm array_slice() để cắt lấy đúng số lượng bài còn thiếu từ mảng $fallback_jobs, sau đó dùng array_merge() để nối vào $home_jobs sao cho tổng luôn đủ 6 bài
     $home_jobs = array_merge( $home_jobs, array_slice( $fallback_jobs, count( $home_jobs ) ) );
 }
 
-// 2. 4 THUMBNAIL BLOG CHUẨN GỐC TỪ THIẾT KẾ (VUÔNG 200x200 SẮC NÉT)
+
+/**
+ * ------------------------------------------------------------------------------
+ * 2. TRUY VẤN 4 BÀI VIẾT TIN TỨC MỚI NHẤT (NEWEST BLOG ENTRIES)
+ * ------------------------------------------------------------------------------
+ * Khởi tạo danh sách 4 hình ảnh đại diện (thumbnail) chất lượng cao tỉ lệ vuông
+ * chuẩn gốc theo thiết kế 1-home.png trong thư mục /images/news/
+ */
 $img_news_dir = $theme_uri . '/images/news';
 $blog_images = array(
-    $img_news_dir . '/blog-project-dev.jpg',
-    $img_news_dir . '/blog-restaurant-hotel.jpg',
-    $img_news_dir . '/blog-hospitality-consulting.jpg',
-    $img_news_dir . '/blog-interior-design.jpg',
+    $img_news_dir . '/blog-project-dev.jpg',             // Bài 1: Phát triển dự án
+    $img_news_dir . '/blog-restaurant-hotel.jpg',        // Bài 2: Vận hành nhà hàng & khách sạn
+    $img_news_dir . '/blog-hospitality-consulting.jpg',   // Bài 3: Tư vấn dịch vụ hiếu khách
+    $img_news_dir . '/blog-interior-design.jpg',         // Bài 4: Thiết kế nội thất & không gian tiệc
 );
 
+// -----------------------------------------------------------------------------
+// MẢNG DỰ PHÒNG ($fallback_blogs): ĐẢM BẢO KHU VỰC BLOG LUÔN CÓ ĐỦ 4 BÀI VIẾT
+// Cách thức xử lý:
+// - Nếu website mới cài hoặc database chưa tạo đủ 4 bài viết blog, code sẽ dùng mảng này bù vào.
+// - Mỗi phần tử là 1 bài viết mẫu chuẩn 100% bản vẽ thiết kế 1-home.png.
+// -----------------------------------------------------------------------------
 $fallback_blogs = array(
+    // Bài blog mẫu 1: Phát triển dự án
     array(
-        'title'   => 'Project Development',
-        'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        'link'    => esc_url( home_url( '/blog/' ) ),
-        'image'   => $blog_images[0]
+        'title'   => 'Project Development',                                                 // Tiêu đề bài viết mẫu số 1
+        'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', // Đoạn tóm tắt văn bản mẫu
+        'link'    => esc_url( home_url( '/blog/' ) ),                                       // Đường link dẫn đến trang tin tức /blog/
+        'image'   => $blog_images[0]                                                        // Hình ảnh đại diện vuông 1:1 từ thư mục /images/news/
     ),
+    // Bài blog mẫu 2: Vận hành nhà hàng & khách sạn
     array(
-        'title'   => 'Restaurant & Hotel Management And Operations',
-        'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        'link'    => esc_url( home_url( '/blog/' ) ),
-        'image'   => $blog_images[1]
+        'title'   => 'Restaurant & Hotel Management And Operations',                        // Tiêu đề bài viết mẫu số 2
+        'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', // Đoạn tóm tắt văn bản mẫu
+        'link'    => esc_url( home_url( '/blog/' ) ),                                       // Đường link dẫn đến trang tin tức /blog/
+        'image'   => $blog_images[1]                                                        // Hình ảnh đại diện vuông 1:1 từ thư mục /images/news/
     ),
+    // Bài blog mẫu 3: Tư vấn dịch vụ hiếu khách
     array(
-        'title'   => 'Hospitality Consulting',
-        'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        'link'    => esc_url( home_url( '/blog/' ) ),
-        'image'   => $blog_images[2]
+        'title'   => 'Hospitality Consulting',                                              // Tiêu đề bài viết mẫu số 3
+        'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', // Đoạn tóm tắt văn bản mẫu
+        'link'    => esc_url( home_url( '/blog/' ) ),                                       // Đường link dẫn đến trang tin tức /blog/
+        'image'   => $blog_images[2]                                                        // Hình ảnh đại diện vuông 1:1 từ thư mục /images/news/
     ),
+    // Bài blog mẫu 4: Thiết kế không gian và nội thất
     array(
-        'title'   => 'Venue And Interior Design',
-        'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        'link'    => esc_url( home_url( '/blog/' ) ),
-        'image'   => $blog_images[3]
+        'title'   => 'Venue And Interior Design',                                           // Tiêu đề bài viết mẫu số 4
+        'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', // Đoạn tóm tắt văn bản mẫu
+        'link'    => esc_url( home_url( '/blog/' ) ),                                       // Đường link dẫn đến trang tin tức /blog/
+        'image'   => $blog_images[3]                                                        // Hình ảnh đại diện vuông 1:1 từ thư mục /images/news/
     ),
 );
 
+// Tham số truy vấn 4 bài viết tin tức mới nhất từ bảng wp_posts
 $args_blogs = array(
-    'post_type'      => 'post',
-    'post_status'    => 'publish',
-    'posts_per_page' => 4,
-    'orderby'        => 'date',
-    'order'          => 'DESC'
+    'post_type'      => 'post',      // Kiểu bài viết: Bài viết tin tức chuẩn (Post)
+    'post_status'    => 'publish',   // Trạng thái: Đã công khai
+    'posts_per_page' => 4,           // Số lượng: Đúng 4 bài viết để hiển thị thành 2 hàng x 2 cột
+    'orderby'        => 'date',      // Tiêu chí sắp xếp: Theo ngày đăng
+    'order'          => 'DESC'       // Thứ tự: Mới nhất xếp trước
 );
 $blog_query = new WP_Query( $args_blogs );
 $home_blogs = array();
 $b_idx = 0;
 
+// Duyệt qua kết quả trả về từ CSDL
 if ( $blog_query->have_posts() ) {
     while ( $blog_query->have_posts() ) {
         $blog_query->the_post();
-        $bid = get_the_ID();
-        $thumb = get_the_post_thumbnail_url( $bid, 'medium' );
+        $bid   = get_the_ID(); // Lấy ID bài viết
+        $thumb = get_the_post_thumbnail_url( $bid, 'medium' ); // Lấy ảnh đại diện (kích thước medium)
+        
+        // Nếu bài viết không có ảnh đại diện, tự động dùng ảnh vector chuẩn thiết kế tương ứng
         if ( ! $thumb ) {
             $thumb = $blog_images[$b_idx % count($blog_images)];
         }
+        
+        // Đóng gói thông tin bài viết vào mảng home_blogs
         $home_blogs[] = array(
-            'title'   => get_the_title(),
-            'excerpt' => wp_trim_words( get_the_excerpt(), 18, '...' ),
-            'link'    => get_permalink( $bid ),
-            'image'   => $thumb
+            'title'   => get_the_title(),                                // Tiêu đề bài viết
+            'excerpt' => wp_trim_words( get_the_excerpt(), 18, '...' ),  // Cắt ngắn trích dẫn đúng 18 từ
+            'link'    => get_permalink( $bid ),                          // Đường link xem bài viết chi tiết
+            'image'   => $thumb                                          // Ảnh đại diện
         );
         $b_idx++;
     }
-    wp_reset_postdata();
+    wp_reset_postdata(); // Khôi phục lại post data toàn cục
 }
 
+// Nếu CSDL có ít hơn 4 bài, dùng array_slice() lấy số bài blog còn thiếu trong $fallback_blogs và ghép vào $home_blogs bằng array_merge()
 if ( count( $home_blogs ) < 4 ) {
     $home_blogs = array_merge( $home_blogs, array_slice( $fallback_blogs, count( $home_blogs ) ) );
 }
 
-$cache_bust = time();
-$hero_bg   = $img_home_dir . '/hero-home-bg.jpg?v=' . $cache_bust;
-$career_bg = $img_home_dir . '/career-bg.jpg?v=' . $cache_bust;
+
+/**
+ * ------------------------------------------------------------------------------
+ * 3. HÌNH ẢNH NỀN & KỸ THUẬT CACHE BUSTING (TRÁNH TRÌNH DUYỆT LƯU ẢNH CŨ)
+ * ------------------------------------------------------------------------------
+ */
+$cache_bust = time(); // Dùng timestamp hiện tại làm tham số phiên bản (?v=...)
+$hero_bg   = $img_home_dir . '/hero-home-bg.jpg?v=' . $cache_bust; // Ảnh nền Hero Banner
+$career_bg = $img_home_dir . '/career-bg.jpg?v=' . $cache_bust;    // Ảnh nền Career With Us
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -1142,13 +1231,32 @@ $career_bg = $img_home_dir . '/career-bg.jpg?v=' . $cache_bust;
 <body <?php body_class( 'home-design' ); ?>>
 <?php wp_body_open(); ?>
 
-<!-- 1. HEADER & NAVIGATION -->
+<!-- ========================================================================
+     BƯỚC 1: NẠP THANH ĐIỀU HƯỚNG & HEADER THỐNG NHẤT CỦA NHÓM C
+     ======================================================================== -->
 <?php get_template_part( 'template-parts/nhomc-header' ); ?>
 
+<!-- ========================================================================
+     BƯỚC 2: RENDER CÁC KHỐI WIDGET TRANG CHỦ THEO CƠ CHẾ NĂNG ĐỘNG
+     Hàm nhomc_render_page_widgets() sẽ tự động nạp 4 widget thành phần:
+     1. home-hero.php   : Banner tìm kiếm việc làm (Hero Search)
+     2. home-jobs.php   : 6 công việc tiêu biểu (Top Jobs)
+     3. home-career.php : Giới thiệu nghề nghiệp (Career With Us)
+     4. home-blogs.php  : 4 bài viết blog mới nhất (Newest Blog Entries)
+     Dữ liệu truyền vào thông qua hàm compact() gồm:
+     - $hero_bg   : Đường dẫn ảnh nền banner
+     - $career_bg : Đường dẫn ảnh nền career
+     - $home_jobs : Mảng 6 việc làm lấy từ CSDL
+     - $home_blogs: Mảng 4 bài viết blog lấy từ CSDL
+     ======================================================================== -->
 <?php nhomc_render_page_widgets( 'nhomc-home', compact( 'hero_bg', 'career_bg', 'home_jobs', 'home_blogs' ) ); ?>
-<!-- 6 & 7. UNIFIED NHOM C FOOTER -->
+
+<!-- ========================================================================
+     BƯỚC 3: NẠP NEWSLETTER & FOOTER ĐỒNG BỘ CỦA NHÓM C
+     ======================================================================== -->
 <?php get_template_part( 'template-parts/nhomc-footer' ); ?>
 
-<?php wp_footer(); ?>
+<?php wp_footer(); // Nạp các thư viện JavaScript và script chân trang của WordPress ?>
 </body>
 </html>
+

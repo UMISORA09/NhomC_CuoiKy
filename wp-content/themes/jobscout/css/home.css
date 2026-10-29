@@ -1,7 +1,20 @@
-/* ==========================================================================
-   HOMEPAGE STYLES - NHÓM C (FIT - TDC)
-   Giao diện chuẩn 100% theo bản vẽ: job-design/1-home.png
-   ========================================================================== */
+/**
+ * ==============================================================================
+ * TẬP TIN: home.css
+ * DỰ ÁN: CỔNG TUYỂN DỤNG JOBSCOUT - FIT TDC (ĐỒ ÁN CUỐI KỲ NHÓM C)
+ * NHÁNH: Hien/1-home
+ * TÁC GIẢ: Nguyễn Thanh Hiền (thenghien2006@gmail.com)
+ * VAI TRÒ: Phụ trách Tính năng 1 - Giao diện Trang Chủ (Home Page)
+ * BẢN VẼ: job-design/1-home.png
+ * ==============================================================================
+ * MÔ TẢ CHI TIẾT:
+ * Toàn bộ các định dạng CSS chuẩn Responsive cho Trang Chủ:
+ * - Màu cam chủ đạo: #eb6723 (var(--primary-orange))
+ * - Bố cục Container: Tối đa 1140px căn giữa màn hình
+ * - Lưới hiển thị các thẻ Top Jobs & Blog Entries chuẩn tỉ lệ
+ * - Hiệu ứng hover chuyển động mượt mà và tương thích tốt trên điện thoại
+ * ==============================================================================
+ */
 
 :root {
     --primary-orange: #eb6723;
