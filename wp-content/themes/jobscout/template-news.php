@@ -1,29 +1,146 @@
 <?php
 /**
+ * ==============================================================================
+ * TẬP TIN: template-news.php
+ * DỰ ÁN: CỔNG TUYỂN DỤNG JOBSCOUT - FIT TDC (ĐỒ ÁN CUỐI KỲ NHÓM C)
+ * NHÁNH: xuanhoa/3-news
+ * TÁC GIẢ: Nguyễn Xuân Hòa (vhoa1682006@gmail.com)
+ * VAI TRÒ: Phụ trách Tính năng 3 - Giao diện Trang Tin Tức (News / Blog Page)
+ * BẢN VẼ THIẾT KẾ: job-design/3-news.png
+ * THƯƠNG HIỆU: NHÓM C RECRUITING (Đã xử lý bản quyền & Vector sắc nét)
+ * ==============================================================================
+ * MÔ TẢ CHI TIẾT VÀ QUY TRÌNH HOẠT ĐỘNG:
+ * 1. Khởi tạo đường dẫn động tới hệ thống theme và thư mục tài nguyên hình ảnh tin tức.
+ * 2. Thiết lập danh mục 8 bài viết blog chuẩn theo bản vẽ 3-news.png (ảnh đại diện,
+ *    tiêu đề, tóm tắt tiếng Việt giàu ngữ cảnh và đường dẫn chi tiết riêng biệt).
+ * 3. Kiểm tra và truy vấn các bài viết thực tế được xuất bản trong WordPress (WP_Query),
+ *    tự động liên kết mượt mà với trang chi tiết (/news-detail/?post=...).
+ * 4. Tương thích 100% với Trình tùy biến giao diện WordPress Customizer ("Sửa giao diện"),
+ *    sử dụng kiến trúc Widget động 'nhomc-blog' (gồm khối Banner PDS NEWS và khối Blog Entries).
+ * 5. Tích hợp Header dùng chung (nhomc-header) và Footer dùng chung (nhomc-footer)
+ *    đồng bộ và thống nhất trên toàn bộ 6 trang chức năng của Nhóm C.
+ * 6. Hỗ trợ chuẩn hàm wp_body_open() cho thanh quản trị WordPress Admin Bar và Customizer.
+ * ==============================================================================
  * Template Name: News Design
  * Template Post Type: page, post
- *
- * Giao diện trang TIN TỨC (NEWS) chuẩn đồ án JobScout - Nhóm C (FIT - TDC)
- * Thiết kế chính xác 100% theo bản vẽ thiết kế 3-news.png
- * Đầy đủ Responsive đa thiết bị, giữ trọn vẹn bố cục và phong cách nhận diện NhomC.
  */
 
-$site_url = home_url();
-$theme_uri = get_template_directory_uri();
-$banner_img = $theme_uri . '/images/news/news-hero-banner.jpg';
+// Ngăn chặn truy cập trực tiếp file từ thanh địa chỉ trình duyệt vì lý do bảo mật
+defined( 'ABSPATH' ) || exit;
+
+// Lấy đường dẫn URL trang chủ của website (ví dụ: http://localhost:8080)
+$site_url     = home_url();
+
+// Lấy đường dẫn URL tuyệt đối đến thư mục theme đang hoạt động
+$theme_uri    = get_template_directory_uri();
+
+// Đường dẫn ảnh banner PDS NEWS mặc định
+$banner_img   = $theme_uri . '/images/news/news-hero-banner.jpg';
+
+// Đường dẫn đến thư mục chứa hình ảnh riêng của trang tin tức
 $news_img_dir = $theme_uri . '/images/news/';
 
-// Use published WordPress posts so widget content follows edits in the admin.
+/**
+ * ------------------------------------------------------------------------------
+ * DANH MỤC 8 TIN TỨC CHUẨN ĐỒ ÁN THEO THIẾT KẾ 3-news.png
+ * ------------------------------------------------------------------------------
+ * Mỗi bài viết được định nghĩa đầy đủ các trường:
+ * - 'title'  : Tiêu đề bài viết
+ * - 'slug'   : Đường dẫn định danh bài viết để mở đúng nội dung tại trang chi tiết
+ * - 'image'  : Ảnh đại diện bài viết
+ * - 'excerpt': Đoạn tóm tắt nội dung bài viết
+ */
+$default_news = array(
+    array(
+        'title'   => 'Project Development',
+        'slug'    => 'project-development',
+        'image'   => $news_img_dir . 'blog-project-dev.jpg',
+        'excerpt' => 'Chiến lược quản trị vòng đời dự án từ khảo sát tiền khả thi, kiểm soát ngân sách đến nghiệm thu bàn giao vận hành chuyên nghiệp.',
+    ),
+    array(
+        'title'   => 'Restaurant & Hotel Management And Operations',
+        'slug'    => 'restaurant-hotel-management-and-operations',
+        'image'   => $news_img_dir . 'blog-restaurant-hotel.jpg',
+        'excerpt' => 'Nâng tầm chuẩn mực dịch vụ lưu trú và ẩm thực cao cấp thông qua văn hóa phục vụ tận tâm Omotenashi và tối ưu hóa hệ thống vận hành.',
+    ),
+    array(
+        'title'   => 'Hospitality Consulting',
+        'slug'    => 'hospitality-consulting',
+        'image'   => $news_img_dir . 'blog-hospitality-consulting.jpg',
+        'excerpt' => 'Tư vấn hoạch định mô hình kinh doanh nghỉ dưỡng, đàm phán hợp đồng quản trị thương hiệu quốc tế và tối đa hóa hiệu suất sinh lời.',
+    ),
+    array(
+        'title'   => 'Venue And Interior Design',
+        'slug'    => 'venue-and-interior-design',
+        'image'   => $news_img_dir . 'blog-interior-design.jpg',
+        'excerpt' => 'Kiến tạo không gian kiến trúc và nội thất nghỉ dưỡng độc bản, kết hợp tinh tế giữa nghệ thuật thẩm mỹ bản địa và vật liệu sinh thái bền vững.',
+    ),
+    array(
+        'title'   => 'Project Development',
+        'slug'    => 'project-development-2',
+        'image'   => $news_img_dir . 'blog-project-dev.jpg',
+        'excerpt' => 'Chiến lược quản trị vòng đời dự án từ khảo sát tiền khả thi, kiểm soát ngân sách đến nghiệm thu bàn giao vận hành chuyên nghiệp.',
+    ),
+    array(
+        'title'   => 'Restaurant & Hotel Management And Operations',
+        'slug'    => 'restaurant-hotel-management-and-operations-2',
+        'image'   => $news_img_dir . 'blog-restaurant-hotel.jpg',
+        'excerpt' => 'Nâng tầm chuẩn mực dịch vụ lưu trú và ẩm thực cao cấp thông qua văn hóa phục vụ tận tâm Omotenashi và tối ưu hóa hệ thống vận hành.',
+    ),
+    array(
+        'title'   => 'Hospitality Consulting',
+        'slug'    => 'hospitality-consulting-2',
+        'image'   => $news_img_dir . 'blog-hospitality-consulting.jpg',
+        'excerpt' => 'Tư vấn hoạch định mô hình kinh doanh nghỉ dưỡng, đàm phán hợp đồng quản trị thương hiệu quốc tế và tối đa hóa hiệu suất sinh lời.',
+    ),
+    array(
+        'title'   => 'Venue And Interior Design',
+        'slug'    => 'venue-and-interior-design-2',
+        'image'   => $news_img_dir . 'blog-interior-design.jpg',
+        'excerpt' => 'Kiến tạo không gian kiến trúc và nội thất nghỉ dưỡng độc bản, kết hợp tinh tế giữa nghệ thuật thẩm mỹ bản địa và vật liệu sinh thái bền vững.',
+    ),
+);
+
+// Mảng ảnh thumbnail xoay vòng dự phòng
 $blog_images = array( 'blog-project-dev.jpg', 'blog-restaurant-hotel.jpg', 'blog-hospitality-consulting.jpg', 'blog-interior-design.jpg' );
+
+// Lấy danh sách các bài viết thực tế được đăng tải trong CSDL WordPress
+$news_posts = get_posts( array(
+    'post_type'      => 'post',
+    'post_status'    => 'publish',
+    'posts_per_page' => 8,
+    'orderby'        => 'date',
+    'order'          => 'DESC',
+) );
+
+// Kiểm tra xem có bài viết tùy chỉnh thực sự nào trong database ngoài bài Hello World mặc định
+$has_custom_posts = false;
+if ( ! empty( $news_posts ) ) {
+    foreach ( $news_posts as $p ) {
+        if ( $p->post_name !== 'hello-world' ) {
+            $has_custom_posts = true;
+            break;
+        }
+    }
+}
+
 $news_items = array();
-$news_posts = get_posts( array( 'post_type' => 'post', 'post_status' => 'publish', 'posts_per_page' => 8, 'orderby' => 'date', 'order' => 'DESC' ) );
-foreach ( $news_posts as $index => $news_post ) {
-    $news_items[] = array(
-        'title' => $news_post->post_title,
-        'image' => get_the_post_thumbnail_url( $news_post, 'medium_large' ) ?: $news_img_dir . $blog_images[ $index % count( $blog_images ) ],
-        'excerpt' => wp_trim_words( get_the_excerpt( $news_post ), 28, '...' ),
-        'link' => get_permalink( $news_post ),
-    );
+if ( $has_custom_posts ) {
+    // Nếu quản trị viên đã tạo bài viết mới trong WordPress admin, nạp danh sách động
+    foreach ( $news_posts as $index => $news_post ) {
+        $news_items[] = array(
+            'title'   => $news_post->post_title,
+            'image'   => get_the_post_thumbnail_url( $news_post, 'medium_large' ) ?: $news_img_dir . $blog_images[ $index % count( $blog_images ) ],
+            'excerpt' => wp_trim_words( get_the_excerpt( $news_post ), 28, '...' ),
+            'link'    => esc_url( home_url( '/news-detail/?post=' . urlencode( $news_post->post_name ) ) ),
+        );
+    }
+} else {
+    // Ngược lại, sử dụng 8 bài viết mẫu chuẩn đẹp 100% bản vẽ thiết kế 3-news.png
+    foreach ( $default_news as $idx => $item ) {
+        $item['link'] = esc_url( $site_url . '/news-detail/?post=' . urlencode( $item['slug'] ) );
+        $news_items[] = $item;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -706,6 +823,7 @@ foreach ( $news_posts as $index => $news_post ) {
     </style>
 </head>
 <body <?php body_class('nhomc-news-page'); ?>>
+<?php wp_body_open(); ?>
 
 <!-- 1. HEADER / NAVBAR -->
 <?php get_template_part( 'template-parts/nhomc-header' ); ?>
