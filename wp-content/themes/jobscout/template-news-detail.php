@@ -1,12 +1,37 @@
 <?php
 /**
+ * ==============================================================================
+ * TẬP TIN: template-news-detail.php
+ * DỰ ÁN: CỔNG TUYỂN DỤNG JOBSCOUT - FIT TDC (ĐỒ ÁN CUỐI KỲ NHÓM C)
+ * NHÁNH: xuanhoa/6-newsdetail
+ * TÁC GIẢ: Nguyễn Xuân Hòa (vhoa1682006@gmail.com)
+ * VAI TRÒ: Phụ trách Tính năng 6 - Giao diện Trang Chi Tiết Tin Tức (News Detail Page)
+ * BẢN VẼ THIẾT KẾ: job-design/6-news detail.png
+ * THƯƠNG HIỆU: NHÓM C RECRUITING (Đã xử lý bản quyền & Vector sắc nét)
+ * ==============================================================================
+ * MÔ TẢ CHI TIẾT VÀ QUY TRÌNH HOẠT ĐỘNG:
+ * 1. Khởi tạo đường dẫn động tới thư mục theme và thư viện ảnh bài viết.
+ * 2. Lưu trữ danh mục các bài viết chuẩn đồ án (articles_catalog) gồm: tiêu đề,
+ *    ngày đăng, danh mục, địa điểm, ảnh thumbnail và 3 đoạn văn bản nội dung chi tiết.
+ * 3. Cơ chế nhận diện bài viết động: Tiếp nhận tham số $_GET['post'] truyền từ trang
+ *    danh sách tin tức hoặc từ các liên kết bài viết liên quan; tự động nạp nội dung tương ứng.
+ * 4. Hỗ trợ chuẩn fallback mặc định 100% bản vẽ 6-news detail.png (COO Hotel Resort Chain).
+ * 5. Thanh điều hướng Breadcrumb thông minh (Home / All News / Tiêu đề bài viết).
+ * 6. Khối Header Card hiển thị tiêu đề, ngày đăng, huy hiệu danh mục và địa điểm.
+ * 7. Khối nội dung chính chia 2 cột:
+ *    - Cột trái: Văn bản chi tiết, hình ảnh minh họa, trích dẫn nổi bật (Quote),
+ *      danh sách từ khóa tag, nút Share sao chép link và thông báo Toast.
+ *    - Cột phải: Hộp giới thiệu cơ hội việc làm liên quan và danh sách tin tức mới nhất.
+ * 8. Khối danh sách 4 bài viết gần đây ở chân trang (Recent News grid).
+ * 9. Tích hợp Header và Footer dùng chung đồng bộ toàn hệ thống Nhóm C.
+ * 10. Tương thích chuẩn WordPress Customizer ("Sửa giao diện") với hàm wp_body_open().
+ * ==============================================================================
  * Template Name: News Detail Design
  * Template Post Type: post, page
- *
- * Giao diện trang CHI TIẾT BÀI VIẾT (NEWS DETAIL) chuẩn đồ án JobScout - Nhóm C (FIT - TDC)
- * Thiết kế chính xác 100% theo bản vẽ thiết kế 6-news detail.png
- * Đầy đủ Responsive đa thiết bị, giữ trọn vẹn bố cục và phong cách nhận diện NhomC.
  */
+
+// Ngăn chặn truy cập trực tiếp file từ thanh địa chỉ trình duyệt vì lý do bảo mật
+defined( 'ABSPATH' ) || exit;
 
 $site_url = home_url();
 $theme_uri = get_template_directory_uri();
@@ -1042,6 +1067,7 @@ foreach ($recent_news as $r_item) {
     </style>
 </head>
 <body <?php body_class('nhomc-news-detail-page'); ?>>
+<?php wp_body_open(); ?>
 
 <!-- 1. HEADER / NAVBAR -->
 <?php get_template_part( 'template-parts/nhomc-header' ); ?>
