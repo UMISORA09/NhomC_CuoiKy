@@ -39,13 +39,14 @@ extract( $args, EXTR_SKIP );
             <div class="nhomc-job-hero-left">
                 <!-- Chức năng hiển thị Logo doanh nghiệp chuẩn tỉ lệ -->
                 <div class="nhomc-company-logo-box">
-                    <?php echo nhomc_get_company_logo( $company_name, $current_job_id, 'large' ); ?>
+                    <?php if ( $widget_image ) : ?><img class="nc-widget-image" src="<?php echo esc_url( $widget_image ); ?>" alt="<?php echo esc_attr( $company_name ); ?>"><?php else : ?><?php echo nhomc_get_company_logo( $company_name, $current_job_id, 'large' ); ?><?php endif; ?>
                 </div>
 
                 <!-- Tiêu đề công việc và siêu dữ liệu (Metadata) -->
                 <div class="nhomc-job-hero-info">
                     <!-- Tên vị trí tuyển dụng lấy trực tiếp từ tiêu đề bài viết -->
-                    <h1 class="nhomc-job-title"><?php the_title(); ?></h1>
+                    <h1 class="nhomc-job-title"><?php echo esc_html( $widget_title ?: get_the_title() ); ?></h1>
+                    <?php if ( $widget_description !== '' ) : ?><p><?php echo nl2br( esc_html( $widget_description ) ); ?></p><?php endif; ?>
 
                     <!-- Ngày đăng bài định dạng: Tháng Ngày, Năm (VD: Oct 28, 2026) -->
                     <div class="nhomc-job-meta-row">

@@ -27,7 +27,7 @@ extract( $args, EXTR_SKIP );
                 <article class="nhomc-card-content">
                     <?php
                     // Lấy nội dung gốc của bài viết từ Database
-                    $raw_content = get_the_content();
+                    $raw_content = $widget_description !== '' ? esc_html( $widget_description ) : get_the_content();
 
                     if ( ! empty( $raw_content ) ) {
                         // Hiển thị nội dung sạch, tự động thêm thẻ đoạn văn <p> và xử lý shortcode
@@ -60,7 +60,7 @@ extract( $args, EXTR_SKIP );
             <div class="nhomc-job-col-right">
                 <!-- Khối Widget 1: Điểm số đánh giá từ nhân viên (Staff Rating) -->
                 <div class="nhomc-sidebar-card">
-                    <h3 class="nhomc-sidebar-title">Staff Rating</h3>
+                    <h3 class="nhomc-sidebar-title"><?php echo esc_html( $widget_rating_title ?? 'Staff Rating' ); ?></h3>
                     <div class="nhomc-rating-box">
                         <!-- Hiển thị dãy 5 ngôi sao vàng theo thiết kế -->
                         <div class="nhomc-stars" aria-label="Rating: 4.0 out of 5 stars">
@@ -77,7 +77,7 @@ extract( $args, EXTR_SKIP );
 
                 <!-- Khối Widget 2: Thư viện hình ảnh công ty (Company Photos Preview) -->
                 <div class="nhomc-sidebar-card">
-                    <h3 class="nhomc-sidebar-title">Company Photos</h3>
+                    <h3 class="nhomc-sidebar-title"><?php echo esc_html( $widget_photos_title ?? 'Company Photos' ); ?></h3>
                     <div class="nhomc-photos-preview" id="nhomcCompanyPhotosTrigger" onclick="nhomcOpenPhotoModal(0)" role="button" tabindex="0" title="Click để xem toàn bộ ảnh công ty">
                         <img src="<?php echo esc_url( $photo_url ); ?>" alt="<?php echo esc_attr( $company_name ); ?> Photos">
                         <!-- Huy hiệu thông báo số lượng ảnh còn lại (+5) -->

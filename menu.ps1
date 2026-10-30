@@ -1,4 +1,4 @@
-# ===============================================================================
+﻿# ===============================================================================
 # JOBSCOUT OS - UNG DUNG MENU TERMINAL 2D TUONG TAC CO TAB RIENG BIET
 # DO AN CUOI KY - KHOA CNTT - NHOM C
 # ===============================================================================
@@ -58,11 +58,17 @@ function Open-FloatingWindow {
 
 function Invoke-SqlFile ($sqlFile) {
     if (Test-Path $sqlFile) {
+        if ($sqlFile -eq 'import_job_design_data.sql') {
+            powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'backup_database.ps1')
+            if ($LASTEXITCODE -ne 0) { throw 'Khong sao luu duoc CSDL. Da huy thao tac nap lai.' }
+        }
         docker cp $sqlFile "${DB_CONTAINER}:/tmp/$sqlFile" 2>$null
+        if ($LASTEXITCODE -ne 0) { throw "Khong chep duoc $sqlFile vao container." }
         docker exec $DB_CONTAINER mysql -u root -prootpassword --default-character-set=utf8mb4 $DB_NAME -e "source /tmp/$sqlFile;" 2>$null
+        if ($LASTEXITCODE -ne 0) { throw "Khong nap duoc $sqlFile." }
         Write-Host "  [+] Thuc thi ${sqlFile} - Thanh cong." -ForegroundColor Green
     } else {
-        Write-Host "  [-] File $sqlFile khong ton tai!" -ForegroundColor Red
+        throw "File $sqlFile khong ton tai. Da dung thao tac."
     }
 }
 
@@ -86,25 +92,34 @@ function Start-JobScoutAll {
     if ($dbReady) {
         Write-Host "      CSDL MySQL da san sang ket noi!" -ForegroundColor Green
     } else {
-        Write-Host "      [Canh bao] MySQL van dang khoi dong, tiep tuc nap..." -ForegroundColor DarkYellow
+        throw 'MySQL chua san sang. Da dung khoi dong de tranh ghi de du lieu.'
     }
 
-    Write-Host "[3/6] Nap 7 trang thiet ke Figma & CSDL goc vao Database..." -ForegroundColor Yellow
-    Invoke-SqlFile "import_job_design_data.sql"
+    docker exec $DB_CONTAINER mysql -u root -prootpassword $DB_NAME -e "SELECT 1 FROM wp_options LIMIT 1;" >$null 2>$null
+    $databaseExists = $LASTEXITCODE -eq 0
+    if ($databaseExists) {
+        Write-Host '[+] CSDL da ton tai. Giu nguyen noi dung, cau hinh va tai khoan.' -ForegroundColor Green
+    } else {
+        Write-Host "[3/6] Nap 7 trang thiet ke Figma & CSDL goc vao Database..." -ForegroundColor Yellow
+        Invoke-SqlFile "import_job_design_data.sql"
 
-    Write-Host "[4/6] Dong bo 6 tai khoan Administrator Nhom C..." -ForegroundColor Yellow
-    Invoke-SqlFile "create_users.sql"
+        Write-Host "[4/6] Dong bo 6 tai khoan Administrator Nhom C..." -ForegroundColor Yellow
+        Invoke-SqlFile "create_users.sql"
 
-    Write-Host "[5/6] Thiet lap thuong hieu JobScout va Front Page..." -ForegroundColor Yellow
-    Invoke-SqlFile "setup_jobscout_brand.sql"
+        Write-Host "[5/6] Thiet lap thuong hieu JobScout va Front Page..." -ForegroundColor Yellow
+        Invoke-SqlFile "setup_jobscout_brand.sql"
 
-    Write-Host "[6/6] Kich hoat Theme JobScout, 5 Plugins, Dong bo Doanh Nghiep & Jobs Seeder..." -ForegroundColor Yellow
-    Invoke-SqlFile "activate_theme_plugins.sql"
-    docker exec $WP_CONTAINER php sync_company_profiles.php 2>$null
-    if (Test-Path "seed_jobs.php") {
-        docker cp "seed_jobs.php" "${WP_CONTAINER}:/var/www/html/seed_jobs.php" 2>$null
-        docker exec $WP_CONTAINER php seed_jobs.php 2>$null
+        Write-Host "[6/6] Kich hoat Theme JobScout, 5 Plugins, Dong bo Doanh Nghiep & Jobs Seeder..." -ForegroundColor Yellow
+        Invoke-SqlFile "activate_theme_plugins.sql"
+        docker exec $WP_CONTAINER php sync_company_profiles.php 2>$null
+        if (Test-Path "seed_jobs.php") {
+            docker cp "seed_jobs.php" "${WP_CONTAINER}:/var/www/html/seed_jobs.php" 2>$null
+            docker exec $WP_CONTAINER php seed_jobs.php 2>$null
+        }
+
     }
+    docker exec $WP_CONTAINER php setup_widgets.php
+    if ($LASTEXITCODE -ne 0) { throw 'Khong cap nhat duoc cau hinh Tien ich.' }
 
     Write-Host ""
     Write-Host "+--------------------------------------------------------------------------+" -ForegroundColor Green
@@ -145,6 +160,8 @@ function Reload-JobScoutDatabase {
         Write-Host "  [+] Da thuc thi seed_jobs.php thanh cong!" -ForegroundColor Green
     }
 
+    docker exec $WP_CONTAINER php setup_widgets.php
+    if ($LASTEXITCODE -ne 0) { throw 'Khong cap nhat duoc cau hinh Tien ich.' }
     Write-Host ""
     Write-Host "+--------------------------------------------------------------------------+" -ForegroundColor Green
     Write-Host "| [HOAN TAT] Da nap lai toan bo Co So Du Lieu JobScout thanh cong 100%!    |" -ForegroundColor Green
@@ -159,6 +176,8 @@ function Import-JobDesign {
     Write-Host "[TIEN TRINH] Nap du lieu 7 trang thiet ke Figma vao CSDL JobScout..." -ForegroundColor Cyan
     Write-Host "-------------------------------------------------------------------------------" -ForegroundColor Gray
     Invoke-SqlFile "import_job_design_data.sql"
+    docker exec $WP_CONTAINER php setup_widgets.php
+    if ($LASTEXITCODE -ne 0) { throw 'Khong cap nhat duoc cau hinh Tien ich.' }
     Write-Host "[OK] Da nap thanh cong Trang, Tin Tuc va 6 Tin Tuyen Dung vao database!" -ForegroundColor Green
     Write-Host ""
     Write-Host "Nhan phim bat ky de quay lai menu..." -ForegroundColor Gray

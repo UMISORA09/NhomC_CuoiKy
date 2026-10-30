@@ -128,7 +128,7 @@ echo.
 echo ================================================================================
 echo  [LUA CHON KHOI DONG]
 echo    [1] Vao thang Bang Dieu Khien JobScout OS (Giu nguyen CSDL)
-echo    [2] NAP LAI CSDL (Import lai toan bo CSDL goc, 6 Admins, 30+ Job Seeder)
+echo    [2] NAP LAI CSDL GOC (GHI DE DU LIEU - Sao luu ra file truoc khi nap)
 echo ================================================================================
 echo.
 choice /C 12 /N /T 5 /D 1 /M "Bam [1] de vao menu hoac [2] de nap lai CSDL (Mac dinh [1] sau 5s): "
@@ -143,42 +143,53 @@ echo  [*] DANG NAP: 7 TRANG FIGMA, 5 CONG TY, 6 ADMINS, SEEDER JOBS
 echo ================================================================================
 
 :do_reload_db_exec
-echo  [1/7] Dang nap du lieu CSDL goc [import_job_design_data.sql]...
+echo  [*] Sao luu CSDL hien tai ra thu muc backups truoc khi nap lai...
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0backup_database.ps1"
+if errorlevel 1 (
+    echo  [LOI] Khong sao luu duoc CSDL. Da dung nap lai de bao ve du lieu.
+    pause
+    goto :launch_menu
+)
+
+echo  [1/6] Dang nap du lieu CSDL goc [import_job_design_data.sql]...
 docker cp "%~dp0import_job_design_data.sql" wordpress_db:/tmp/import_job_design_data.sql >nul 2>&1
 docker exec wordpress_db mysql -u root -prootpassword --default-character-set=utf8mb4 wordpress -e "source /tmp/import_job_design_data.sql;" >nul 2>&1
 
-echo  [2/7] Dang dong bo 6 tai khoan Administrator Nhom C [create_users.sql]...
+echo  [2/6] Dang dong bo 6 tai khoan Administrator Nhom C [create_users.sql]...
 docker cp "%~dp0create_users.sql" wordpress_db:/tmp/create_users.sql >nul 2>&1
 docker exec wordpress_db mysql -u root -prootpassword --default-character-set=utf8mb4 wordpress -e "source /tmp/create_users.sql;" >nul 2>&1
 
-echo  [3/7] Dang thiet lap thuong hieu JobScout va Front Page [setup_jobscout_brand.sql]...
+echo  [3/6] Dang thiet lap thuong hieu JobScout va Front Page [setup_jobscout_brand.sql]...
 docker cp "%~dp0setup_jobscout_brand.sql" wordpress_db:/tmp/setup_jobscout_brand.sql >nul 2>&1
 docker exec wordpress_db mysql -u root -prootpassword --default-character-set=utf8mb4 wordpress -e "source /tmp/setup_jobscout_brand.sql;" >nul 2>&1
 
-echo  [4/7] Dang kich hoat Theme JobScout va 5 Plugins [activate_theme_plugins.sql]...
+echo  [4/6] Dang kich hoat Theme JobScout va 5 Plugins [activate_theme_plugins.sql]...
 docker cp "%~dp0activate_theme_plugins.sql" wordpress_db:/tmp/activate_theme_plugins.sql >nul 2>&1
 docker exec wordpress_db mysql -u root -prootpassword --default-character-set=utf8mb4 wordpress -e "source /tmp/activate_theme_plugins.sql;" >nul 2>&1
 
-echo  [5/7] Dang dong bo 5 Ho So Doanh Nghiep va lien ket 25 viec lam...
+echo  [5/6] Dang dong bo 5 Ho So Doanh Nghiep va lien ket 25 viec lam...
 docker exec wordpress_app php sync_company_profiles.php >nul 2>&1
 
-echo  [6/7] Dang nap them 30+ viec lam mau vao CSDL [seed_jobs.php]...
+echo  [6/6] Dang nap them 30+ viec lam mau vao CSDL [seed_jobs.php]...
 if exist "%~dp0seed_jobs.php" (
     docker cp "%~dp0seed_jobs.php" wordpress_app:/var/www/html/seed_jobs.php >nul 2>&1
     docker exec wordpress_app php seed_jobs.php >nul 2>&1
 )
 
-echo  [7/7] Dang dong bo cau hinh Tien ich (Widgets) theo giao dien Nhom C...
-if exist "%~dp0setup_widgets.php" (
-    docker cp "%~dp0setup_widgets.php" wordpress_app:/var/www/html/setup_widgets.php >nul 2>&1
-    docker exec wordpress_app php setup_widgets.php >nul 2>&1
-)
 
 echo.
 echo [+] Khoi tao va nap lai CSDL hoan tat 100%!
 echo.
 
 :launch_menu
+echo [*] Cap nhat cau hinh Tien ich Nhom C (giu nguyen noi dung da chinh)...
+docker exec wordpress_app php setup_widgets.php
+if errorlevel 1 (
+    echo [LOI] Khong cap nhat duoc Tien ich. Kiem tra thong bao tren; CSDL khong duoc nap lai.
+    pause
+    exit /b 1
+)
+
 :: 8. KHOI DONG MENU TERMINAL 2D OS
 echo [*] Dang mo Bang Dieu Khien JobScout OS 2D...
 if exist "%~dp0menu.ps1" (

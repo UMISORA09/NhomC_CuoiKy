@@ -26,6 +26,7 @@ extract( $args, EXTR_SKIP );
         <div class="nhomc-container">
             <!-- Tiêu đề phân đoạn: Hỗ trợ tiêu đề tùy biến từ cài đặt Widget Admin -->
             <h2 class="nhomc-section-heading"><?php echo esc_html( $widget_title ?: 'OTHER JOBS' ); ?></h2>
+        <?php if ( $widget_description !== '' ) : ?><div class="nc-widget-description"><?php echo wpautop( esc_html( $widget_description ) ); ?></div><?php endif; ?>
 
             <div class="nhomc-other-jobs-grid">
                 <?php
@@ -67,7 +68,7 @@ extract( $args, EXTR_SKIP );
                             <div class="nhomc-oj-top">
                                 <!-- Logo công ty kích thước nhỏ gọn -->
                                 <div class="nhomc-oj-logo">
-                                    <?php echo nhomc_get_company_logo( $oj_company, $oj_id, 'small' ); ?>
+                                    <?php if ( $widget_image ) : ?><img class="nc-widget-image" src="<?php echo esc_url( $widget_image ); ?>" alt="<?php echo esc_attr( $oj_company ); ?>"><?php else : ?><?php echo nhomc_get_company_logo( $oj_company, $oj_id, 'small' ); ?><?php endif; ?>
                                 </div>
 
                                 <!-- Tiêu đề công việc và siêu dữ liệu -->

@@ -7,13 +7,14 @@ extract( $args, EXTR_SKIP );
 <main class="news-main-section">
     <div class="news-main-inner">
         <h2 class="news-main-heading"><?php echo esc_html( $widget_title ?: 'NEWEST BLOG ENTRIES' ); ?></h2>
+        <?php if ( $widget_description !== '' ) : ?><div class="nc-widget-description"><?php echo wpautop( esc_html( $widget_description ) ); ?></div><?php endif; ?>
 
         <div class="news-grid">
             <?php foreach ($news_items as $post_item): ?>
             <article class="news-card">
                 <div class="news-card-img-wrap">
                     <a href="<?php echo esc_url($post_item['link']); ?>">
-                        <img src="<?php echo esc_url($post_item['image']); ?>" alt="<?php echo esc_attr($post_item['title']); ?>" class="news-card-img" loading="lazy">
+                        <img src="<?php echo esc_url( $widget_image ?: $post_item['image'] ); ?>" alt="<?php echo esc_attr($post_item['title']); ?>" class="news-card-img" loading="lazy">
                     </a>
                 </div>
                 <div class="news-card-content">

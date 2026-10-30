@@ -71,6 +71,14 @@ $company_gallery = array(
         'title' => $company_name . ' - Khu vườn & Tiện ích Thư giãn',
     ),
 );
+$gallery_settings = nhomc_active_widget_settings( 'nhomc-job-detail', 'nhomc_job_main' );
+foreach ( $company_gallery as $index => &$photo ) {
+    if ( ! empty( $gallery_settings[ 'image_' . ( $index + 1 ) ] ) ) {
+        $photo['url'] = $gallery_settings[ 'image_' . ( $index + 1 ) ];
+    }
+}
+unset( $photo );
+$photo_url = $company_gallery[0]['url'];
 ?>
 
 <div class="nhomc-job-detail-wrapper">
