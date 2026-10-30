@@ -1,0 +1,4 @@
+.nc-widget-banner-edited { display: grid; place-items: center; }
+.nc-widget-banner-edited h1 { position: static !important; width: auto !important; height: auto !important; padding: 24px !important; clip: auto !important; clip-path: none !important; overflow: visible !important; white-space: normal !important; color: #fff !important; text-align: center; font-size: clamp(24px, 4vw, 44px); text-shadow: 0 2px 6px #000; }
+.nc-widget-description { max-width: 1050px; margin: 16px auto; padding: 0 20px; }
+.nc-widget-image { display: block; max-width: 100%; height: auto; }

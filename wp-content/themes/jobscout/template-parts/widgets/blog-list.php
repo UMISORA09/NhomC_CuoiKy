@@ -16,16 +16,19 @@ defined( 'ABSPATH' ) || exit;
 
 // Lấy tiêu đề khối widget cấu hình từ Customizer (mặc định là 'NEWEST BLOG ENTRIES')
 $args['widget_title'] = $args['widget_title'] ?? '';
+$widget_description = $args['widget_description'] ?? '';
+$widget_image = $args['widget_image'] ?? '';
 extract( $args, EXTR_SKIP );
 
 // Đảm bảo biến danh sách bài viết tồn tại
 $news_items = $news_items ?? array();
 ?>
-<!-- KHỐI NỘI DUNG CHÍNH: NEWEST BLOG ENTRIES -->
+<!-- 3. KHỐI NỘI DUNG CHÍNH: NEWEST BLOG ENTRIES -->
 <main class="news-main-section">
     <div class="news-main-inner">
         <!-- Tiêu đề khối bài viết (hỗ trợ chỉnh sửa linh hoạt từ Customizer "Sửa giao diện") -->
         <h2 class="news-main-heading"><?php echo esc_html( ! empty( $widget_title ) ? $widget_title : 'NEWEST BLOG ENTRIES' ); ?></h2>
+        <?php if ( ! empty( $widget_description ) ) : ?><div class="nc-widget-description"><?php echo wpautop( esc_html( $widget_description ) ); ?></div><?php endif; ?>
 
         <!-- Lưới bài viết tin tức 2 cột chuẩn thiết kế -->
         <div class="news-grid">
@@ -34,7 +37,7 @@ $news_items = $news_items ?? array();
                 <!-- Khung ảnh đại diện bài viết -->
                 <div class="news-card-img-wrap">
                     <a href="<?php echo esc_url( $post_item['link'] ); ?>" tabindex="-1">
-                        <img src="<?php echo esc_url( $post_item['image'] ); ?>" alt="<?php echo esc_attr( $post_item['title'] ); ?>" class="news-card-img" loading="lazy">
+                        <img src="<?php echo esc_url( ! empty( $widget_image ) ? $widget_image : $post_item['image'] ); ?>" alt="<?php echo esc_attr( $post_item['title'] ); ?>" class="news-card-img" loading="lazy">
                     </a>
                 </div>
                 <!-- Nội dung tóm tắt bài viết -->

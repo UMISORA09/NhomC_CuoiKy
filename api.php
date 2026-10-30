@@ -104,18 +104,10 @@ if ($action === 'sync_users') {
     exit;
 }
 
-if ($action === 'import_design') {
-    runSqlFile($conn, 'import_job_design_data.sql');
-    echo json_encode(['status' => 'ok', 'message' => 'Đã nạp thành công 7 trang thiết kế Figma và tin tuyển dụng vào Database!']);
-    exit;
-}
-
-if ($action === 'start_all') {
-    runSqlFile($conn, 'create_users.sql');
-    runSqlFile($conn, 'setup_jobscout_brand.sql');
-    runSqlFile($conn, 'activate_theme_plugins.sql');
-    runSqlFile($conn, 'import_job_design_data.sql');
-    echo json_encode(['status' => 'ok', 'message' => 'Khởi động và nạp toàn bộ cấu hình JobScout thành công 100%!']);
+// Full SQL imports replace wp_options; use the local launcher with its verified backup instead.
+if (in_array($action, array('import_design', 'start_all'), true)) {
+    http_response_code(409);
+    echo json_encode(array('status' => 'error', 'message' => 'Dữ liệu hiện tại được giữ nguyên. Hãy khởi động bằng start.bat; nếu cần nạp dữ liệu gốc, chọn Nạp lại CSDL để được sao lưu trước.'));
     exit;
 }
 

@@ -16,22 +16,29 @@
  * ==============================================================================
  */
 
+/* ==========================================================================
+   0. KHAI BÁO BIẾN TOÀN CỤC & THIẾT LẬP CHUNG (CSS VARIABLES & BASE STYLES)
+   ========================================================================== */
+
+/* Bảng mã màu và biến toàn cục của hệ thống */
 :root {
-    --primary-orange: #eb6723;
-    --primary-orange-hover: #d35616;
-    --text-dark: #1f1f1f;
-    --text-gray: #666666;
-    --text-light-gray: #999999;
-    --bg-section: #f5f6f8;
-    --border-light: #e8e8e8;
+    --primary-orange: #eb6723;       /* Màu cam thương hiệu chủ đạo */
+    --primary-orange-hover: #d35616; /* Màu cam sẫm khi hover */
+    --text-dark: #1f1f1f;            /* Màu chữ đen tiêu đề / nội dung chính */
+    --text-gray: #666666;            /* Màu chữ xám cho văn bản phụ */
+    --text-light-gray: #999999;      /* Màu xám nhạt cho placeholder / ngày tháng */
+    --bg-section: #f5f6f8;           /* Màu nền xám nhẹ của các section */
+    --border-light: #e8e8e8;         /* Màu đường viền mảnh ngăn cách */
 }
 
+/* Reset Box-Sizing và Margin/Padding mặc định của trình duyệt */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* Thiết lập font chữ, màu sắc và độ mượt hiển thị cho toàn bộ trang chủ */
 body.home-design {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     color: var(--text-dark);
@@ -41,6 +48,7 @@ body.home-design {
     overflow-x: hidden;
 }
 
+/* Khung bao chung (Container) giới hạn chiều rộng 1140px và căn giữa màn hình */
 .home-container {
     width: 100%;
     max-width: 1140px;
@@ -49,8 +57,10 @@ body.home-design {
 }
 
 /* ==========================================================================
-   1. HEADER
+   1. KHỐI HEADER & THANH ĐIỀU HƯỚNG CHÍNH (NAVIGATION)
    ========================================================================== */
+
+/* Khung header cố định ở phần đầu trang */
 .home-header {
     background: #ffffff;
     border-bottom: 1px solid #eaeaea;
@@ -58,6 +68,7 @@ body.home-design {
     z-index: 100;
 }
 
+/* Khung chứa các phần tử header dàn ngang (Logo bên trái, Menu bên phải) */
 .home-header-inner {
     display: flex;
     align-items: center;
@@ -65,24 +76,28 @@ body.home-design {
     height: 76px;
 }
 
+/* Logo thương hiệu JobScout */
 .home-brand {
     display: flex;
     align-items: center;
     text-decoration: none;
 }
 
+/* Kích thước ảnh Logo */
 .home-brand img {
     height: 42px;
     width: auto;
     object-fit: contain;
 }
 
+/* Cụm điều hướng bên phải: gồm danh sách menu và nút Post a Job */
 .home-header-right {
     display: flex;
     align-items: center;
     gap: 35px;
 }
 
+/* Danh sách menu điều hướng chính */
 .home-nav {
     display: flex;
     align-items: center;
@@ -90,6 +105,7 @@ body.home-design {
     list-style: none;
 }
 
+/* Từng liên kết trong menu */
 .home-nav a {
     text-decoration: none;
     font-size: 13px;
@@ -102,11 +118,13 @@ body.home-design {
     padding: 6px 0;
 }
 
+/* Hiệu ứng khi rê chuột hoặc đang ở trang hiện tại */
 .home-nav a:hover,
 .home-nav a.active {
     color: #111111;
 }
 
+/* Gạch chân màu đen dưới mục menu đang kích hoạt (active) */
 .home-nav a.active::after {
     content: '';
     position: absolute;
@@ -117,6 +135,7 @@ body.home-design {
     background-color: #222222;
 }
 
+/* Nút Đăng tin tuyển dụng (POST A JOB) màu cam nổi bật */
 .home-btn-submit {
     display: inline-block;
     padding: 9px 24px;
@@ -131,13 +150,16 @@ body.home-design {
     transition: background-color 0.2s;
 }
 
+/* Hiệu ứng rê chuột vào nút Đăng tin tuyển dụng */
 .home-btn-submit:hover {
     background-color: var(--primary-orange-hover);
 }
 
 /* ==========================================================================
-   2. HERO BANNER & SEARCH BAR
+   2. KHỐI HERO BANNER & THANH TÌM KIẾM VIỆC LÀM (SEARCH BAR)
    ========================================================================== */
+
+/* Khung Hero Banner lớn chứa hình nền công việc */
 .home-hero {
     position: relative;
     min-height: 540px;
@@ -150,18 +172,21 @@ body.home-design {
     padding: 85px 0;
 }
 
+/* Lớp phủ dải gradient tối dần từ trái sang phải để làm nổi bật chữ */
 .home-hero-overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(90deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.25) 60%, rgba(0, 0, 0, 0.15) 100%);
 }
 
+/* Vùng nội dung chữ và thanh tìm kiếm trên Hero Banner */
 .home-hero-content {
     position: relative;
     z-index: 2;
     max-width: 960px;
 }
 
+/* Tiêu đề chính lớn của Hero Banner */
 .home-hero-title {
     font-size: 38px;
     font-weight: 800;
@@ -171,6 +196,7 @@ body.home-design {
     line-height: 1.2;
 }
 
+/* Đoạn mô tả phụ bên dưới tiêu đề Hero */
 .home-hero-subtitle {
     font-size: 14.5px;
     line-height: 1.65;
@@ -181,7 +207,7 @@ body.home-design {
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
-/* Search Form Bar */
+/* Form tìm kiếm việc làm dàn ngang */
 .home-search-form {
     display: flex;
     align-items: center;
@@ -189,6 +215,7 @@ body.home-design {
     max-width: 860px;
 }
 
+/* Hộp nhập từ khóa việc làm (Job Title / Keywords) */
 .home-search-input-box {
     flex: 1.8;
     background: #ffffff;
@@ -200,6 +227,7 @@ body.home-design {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
+/* Icon kính lúp màu cam */
 .home-search-input-box i,
 .hm-icon-search {
     color: var(--primary-orange);
@@ -209,6 +237,7 @@ body.home-design {
     display: inline-block;
 }
 
+/* Ô input nhập từ khóa tìm kiếm */
 .home-search-input-box input {
     width: 100%;
     border: none;
@@ -217,10 +246,12 @@ body.home-design {
     color: #333333;
 }
 
+/* Màu chữ placeholder của ô tìm kiếm */
 .home-search-input-box input::placeholder {
     color: #999999;
 }
 
+/* Hộp chọn địa điểm (Location Dropdown) */
 .home-search-location-box {
     flex: 1;
     background: #ffffff;
@@ -233,6 +264,7 @@ body.home-design {
     position: relative;
 }
 
+/* Icon định vị vị trí */
 .home-search-location-box i.fa-location-dot,
 .hm-icon-location {
     color: var(--primary-orange);
@@ -242,6 +274,7 @@ body.home-design {
     display: inline-block;
 }
 
+/* Thẻ select danh sách địa điểm */
 .home-search-location-box select {
     width: 100%;
     border: none;
@@ -255,6 +288,7 @@ body.home-design {
     padding-right: 20px;
 }
 
+/* Mũi tên trỏ xuống của dropdown địa điểm */
 .home-search-location-box .fa-chevron-down,
 .hm-icon-chevron {
     position: absolute;
@@ -265,6 +299,7 @@ body.home-design {
     flex-shrink: 0;
 }
 
+/* Nút bấm Tìm kiếm màu cam (FIND JOB) */
 .home-search-submit-btn {
     padding: 0 28px;
     height: 48px;
@@ -282,18 +317,22 @@ body.home-design {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
+/* Hiệu ứng khi rê chuột vào nút tìm kiếm */
 .home-search-submit-btn:hover {
     background-color: var(--primary-orange-hover);
 }
 
 /* ==========================================================================
-   3. SECTION: TOP JOBS
+   3. KHỐI SECTION: TOP JOBS (VIỆC LÀM NỔI BẬT)
    ========================================================================== */
+
+/* Khung nền xám của khu vực việc làm nổi bật */
 .home-section-jobs {
     padding: 65px 0 60px 0;
     background-color: var(--bg-section);
 }
 
+/* Tiêu đề chung của từng section (TOP JOBS, NEWEST BLOG ENTRIES...) */
 .home-section-heading {
     text-align: center;
     font-size: 28px;
@@ -304,6 +343,7 @@ body.home-design {
     margin-bottom: 42px;
 }
 
+/* Lưới hiển thị danh sách việc làm chia làm 2 cột đối xứng */
 .home-jobs-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -311,6 +351,7 @@ body.home-design {
     margin-bottom: 40px;
 }
 
+/* Thẻ (Card) chi tiết từng tin tuyển dụng */
 .home-job-card {
     background: #ffffff;
     border-radius: 4px;
@@ -322,6 +363,7 @@ body.home-design {
     border: 1px solid #ededed;
 }
 
+/* Ô vuông hiển thị logo công ty hoặc vector icon công ty */
 .home-job-logo {
     width: 104px;
     height: 104px;
@@ -338,12 +380,14 @@ body.home-design {
     flex-shrink: 0;
 }
 
+/* Icon vector biểu trưng công ty */
 .hm-logo-vector-icon {
     font-size: 26px;
     color: #222222;
     margin-bottom: 4px;
 }
 
+/* Tên công ty dạng chữ hoa đậm trong ô logo */
 .hm-logo-vector-name {
     font-size: 9px;
     font-weight: 700;
@@ -354,6 +398,7 @@ body.home-design {
     display: block;
 }
 
+/* Dòng chữ phụ bên dưới logo công ty (SLOGAN/CORP) */
 .hm-logo-vector-sub {
     font-size: 8px;
     color: #888888;
@@ -363,10 +408,12 @@ body.home-design {
     margin-top: 2px;
 }
 
+/* Khung chứa toàn bộ thông tin chi tiết công việc bên phải */
 .home-job-info {
     flex: 1;
 }
 
+/* Chức danh tuyển dụng (Job Title) */
 .home-job-title {
     font-size: 15.5px;
     font-weight: 700;
@@ -376,21 +423,25 @@ body.home-design {
     line-height: 1.35;
 }
 
+/* Liên kết chức danh việc làm */
 .home-job-title a {
     color: #111111;
     text-decoration: none;
 }
 
+/* Đổi màu cam khi rê chuột vào chức danh việc làm */
 .home-job-title a:hover {
     color: var(--primary-orange);
 }
 
+/* Ngày đăng tin tuyển dụng */
 .home-job-date {
     font-size: 11.5px;
     color: #888888;
     margin-bottom: 8px;
 }
 
+/* Khung dải tag thông tin công việc (Toàn thời gian, Địa điểm, Danh mục) */
 .home-job-tags, .hm-job-tags {
     display: inline-flex;
     align-items: center;
@@ -403,6 +454,7 @@ body.home-design {
     max-width: 100%;
 }
 
+/* Từng nhãn văn bản tag */
 .home-job-tag, .hm-job-tag {
     background: transparent;
     border: none;
@@ -415,6 +467,7 @@ body.home-design {
     white-space: nowrap;
 }
 
+/* Dấu gạch chéo ngăn cách giữa các tag */
 .home-job-sep, .hm-tag-sep {
     color: #cbd5e1;
     font-size: 10px;
@@ -422,10 +475,12 @@ body.home-design {
     user-select: none;
 }
 
+/* Danh sách tóm tắt yêu cầu công việc */
 .home-job-bullets {
     list-style: none;
 }
 
+/* Từng dòng mô tả yêu cầu */
 .home-job-bullets li {
     font-size: 12px;
     color: #555555;
@@ -435,6 +490,7 @@ body.home-design {
     margin-bottom: 3px;
 }
 
+/* Dấu chấm đầu dòng của từng yêu cầu */
 .home-job-bullets li::before {
     content: "•";
     color: #555555;
@@ -444,11 +500,12 @@ body.home-design {
     top: -1px;
 }
 
-/* Nút VIEW MORE JOBS viền cam chuẩn bản vẽ */
+/* Khung bọc nút Xem thêm việc làm căn giữa */
 .home-more-jobs-wrap {
     text-align: center;
 }
 
+/* Nút VIEW MORE JOBS viền cam theo đúng chuẩn thiết kế */
 .home-btn-view-more {
     display: inline-block;
     padding: 10px 42px;
@@ -464,14 +521,17 @@ body.home-design {
     transition: all 0.2s;
 }
 
+/* Hiệu ứng khi rê chuột vào nút View More Jobs: chuyển sang nền cam chữ trắng */
 .home-btn-view-more:hover {
     background-color: var(--primary-orange);
     color: #ffffff !important;
 }
 
 /* ==========================================================================
-   4. SECTION: CAREER WITH US
+   4. KHỐI SECTION: CAREER WITH US (GIỚI THIỆU SỰ NGHIỆP)
    ========================================================================== */
+
+/* Khung banner giới thiệu toàn màn hình với hình nền công ty */
 .home-section-career {
     position: relative;
     padding: 90px 0 95px 0;
@@ -482,12 +542,14 @@ body.home-design {
     text-align: center;
 }
 
+/* Lớp phủ màu đen trong suốt để tăng độ tương phản của chữ */
 .home-career-overlay {
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.45);
 }
 
+/* Nội dung căn giữa giới thiệu tuyển dụng */
 .home-career-content {
     position: relative;
     z-index: 2;
@@ -495,6 +557,7 @@ body.home-design {
     margin: 0 auto;
 }
 
+/* Tiêu đề phần Career with us */
 .home-career-title {
     font-size: 30px;
     font-weight: 800;
@@ -503,6 +566,7 @@ body.home-design {
     margin-bottom: 24px;
 }
 
+/* Đoạn văn bản mô tả môi trường làm việc */
 .home-career-desc {
     font-size: 14.5px;
     line-height: 1.8;
@@ -511,10 +575,12 @@ body.home-design {
     font-weight: 400;
 }
 
+/* Khung bao nút tìm hiểu thêm */
 .home-career-btn-wrap {
     margin-top: 32px;
 }
 
+/* Nút MORE ABOUT US viền trắng nền bán trong suốt */
 .home-btn-more-about {
     display: inline-block;
     padding: 10px 36px;
@@ -530,25 +596,30 @@ body.home-design {
     transition: all 0.2s;
 }
 
+/* Hiệu ứng rê chuột: nền trắng chữ đen */
 .home-btn-more-about:hover {
     background: #ffffff;
     color: #111111 !important;
 }
 
 /* ==========================================================================
-   5. SECTION: NEWEST BLOG ENTRIES (2 Cột x 2 Hàng Layout ngang)
+   5. KHỐI SECTION: NEWEST BLOG ENTRIES (BÀI VIẾT MỚI NHẤT)
    ========================================================================== */
+
+/* Khung nền xám nhạt của khối tin tức / blog */
 .home-section-blogs {
     padding: 70px 0 80px 0;
     background-color: var(--bg-section);
 }
 
+/* Lưới hiển thị bài viết gồm 2 cột đối xứng */
 .home-blogs-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 26px;
 }
 
+/* Thẻ tin tức (Blog Card) bố cục ngang: Ảnh bên trái, Nội dung bên phải */
 .home-blog-card {
     background: #ffffff;
     border-radius: 4px;
@@ -564,11 +635,13 @@ body.home-design {
     box-sizing: border-box;
 }
 
+/* Hiệu ứng nổi nhẹ khi rê chuột vào thẻ bài viết */
 .home-blog-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
+/* Khung ảnh đại diện (Thumbnail) bài viết hình vuông 180x180 */
 .home-blog-thumb {
     width: 180px;
     height: 180px;
@@ -582,6 +655,7 @@ body.home-design {
     position: relative;
 }
 
+/* Hình ảnh đại diện bài viết tỉ lệ cover */
 .home-blog-thumb img {
     width: 100%;
     height: 100%;
@@ -589,6 +663,7 @@ body.home-design {
     display: block;
 }
 
+/* Khung nội dung chi tiết bài viết bên phải */
 .home-blog-body {
     padding-left: 20px;
     display: flex;
@@ -598,6 +673,7 @@ body.home-design {
     min-width: 0;
 }
 
+/* Tiêu đề bài viết */
 .home-blog-title {
     font-size: 15px;
     font-weight: 700;
@@ -605,15 +681,18 @@ body.home-design {
     margin-bottom: 6px;
 }
 
+/* Liên kết tiêu đề bài viết */
 .home-blog-title a {
     color: #111111;
     text-decoration: none;
 }
 
+/* Đổi sang màu cam khi rê chuột vào tiêu đề bài viết */
 .home-blog-title a:hover {
     color: var(--primary-orange);
 }
 
+/* Đoạn trích dẫn tóm tắt bài viết (giới hạn tối đa 3 dòng hiển thị) */
 .home-blog-excerpt {
     font-size: 12px;
     color: #666666;
@@ -625,6 +704,7 @@ body.home-design {
     overflow: hidden;
 }
 
+/* Nút đọc tiếp bài viết (Read More) */
 .home-blog-readmore {
     font-size: 12px;
     font-weight: 700;
@@ -632,19 +712,23 @@ body.home-design {
     text-decoration: none;
 }
 
+/* Gạch chân khi hover vào nút đọc tiếp */
 .home-blog-readmore:hover {
     text-decoration: underline;
 }
 
 /* ==========================================================================
-   6. SECTION: SUBSCRIBE TO OUR NEWSLETTER (Nền màu cam toàn phần)
+   6. KHỐI SECTION: SUBSCRIBE TO OUR NEWSLETTER (ĐĂNG KÝ BẢN TIN)
    ========================================================================== */
+
+/* Khung banner cam toàn phần kêu gọi đăng ký nhận tin */
 .home-section-newsletter {
     background-color: var(--primary-orange);
     color: #ffffff;
     padding: 38px 0;
 }
 
+/* Căn ngang giữa tiêu đề kêu gọi và form đăng ký */
 .home-newsletter-inner {
     display: flex;
     align-items: center;
@@ -652,6 +736,7 @@ body.home-design {
     gap: 30px;
 }
 
+/* Dòng chữ tiêu đề kêu gọi đăng ký bản tin */
 .home-newsletter-heading {
     font-size: 24px;
     font-weight: 800;
@@ -659,6 +744,7 @@ body.home-design {
     line-height: 1.25;
 }
 
+/* Khung chứa form đăng ký email */
 .home-newsletter-form {
     display: flex;
     align-items: center;
@@ -667,6 +753,7 @@ body.home-design {
     max-width: 620px;
 }
 
+/* Hộp nhập email màu trắng */
 .home-newsletter-input-box {
     flex: 1;
     background: #ffffff;
@@ -677,6 +764,7 @@ body.home-design {
     height: 44px;
 }
 
+/* Icon phong bì thư màu cam */
 .home-newsletter-input-box i,
 .hm-icon-mail {
     color: var(--primary-orange);
@@ -686,6 +774,7 @@ body.home-design {
     display: inline-block;
 }
 
+/* Ô nhập địa chỉ email */
 .home-newsletter-input-box input {
     width: 100%;
     border: none;
@@ -694,6 +783,7 @@ body.home-design {
     color: #333333;
 }
 
+/* Nút gửi đăng ký (SUBSCRIBE) viền trắng */
 .home-newsletter-btn {
     height: 44px;
     padding: 0 30px;
@@ -710,30 +800,36 @@ body.home-design {
     white-space: nowrap;
 }
 
+/* Hiệu ứng rê chuột: đổi nền trắng chữ cam */
 .home-newsletter-btn:hover {
     background: #ffffff;
     color: var(--primary-orange);
 }
 
 /* ==========================================================================
-   7. FOOTER
+   7. KHỐI FOOTER (CHÂN TRANG VÀ THÔNG TIN BẢN QUYỀN)
    ========================================================================== */
+
+/* Khung chân trang nền trắng */
 .home-footer {
     background-color: #ffffff;
     padding: 45px 0 25px 0;
     text-align: center;
 }
 
+/* Khu vực hiển thị logo chân trang */
 .home-footer-logo {
     margin-bottom: 22px;
 }
 
+/* Kích thước logo chân trang */
 .home-footer-logo img {
     height: 38px;
     width: auto;
     object-fit: contain;
 }
 
+/* Menu liên kết điều hướng chân trang */
 .home-footer-nav {
     display: flex;
     justify-content: center;
@@ -742,6 +838,7 @@ body.home-design {
     margin-bottom: 24px;
 }
 
+/* Liên kết menu chân trang */
 .home-footer-nav a {
     color: #222222;
     text-decoration: none;
@@ -752,10 +849,12 @@ body.home-design {
     transition: color 0.2s;
 }
 
+/* Đổi màu cam khi rê chuột vào menu chân trang */
 .home-footer-nav a:hover {
     color: var(--primary-orange);
 }
 
+/* Cụm biểu tượng mạng xã hội (Facebook, Google+, Line, Twitter) */
 .home-footer-socials {
     display: flex;
     justify-content: center;
@@ -763,6 +862,7 @@ body.home-design {
     margin-bottom: 30px;
 }
 
+/* Thiết lập icon tròn cho mạng xã hội */
 .home-social-icon {
     width: 34px;
     height: 34px;
@@ -776,15 +876,18 @@ body.home-design {
     transition: opacity 0.2s;
 }
 
+/* Hiệu ứng khi rê chuột vào icon mạng xã hội */
 .home-social-icon:hover {
     opacity: 0.85;
 }
 
-.home-social-fb { background-color: #3b5998; }
-.home-social-gg { background-color: #ea4335; }
-.home-social-line { background-color: #00b900; }
-.home-social-tw { background-color: #1da1f2; }
+/* Màu nền riêng của từng mạng xã hội */
+.home-social-fb { background-color: #3b5998; }   /* Facebook */
+.home-social-gg { background-color: #ea4335; }   /* Google+ */
+.home-social-line { background-color: #00b900; } /* Line */
+.home-social-tw { background-color: #1da1f2; }   /* Twitter */
 
+/* Dòng chữ bản quyền chân trang nền đen */
 .home-footer-copyright-bar {
     background-color: #000000;
     color: #777777;
@@ -794,79 +897,102 @@ body.home-design {
 }
 
 /* ==========================================================================
-   RESPONSIVE DESIGN
+   8. THIẾT KẾ ĐÁP ỨNG ĐA THIẾT BỊ (RESPONSIVE DESIGN)
    ========================================================================== */
+
+/* Thiết bị màn hình máy tính bảng và màn hình vừa (Tối đa 992px) */
 @media (max-width: 992px) {
+    /* Thu nhỏ tiêu đề Hero banner */
     .home-hero-title {
         font-size: 32px;
     }
+    /* Thanh tìm kiếm cho phép rớt dòng khi thiếu chiều rộng */
     .home-search-form {
         flex-wrap: wrap;
     }
+    /* Chuyển lưới việc làm nổi bật thành 1 cột */
     .home-jobs-grid {
         grid-template-columns: 1fr;
     }
+    /* Chuyển lưới bài viết tin tức thành 1 cột */
     .home-blogs-grid {
         grid-template-columns: 1fr;
     }
+    /* Khối bản tin chuyển sang sắp xếp dạng dọc */
     .home-newsletter-inner {
         flex-direction: column;
         text-align: center;
     }
+    /* Form đăng ký bản tin giãn hết chiều ngang */
     .home-newsletter-form {
         width: 100%;
     }
 }
 
+/* Thiết bị điện thoại thông minh (Tối đa 768px) */
 @media (max-width: 768px) {
+    /* Thu gọn chiều cao header */
     .home-header-inner {
         height: 64px;
     }
+    /* Ẩn menu ngang trên điện thoại */
     .home-nav {
         display: none;
     }
+    /* Thu gọn padding của Hero banner */
     .home-hero {
         min-height: 420px;
         padding: 50px 0;
     }
+    /* Thu nhỏ chữ tiêu đề chính */
     .home-hero-title {
         font-size: 26px;
     }
+    /* Form tìm kiếm chuyển thành dạng cột xếp chồng */
     .home-search-form {
         flex-direction: column;
         width: 100%;
     }
+    /* Các ô nhập từ khóa, chọn địa điểm và nút tìm kiếm rộng 100% */
     .home-search-input-box,
     .home-search-location-box,
     .home-search-submit-btn {
         width: 100%;
     }
+    /* Thẻ việc làm chuyển sang căn giữa và xếp dọc trên điện thoại */
     .home-job-card {
         flex-direction: column;
         align-items: center;
         text-align: center;
     }
+    /* Dải tag căn giữa */
     .home-job-tags {
         justify-content: center;
     }
+    /* Các mục yêu cầu giữ căn lề trái để dễ đọc */
     .home-job-bullets li {
         text-align: left;
     }
+    /* Thẻ bài viết tin tức chuyển sang dạng dọc (Ảnh ở trên, Chữ ở dưới) */
     .home-blog-card {
         flex-direction: column;
         height: auto;
     }
+    /* Ảnh đại diện bài viết rộng 100% */
     .home-blog-thumb {
         width: 100%;
         height: 180px;
     }
+    /* Form bản tin xếp dọc */
     .home-newsletter-form {
         flex-direction: column;
     }
+    /* Ô nhập email và nút bấm rộng 100% */
     .home-newsletter-input-box,
     .home-newsletter-btn {
         width: 100%;
     }
+    /* Menu chân trang tự động xuống hàng nếu thiếu chỗ */
     .home-footer-nav {
         flex-wrap: wrap;
         gap: 16px;

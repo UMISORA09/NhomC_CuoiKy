@@ -44,6 +44,7 @@ extract( $args, EXTR_SKIP );
 
         <!-- Thẻ <h2>: Tiêu đề đề mục lớn. Hàm esc_html() lọc sạch mã độc XSS. Toán tử Elvis ?: in chữ 'TOP JOBS' nếu biến rỗng -->
         <h2 class="hm-section-heading"><?php echo esc_html( $widget_title ?: 'TOP JOBS' ); ?></h2>
+        <?php if ( $widget_description !== '' ) : ?><div class="nc-widget-description"><?php echo wpautop( esc_html( $widget_description ) ); ?></div><?php endif; ?>
         
         <!-- Thẻ <div>: Lưới hiển thị CSS Grid 2 cột trên Desktop và tự động co lại thành 1 cột trên điện thoại di động -->
         <div class="hm-jobs-grid">
@@ -57,7 +58,7 @@ extract( $args, EXTR_SKIP );
                     <!-- CỘT BÊN TRÁI: Logo thương hiệu chuẩn Vector sắc nét của doanh nghiệp tuyển dụng -->
                     <div class="hm-job-logo">
                         <!-- Thẻ <i>: Hiển thị icon vector FontAwesome (ví dụ: fa-hotel, fa-tree...). Hàm esc_attr() lọc an toàn thuộc tính class -->
-                        <i class="<?php echo esc_attr( $job['brand']['icon'] ); ?> hm-logo-vector-icon"></i>
+                        <?php if ( $widget_image ) : ?><img class="nc-widget-image" src="<?php echo esc_url( $widget_image ); ?>" alt="<?php echo esc_attr( $job['brand']['name'] ); ?>"><?php else : ?><i class="<?php echo esc_attr( $job['brand']['icon'] ); ?> hm-logo-vector-icon"></i><?php endif; ?>
 
                         <!-- Thẻ <span>: Tên thương hiệu chính in hoa đậm (ví dụ: THE SODOH, FORTUNE GARDEN...). Hàm esc_html() in an toàn -->
                         <span class="hm-logo-vector-name"><?php echo esc_html( $job['brand']['name'] ); ?></span>

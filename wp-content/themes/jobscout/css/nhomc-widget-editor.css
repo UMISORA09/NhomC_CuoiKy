@@ -1,0 +1,5 @@
+.nc-widget-field label { display: block; font-weight: 600; margin-bottom: 5px; }
+.nc-widget-field textarea { resize: vertical; }
+.nc-widget-image-controls { display: block; margin-top: 8px; }
+.nc-widget-image-preview { display: block; max-width: 100%; max-height: 140px; margin-top: 8px; object-fit: contain; }
+.nc-widget-image-preview[hidden] { display: none; }

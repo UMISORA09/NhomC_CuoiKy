@@ -9,6 +9,7 @@ extract( $args, EXTR_SKIP );
         <!-- Section Header -->
         <div class="aj-section-header">
             <h2 class="aj-section-title"><?php echo esc_html( $widget_title ?: 'ALL JOBS' ); ?></h2>
+        <?php if ( $widget_description !== '' ) : ?><div class="nc-widget-description"><?php echo wpautop( esc_html( $widget_description ) ); ?></div><?php endif; ?>
             <div class="aj-sort-wrapper">
                 <select class="aj-sort-select" id="jobSortSelect">
                     <option value="latest">Latest Jobs</option>
@@ -98,7 +99,7 @@ extract( $args, EXTR_SKIP );
             ?>
                 <article class="aj-job-card<?php echo $hidden_class; ?>" data-title="<?php echo esc_attr($title); ?>" data-idx="<?php echo $i; ?>" onclick="window.location.href='<?php echo esc_url($link); ?>';" role="link" tabindex="0" onkeydown="if(event.key==='Enter') window.location.href='<?php echo esc_url($link); ?>';">
                     <div class="aj-card-logo-box">
-                        <i class="<?php echo esc_attr($brand['icon']); ?> aj-logo-vector-icon"></i>
+                        <?php if ( $widget_image ) : ?><img class="nc-widget-image" src="<?php echo esc_url( $widget_image ); ?>" alt="<?php echo esc_attr( $brand['name'] ); ?>"><?php else : ?><i class="<?php echo esc_attr($brand['icon']); ?> aj-logo-vector-icon"></i><?php endif; ?>
                         <span class="aj-logo-vector-name"><?php echo esc_html($brand['name']); ?></span>
                         <span style="font-size: 8px; color: #888; letter-spacing: 0.5px;"><?php echo esc_html($brand['sub']); ?></span>
                     </div>

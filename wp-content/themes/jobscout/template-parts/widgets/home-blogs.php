@@ -42,6 +42,7 @@ extract( $args, EXTR_SKIP );
 
         <!-- Thẻ <h2>: Tiêu đề đề mục lớn. Hàm esc_html() lọc sạch mã độc XSS trước khi hiển thị. Toán tử ?: in chữ 'NEWEST BLOG ENTRIES' nếu biến rỗng -->
         <h2 class="hm-section-heading"><?php echo esc_html( $widget_title ?: 'NEWEST BLOG ENTRIES' ); ?></h2>
+        <?php if ( $widget_description !== '' ) : ?><div class="nc-widget-description"><?php echo wpautop( esc_html( $widget_description ) ); ?></div><?php endif; ?>
         
         <!-- Thẻ <div>: Lưới hiển thị CSS Grid gồm 2 cột x 2 hàng trên máy tính và tự co thành 1 cột trên điện thoại -->
         <div class="hm-blogs-grid">
@@ -55,7 +56,7 @@ extract( $args, EXTR_SKIP );
                     <!-- CỘT BÊN TRÁI: Khung vuông 180px x 180px cố định để chứa ảnh đại diện của bài viết -->
                     <div class="hm-blog-thumb">
                         <!-- Thẻ <img>: Hiển thị hình ảnh. Hàm esc_url() bảo vệ link ảnh, hàm esc_attr() lọc an toàn tiêu đề ảnh trong thuộc tính alt -->
-                        <img src="<?php echo esc_url( $blog['image'] ); ?>" alt="<?php echo esc_attr( $blog['title'] ); ?>">
+                        <img src="<?php echo esc_url( $widget_image ?: $blog['image'] ); ?>" alt="<?php echo esc_attr( $blog['title'] ); ?>">
                     </div><!-- Kết thúc thẻ hm-blog-thumb -->
                     
                     <!-- CỘT BÊN PHẢI: Chứa toàn bộ nội dung văn bản (tiêu đề, tóm tắt và nút xem thêm) -->

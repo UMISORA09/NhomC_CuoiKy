@@ -1,4 +1,22 @@
 <?php
+require_once __DIR__ . "/nhomc-widget-editor.php";
+const NHOMC_WIDGETS_VERSION = "six-pages-editable-20261030";
+
+// This WordPress build omits the Widgets entry from the Appearance menu.
+function nhomc_add_widgets_menu() {
+    if ( ! current_theme_supports( 'widgets' ) ) {
+        return;
+    }
+    global $submenu;
+    foreach ( $submenu['themes.php'] ?? array() as $item ) {
+        if ( 'widgets.php' === $item[2] ) {
+            return;
+        }
+    }
+    add_submenu_page( 'themes.php', __( 'Widgets' ), __( 'Widgets' ), 'edit_theme_options', 'widgets.php' );
+}
+add_action( 'admin_menu', 'nhomc_add_widgets_menu', 99 );
+
 /** Widget areas matching the six Nhom C page designs. */
 function nhomc_page_widgets() {
     return array(
@@ -16,13 +34,14 @@ add_action( 'widgets_init', function () {
     foreach ( nhomc_page_widgets() as $area => $definition ) {
         $areas[ $area ] = $definition[0];
         foreach ( $definition[1] as $section => $data ) {
-            if ( $data[1] ) { register_widget( new NhomC_Section_Widget( $section, $data[0], $area ) ); }
+            register_widget( new NhomC_Section_Widget( $section, $data[0], $area, $data[1] ) );
         }
     }
     foreach ( $areas as $id => $name ) {
         register_sidebar( array( 'id' => $id, 'name' => 'Nhóm C — ' . $name, 'description' => 'Các khối theo đúng giao diện hiện tại. Có thể sắp xếp hoặc thay bằng HTML tùy chỉnh.', 'before_widget' => '', 'after_widget' => '', 'before_title' => '<span hidden>', 'after_title' => '</span>' ) );
     }
     register_widget( 'NhomC_Newsletter_Widget' );
+    register_widget( new NhomC_Section_Widget( 'footer-menu', 'Liên kết chân trang', 'nhomc-footer-menu', false ) );
 } );
 
 add_action( 'widgets_init', function () {
@@ -36,7 +55,9 @@ add_action( 'widgets_init', function () {
 /** Pass each page's existing query results to its widgets without querying or freezing them again. */
 function nhomc_render_page_widgets( $area, $context ) {
     $context['widget_title'] = '';
-    if ( ! is_active_sidebar( $area ) && get_option( 'nhomc_widgets_version' ) !== 'six-pages-20261023' ) {
+    $context['widget_image'] = '';
+    $context['widget_description'] = '';
+    if ( ! is_active_sidebar( $area ) && ! in_array( get_option( 'nhomc_widgets_version' ), array( 'six-pages-20261023', NHOMC_WIDGETS_VERSION ), true ) ) {
         foreach ( nhomc_page_widgets()[ $area ][1] as $section => $data ) {
             get_template_part( 'template-parts/widgets/' . $section, null, $context );
         }
@@ -50,29 +71,87 @@ function nhomc_render_page_widgets( $area, $context ) {
     try { dynamic_sidebar( $area ); } finally { remove_filter( 'dynamic_sidebar_params', $inject ); }
 }
 
+function nhomc_widget_default_html( $section ) {
+    $theme_uri = get_template_directory_uri();
+    $context = array( 'theme_uri' => $theme_uri, 'site_url' => home_url(), 'hero_bg' => $theme_uri . '/images/home/hero-home-bg.jpg', 'career_bg' => $theme_uri . '/images/home/career-bg.jpg' );
+    ob_start();
+    get_template_part( 'template-parts/widgets/' . $section, null, $context );
+    return str_replace( rtrim( home_url(), '/' ), '', ob_get_clean() );
+}
+
+function nhomc_active_widget_settings( $area, $base ) {
+    $areas = wp_get_sidebars_widgets();
+    foreach ( $areas[ $area ] ?? array() as $id ) {
+        if ( preg_match( '/^' . preg_quote( $base, '/' ) . '-(\d+)$/', $id, $match ) ) {
+            return get_option( 'widget_' . $base, array() )[ (int) $match[1] ] ?? array();
+        }
+    }
+    return array();
+}
+
 class NhomC_Section_Widget extends WP_Widget {
     private $section;
     private $area;
-    public function __construct( $section, $label, $area ) {
+    private $dynamic;
+    public function __construct( $section, $label, $area, $dynamic = true ) {
         $this->section = $section;
         $this->area = $area;
-        parent::__construct( 'nhomc_' . str_replace( '-', '_', $section ), 'Nhóm C: ' . $label, array( 'description' => 'Dữ liệu trực tiếp từ trang hiện tại. Đặt trong vùng ' . $area . '.' ) );
+        $this->dynamic = $dynamic;
+        parent::__construct( 'nhomc_' . str_replace( '-', '_', $section ), 'Nhóm C: ' . $label, array( 'description' => 'Chỉnh chữ, hình ảnh và liên kết trực tiếp. Vùng: ' . $area . '.' ) );
+    }
+    private function fields() {
+        $fields = array( 'title' => array( 'type' => 'text', 'label' => 'Tiêu đề (để trống dùng dữ liệu hiện tại)', 'value' => '' ), 'description' => array( 'type' => 'textarea', 'label' => 'Nội dung bổ sung / mô tả thay thế (áp dụng cho cả khối)', 'value' => '' ) );
+        if ( 'job-main' === $this->section ) {
+            unset( $fields['title'] );
+            $fields['rating_title'] = array( 'type' => 'text', 'label' => 'Tiêu đề phần đánh giá', 'value' => 'Staff Rating' );
+            $fields['photos_title'] = array( 'type' => 'text', 'label' => 'Tiêu đề thư viện ảnh', 'value' => 'Company Photos' );
+            for ( $i = 1; $i <= 6; $i++ ) {
+                $fields[ 'image_' . $i ] = array( 'type' => 'image', 'label' => 'Ảnh công ty ' . $i . ' (để trống giữ ảnh hiện tại)', 'value' => '' );
+            }
+        } else {
+            $fields['image'] = array( 'type' => 'image', 'label' => 'Ảnh dùng chung trong khối (để trống dùng ảnh dữ liệu)', 'value' => '' );
+        }
+        return $fields;
     }
     public function widget( $args, $instance ) {
-        if ( $args['id'] !== $this->area || ! isset( $args['nhomc_context'] ) ) { return; }
+        if ( $args['id'] !== $this->area ) { return; }
+        if ( ! $this->dynamic ) {
+            echo $instance['html'] ?? nhomc_widget_default_html( $this->section );
+            return;
+        }
+        if ( ! isset( $args['nhomc_context'] ) ) { return; }
         $context = $args['nhomc_context'];
+        foreach ( $this->fields() as $key => $field ) { $context[ 'widget_' . $key ] = $instance[ $key ] ?? $field['value']; }
         $context['widget_title'] = $instance['title'] ?? '';
         get_template_part( 'template-parts/widgets/' . $this->section, null, $context );
     }
     public function form( $instance ) {
-        if ( in_array( $this->section, array( 'job-hero', 'job-main' ), true ) ) {
-            echo '<p>Dữ liệu lấy từ việc làm đang xem. Chỉnh nội dung tại mục Việc làm; Share, Apply Job và thư viện ảnh giữ nguyên chức năng hiện tại.</p>';
+        if ( ! $this->dynamic ) {
+            $html = $instance['html'] ?? nhomc_widget_default_html( $this->section );
+            $editor = nhomc_widget_html_editor( $html );
+            echo '<p>Sửa nội dung và hình ảnh bên dưới. Bố cục được giữ nguyên. Với banner có chữ sẵn trong ảnh, hãy chọn ảnh không chữ khi đổi tiêu đề.</p>';
+            foreach ( $editor['fields'] as $key => $field ) { nhomc_widget_editor_field( $this, $key, $field, 'changes' ); }
             return;
         }
-        echo '<p><label for="' . esc_attr( $this->get_field_id( 'title' ) ) . '">Tiêu đề (để trống dùng tiêu đề hiện tại)</label><input class="widefat" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" value="' . esc_attr( $instance['title'] ?? '' ) . '"></p><p>Danh sách lấy dữ liệu trực tiếp; quản lý bài viết và việc làm ở các mục tương ứng.</p>';
+        echo '<p>Các ô này tùy chỉnh phần trình bày của khối. Thông tin từng tin vẫn lấy từ mục Việc làm hoặc Bài viết.</p>';
+        foreach ( $this->fields() as $key => $field ) {
+            $field['value'] = $instance[ $key ] ?? $field['value'];
+            nhomc_widget_editor_field( $this, $key, $field );
+        }
     }
     public function update( $new_instance, $old_instance ) {
-        return array( 'title' => sanitize_text_field( $new_instance['title'] ?? '' ) );
+        if ( ! $this->dynamic ) {
+            $html = $old_instance['html'] ?? nhomc_widget_default_html( $this->section );
+            $changes = isset( $new_instance['changes'] ) && is_array( $new_instance['changes'] ) ? $new_instance['changes'] : array();
+            return array( 'html' => nhomc_widget_html_editor( $html, $changes )['html'] );
+        }
+        $clean = array();
+        foreach ( $this->fields() as $key => $field ) {
+            $value = $new_instance[ $key ] ?? $field['value'];
+            if ( ! is_string( $value ) ) { $value = ''; }
+            $clean[ $key ] = 'image' === $field['type'] ? esc_url_raw( $value, array( 'http', 'https' ) ) : ( 'textarea' === $field['type'] ? sanitize_textarea_field( $value ) : sanitize_text_field( $value ) );
+        }
+        return $clean;
     }
 }
 class NhomC_Newsletter_Widget extends WP_Widget {
