@@ -1,8 +1,19 @@
 <?php
 /**
- * Nhom C Custom Helper Functions for Job Detail
- * Brand: NhomC
- * Project: FIT - TDC Cuoi Ky
+ * ============================================================================
+ * CÁC HÀM TRỢ GIÚP DÀNH RIÊNG CHO TRANG CHI TIẾT VIỆC LÀM (NHOM C HELPERS)
+ * Dự án: FIT - TDC Cuối Kỳ | Thương hiệu: NhomC RECRUITING
+ * Khớp chuẩn thiết kế: 5-job detail.png
+ *
+ * DANH SÁCH CÁC HÀM XỬ LÝ:
+ * 1. nhomc_get_company_logo(): Hiển thị logo doanh nghiệp linh hoạt (Ảnh đại diện,
+ *    post meta _company_logo, logo typography SVG thương hiệu hoặc avatar viết tắt).
+ * 2. nhomc_get_job_badges(): Lấy thông tin phân loại: Loại hình (Full time), Ngành nghề, Địa điểm.
+ * 3. nhomc_get_job_bullets(): Trích xuất 3 điểm nhấn công việc hiển thị trên Card Other Jobs.
+ * 4. nhomc_ensure_custom_pages(): Tự động tạo và kiểm tra các trang cần thiết trong Database.
+ *
+ * @package JobScout
+ * ============================================================================
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,13 +21,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Render Company Logo based on Database metadata or company name
+ * HÀM 1: HIỂN THỊ LOGO DOANH NGHIỆP DỰA THEO DỮ LIỆU DATABASE HOẶC TÊN CÔNG TY
+ * 
+ * Thứ tự ưu tiên hiển thị:
+ * 1. Ảnh đại diện bài viết (Featured Image / Thumbnail).
+ * 2. Đường dẫn ảnh lưu trong custom field '_company_logo'.
+ * 3. Biểu trưng đồ họa SVG chuẩn thiết kế Figma theo các thương hiệu nổi bật (THE SODOH, FONTAINE GARDEN, Seven House, Phở Thìn...).
+ * 4. Fallback tự động: Huy hiệu chữ viết tắt (Initials) kết hợp tên công ty trên nền xám chuyên nghiệp.
+ *
+ * @param string $company_name Tên công ty
+ * @param int    $post_id      ID bài đăng việc làm
+ * @param string $size         Kích thước logo ('large' cho Hero Card, 'small' cho Other Jobs Card)
+ * @return string              Mã HTML hiển thị logo
  */
 function nhomc_get_company_logo( $company_name = '', $post_id = 0, $size = 'large' ) {
+    // 1. Kiểm tra ảnh đại diện bài viết
     if ( ! empty( $post_id ) && has_post_thumbnail( $post_id ) ) {
         return get_the_post_thumbnail( $post_id, 'medium', array( 'class' => 'nhomc-logo-img' ) );
     }
 
+    // 2. Kiểm tra custom meta '_company_logo'
     if ( ! empty( $post_id ) ) {
         $logo_url = get_post_meta( $post_id, '_company_logo', true );
         if ( ! empty( $logo_url ) ) {
@@ -26,7 +50,7 @@ function nhomc_get_company_logo( $company_name = '', $post_id = 0, $size = 'larg
 
     $c_clean = strtoupper( trim( (string)$company_name ) );
 
-    // 1. SODOH / THE SODOH / S 0TbEoH
+    // 3.1. Thương hiệu THE SODOH (Higashiyama Kyoto)
     if ( strpos( $c_clean, 'SODOH' ) !== false || strpos( $c_clean, '0TBEOH' ) !== false ) {
         return '
         <div class="nhomc-typo-logo sodoh">
@@ -39,7 +63,7 @@ function nhomc_get_company_logo( $company_name = '', $post_id = 0, $size = 'larg
         </div>';
     }
 
-    // 2. FONTAINE GARDEN / GARDEN
+    // 3.2. Thương hiệu FONTAINE GARDEN
     if ( strpos( $c_clean, 'GARDEN' ) !== false ) {
         return '
         <div class="nhomc-typo-logo garden" style="border:1px solid #d1d5db;padding:4px;width:90%;height:85%;">
@@ -48,7 +72,7 @@ function nhomc_get_company_logo( $company_name = '', $post_id = 0, $size = 'larg
         </div>';
     }
 
-    // 3. The Seygn House / The Seven House
+    // 3.3. Thương hiệu The Seygn House / The Seven House Kyoto
     if ( strpos( $c_clean, 'SEYGN' ) !== false || strpos( $c_clean, 'SEVEN' ) !== false ) {
         return '
         <div class="nhomc-typo-logo seven-house">
@@ -58,7 +82,7 @@ function nhomc_get_company_logo( $company_name = '', $post_id = 0, $size = 'larg
         </div>';
     }
 
-    // 4. PHỞ THÌN / PHd THIN
+    // 3.4. Thương hiệu PHỞ THÌN
     if ( strpos( $c_clean, 'THIN' ) !== false || strpos( $c_clean, 'PHỞ' ) !== false || strpos( $c_clean, 'PHO' ) !== false ) {
         return '
         <div class="nhomc-typo-logo pho-thin">
@@ -69,7 +93,7 @@ function nhomc_get_company_logo( $company_name = '', $post_id = 0, $size = 'larg
         </div>';
     }
 
-    // 5. FROM WHERE I STAND / LOSS PREVENTION
+    // 3.5. Thương hiệu FROM WHERE I STAND
     if ( strpos( $c_clean, 'STAND' ) !== false || strpos( $c_clean, 'WHERE' ) !== false ) {
         return '
         <div class="nhomc-typo-logo stand" style="border-radius:50%;border:1px solid #999;width:55px;height:55px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
@@ -78,7 +102,7 @@ function nhomc_get_company_logo( $company_name = '', $post_id = 0, $size = 'larg
         </div>';
     }
 
-    // 6. Plan Do See Global
+    // 3.6. Thương hiệu PLAN DO SEE GLOBAL
     if ( strpos( $c_clean, 'PLAN' ) !== false || strpos( $c_clean, 'PDS' ) !== false ) {
         return '
         <div class="nhomc-typo-logo pds">
@@ -87,7 +111,7 @@ function nhomc_get_company_logo( $company_name = '', $post_id = 0, $size = 'larg
         </div>';
     }
 
-    // Generic Default from Database
+    // 4. Logo mặc định: Tạo từ chữ cái đầu (Initials) của tên công ty
     $initials = '';
     $words = explode( ' ', (string)$company_name );
     foreach ( $words as $w ) {
@@ -105,10 +129,13 @@ function nhomc_get_company_logo( $company_name = '', $post_id = 0, $size = 'larg
 }
 
 /**
- * Get Job Badges (Type, Category, Location) from Database
+ * HÀM 2: TRUY VẤN CÁC HUY HIỆU PHÂN LOẠI CÔNG VIỆC TỪ TAXONOMY & META (Type, Category, Location)
+ *
+ * @param int $post_id ID bài viết việc làm
+ * @return array Mảng kết hợp chứa ['type', 'category', 'location']
  */
 function nhomc_get_job_badges( $post_id ) {
-    // 1. Type
+    // 1. Phân loại Loại hình công việc (Full time / Part time / Internship)
     if ( function_exists( 'wpjm_get_the_job_types' ) ) {
         $types = wpjm_get_the_job_types( $post_id );
     } else {
@@ -123,7 +150,7 @@ function nhomc_get_job_badges( $post_id ) {
         $type_name = 'Fulltime';
     }
 
-    // 2. Category
+    // 2. Phân loại Ngành nghề tuyển dụng (Job Category)
     $cats = get_the_terms( $post_id, 'job_listing_category' );
     $cat_name = 'Category Name';
     if ( ! empty( $cats ) && ! is_wp_error( $cats ) ) {
@@ -131,7 +158,7 @@ function nhomc_get_job_badges( $post_id ) {
         $cat_name = $first_cat->name;
     }
 
-    // 3. Location
+    // 3. Địa điểm làm việc (Job Location từ post meta '_job_location')
     $location = get_post_meta( $post_id, '_job_location', true );
     if ( empty( $location ) ) {
         $location = 'Ho Chi Minh City';
@@ -145,12 +172,19 @@ function nhomc_get_job_badges( $post_id ) {
 }
 
 /**
- * Get Job Bullets for Other Jobs cards from Database or post_content
+ * HÀM 3: TRÍCH XUẤT 3 ĐIỂM NỔI BẬT (BULLETS) CHO CARD VIỆC LÀM LIÊN QUAN (OTHER JOBS)
+ *
+ * Tự động quét nội dung bài viết và lọc ra các câu gạch đầu dòng (• hoặc -).
+ * Nếu bài viết chưa có, tự động dùng 3 gạch đầu dòng chuẩn theo thiết kế Figma.
+ *
+ * @param int    $post_id      ID việc làm
+ * @param string $post_content Nội dung bài viết
+ * @return array               Mảng đúng 3 chuỗi mô tả ngắn
  */
 function nhomc_get_job_bullets( $post_id, $post_content = '' ) {
     $bullets = array();
 
-    // Parse from post content if contains bullets or <p>•
+    // Bóc tách nội dung từ bài viết nếu có ký tự bullet • hoặc dấu gạch -
     if ( ! empty( $post_content ) ) {
         $lines = explode( "\n", strip_tags( $post_content, '<br>' ) );
         foreach ( $lines as $line ) {
@@ -164,7 +198,7 @@ function nhomc_get_job_bullets( $post_id, $post_content = '' ) {
         }
     }
 
-    // Standard 3 bullets matching mockup if not found
+    // Mẫu dự phòng đúng 3 gạch đầu dòng chuẩn Figma nếu không bóc tách được
     if ( count( $bullets ) < 3 ) {
         $bullets = array(
             'Be responsible for the effective operational management of the hotel',

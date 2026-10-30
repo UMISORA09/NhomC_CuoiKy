@@ -1,21 +1,36 @@
 /* ==========================================================================
-   NHOM C - JOB DETAIL STYLESHEET (PIXEL-PERFECT FIGMA/MOCKUP MATCH)
-   Primary Color Theme: Recruiter Vibrant Orange (#ea580c / #f26522)
-   Brand Logo: NhomC RECRUITING
+   BẢNG PHONG CÁCH CSS: TRANG CHI TIẾT VIỆC LÀM (NHOM C - JOB DETAIL STYLESHEET)
+   Khớp chuẩn thiết kế Figma: 5-job detail.png
+   Tông màu chủ đạo: Cam tuyển dụng (#ea580c / #f26522) kết hợp Nền xám nhạt (#f8f9fa)
+   Thương hiệu nhận diện: NhomC RECRUITING
+
+   MỤC LỤC CÁC PHÂN ĐOẠN GIAO DIỆN:
+   1. HEADER & BRANDING: Logo NhomC, thanh điều hướng và nút Submit Job.
+   2. BREADCRUMBS: Đường dẫn phân cấp (Home > All Jobs > Job Detail).
+   3. JOB HERO CARD: Thẻ tóm tắt thông tin công việc, logo, ngày tạo, tags, nút Share & Apply.
+   4. TWO-COLUMN LAYOUT: Bố cục 2 cột chia tỉ lệ 70% (nội dung) / 30% (sidebar).
+   5. JOB DETAILS CONTENT: Định dạng bài viết mô tả (H3 gạch chân, đoạn văn, bullet points).
+   6. SIDEBAR WIDGETS: Đánh giá nhân viên (Staff Rating 5 sao) & Ảnh công ty (Company Photos preview).
+   7. OTHER JOBS SECTION: Lưới 6 thẻ việc làm liên quan, logo, tags và 3 gạch đầu dòng điểm nhấn.
+   8. APPLY JOB MODAL & FORM: Popup ứng tuyển, vùng kéo thả CV PDF (Dropzone), báo lỗi & Toast.
+   9. RESPONSIVE BREAKPOINTS: Tối ưu hiển thị cho máy tính bảng (Tablet < 992px) và điện thoại (< 640px).
+   10. COMPANY PHOTOS LIGHTBOX: Trình chiếu ảnh phóng to, mũi tên Prev/Next, bộ đếm và Thumbnails.
    ========================================================================== */
 
 :root {
-  --nhomc-orange: #ea580c;
-  --nhomc-orange-hover: #c2410c;
-  --nhomc-orange-light: #fff7ed;
-  --nhomc-dark: #111827;
-  --nhomc-text-main: #374151;
-  --nhomc-text-muted: #6b7280;
-  --nhomc-border: #e5e7eb;
-  --nhomc-bg-gray: #f9fafb;
-  --nhomc-card-bg: #ffffff;
+  /* Bộ biến màu sắc chuẩn theo nhận diện thương hiệu Nhóm C */
+  --nhomc-orange: #ea580c;        /* Màu cam chủ đạo */
+  --nhomc-orange-hover: #c2410c;  /* Màu cam đậm khi hover chuột */
+  --nhomc-orange-light: #fff7ed;  /* Màu nền cam nhạt */
+  --nhomc-dark: #111827;          /* Màu chữ đậm / tiêu đề */
+  --nhomc-text-main: #374151;     /* Màu chữ nội dung chính */
+  --nhomc-text-muted: #6b7280;    /* Màu chữ phụ / ngày tháng / ghi chú */
+  --nhomc-border: #e5e7eb;        /* Màu đường viền phân cách */
+  --nhomc-bg-gray: #f9fafb;       /* Màu nền phụ */
+  --nhomc-card-bg: #ffffff;       /* Màu nền thẻ card trắng */
 }
 
+/* Cấu hình thân trang (Body) áp dụng riêng cho các trang thuộc Job Detail */
 body.single-job_listing,
 body.page-template-page-jobdetail,
 body.page-template-page-job-detail,
@@ -26,7 +41,7 @@ body.nhomc-job-page {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Container */
+/* Khung bao chứa nội dung có chiều rộng tối đa 1140px chuẩn Bootstrap */
 .nhomc-container {
   max-width: 1140px;
   margin: 0 auto;
