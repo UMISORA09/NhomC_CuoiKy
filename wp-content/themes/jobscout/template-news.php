@@ -13,13 +13,11 @@
  * 1. Khởi tạo đường dẫn động tới hệ thống theme và thư mục tài nguyên hình ảnh tin tức.
  * 2. Thiết lập danh mục 8 bài viết blog chuẩn theo bản vẽ 3-news.png (ảnh đại diện,
  *    tiêu đề, tóm tắt tiếng Việt giàu ngữ cảnh và đường dẫn chi tiết riêng biệt).
- * 3. Kiểm tra và truy vấn các bài viết thực tế được xuất bản trong WordPress (WP_Query),
- *    tự động liên kết mượt mà với trang chi tiết (/news-detail/?post=...).
- * 4. Tương thích 100% với Trình tùy biến giao diện WordPress Customizer ("Sửa giao diện"),
+ * 3. Tương thích 100% với Trình tùy biến giao diện WordPress Customizer ("Sửa giao diện"),
  *    sử dụng kiến trúc Widget động 'nhomc-blog' (gồm khối Banner PDS NEWS và khối Blog Entries).
- * 5. Tích hợp Header dùng chung (nhomc-header) và Footer dùng chung (nhomc-footer)
+ * 4. Tích hợp Header dùng chung (nhomc-header) và Footer dùng chung (nhomc-footer)
  *    đồng bộ và thống nhất trên toàn bộ 6 trang chức năng của Nhóm C.
- * 6. Hỗ trợ chuẩn hàm wp_body_open() cho thanh quản trị WordPress Admin Bar và Customizer.
+ * 5. Hỗ trợ chuẩn hàm wp_body_open() cho thanh quản trị WordPress Admin Bar và Customizer.
  * ==============================================================================
  * Template Name: News Design
  * Template Post Type: page, post
@@ -101,46 +99,12 @@ $default_news = array(
     ),
 );
 
-// Mảng ảnh thumbnail xoay vòng dự phòng
-$blog_images = array( 'blog-project-dev.jpg', 'blog-restaurant-hotel.jpg', 'blog-hospitality-consulting.jpg', 'blog-interior-design.jpg' );
-
-// Lấy danh sách các bài viết thực tế được đăng tải trong CSDL WordPress
-$news_posts = get_posts( array(
-    'post_type'      => 'post',
-    'post_status'    => 'publish',
-    'posts_per_page' => 8,
-    'orderby'        => 'date',
-    'order'          => 'DESC',
-) );
-
-// Kiểm tra xem có bài viết tùy chỉnh thực sự nào trong database ngoài bài Hello World mặc định
-$has_custom_posts = false;
-if ( ! empty( $news_posts ) ) {
-    foreach ( $news_posts as $p ) {
-        if ( $p->post_name !== 'hello-world' ) {
-            $has_custom_posts = true;
-            break;
-        }
-    }
-}
-
+// Khởi tạo danh sách bài viết hiển thị chuẩn đẹp 100% bản vẽ thiết kế 3-news.png
 $news_items = array();
-if ( $has_custom_posts ) {
-    // Nếu quản trị viên đã tạo bài viết mới trong WordPress admin, nạp danh sách động
-    foreach ( $news_posts as $index => $news_post ) {
-        $news_items[] = array(
-            'title'   => $news_post->post_title,
-            'image'   => get_the_post_thumbnail_url( $news_post, 'medium_large' ) ?: $news_img_dir . $blog_images[ $index % count( $blog_images ) ],
-            'excerpt' => wp_trim_words( get_the_excerpt( $news_post ), 28, '...' ),
-            'link'    => esc_url( home_url( '/news-detail/?post=' . urlencode( $news_post->post_name ) ) ),
-        );
-    }
-} else {
-    // Ngược lại, sử dụng 8 bài viết mẫu chuẩn đẹp 100% bản vẽ thiết kế 3-news.png
-    foreach ( $default_news as $idx => $item ) {
-        $item['link'] = esc_url( $site_url . '/news-detail/?post=' . urlencode( $item['slug'] ) );
-        $news_items[] = $item;
-    }
+foreach ( $default_news as $idx => $item ) {
+    // Luôn liên kết trực tiếp đến trang News Detail (/news-detail/?post=...) chuẩn tính năng 6
+    $item['link'] = esc_url( $site_url . '/news-detail/?post=' . urlencode( $item['slug'] ) );
+    $news_items[] = $item;
 }
 ?>
 <!DOCTYPE html>
